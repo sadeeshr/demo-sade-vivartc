@@ -1,0 +1,83 @@
+        <nav class="navbar navbar-default navbar-top" style="padding: 0 15px;">
+            <div class="container-fluid">
+                <div class="navbar-left visible-xs">
+                    <button type="button" class="nav-menu navbar-toggle">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar bar1"></span>
+                        <span class="icon-bar bar2"></span>
+                        <span class="icon-bar bar3"></span>
+                    </button>
+                </div>
+                <div class="navbar-left hidden-xs">
+                    <div class="nav navbar-nav">
+                        <li class="top-menu-item">
+                            <a href="" class="menu-link" data-link="menu">
+                                <i class="fa fa-btc" style="padding-right: 8px;"></i>
+                                Markets
+                            </a>
+                        </li>
+                        <li class="top-menu-item">
+                            <a href="" class="menu-link" data-link="menu">
+                                <i class="fa fa-newspaper-o" style="padding-right: 8px;"></i>
+                                News
+                            </a>
+                        </li>
+                    </div>
+                </div>
+
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                        <div class="logo-img">
+                            <a href="">
+                                <div class="" style="">
+                                    <img src="{{MEDIA_URL}}images/logo.png" style="height: 28px">
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="top-menu-item">
+                           <a href="">
+                               <i class="fa fa-clone"></i>
+                           </a>
+                        </li>
+                        <li class="dropdown top-menu-item">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" >
+                                    <i class="fa fa-bell"></i>
+                                    <p class="notification badge" style="background-color: rgb(200,140,120); position: absolute; color: #fff; top: 0px; right: -8px; font-size: 12px;"></p>
+                                    {% comment %}<b class="caret" style="margin-left: 16px;"></b> {% endcomment %}
+                              </a>
+                              <ul class="dropdown-menu">
+                                <li><a href="#">Notification 1</a></li>
+                                <li><a href="#">Notification 2</a></li>
+                                <li><a href="#">Notification 3</a></li>
+                                <li><a href="#">Notification 4</a></li>
+                                <li><a href="#">Another notification</a></li>
+                              </ul>
+                        </li>
+                        <li class="top-menu-item">
+                            <a href="#">
+                                <i class="fa fa-cog"></i>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                  {% if request.user.profile.photo %}
+                                  <img src="{{ request.user.profile.photo.url }}" class="img-xs img-circle">
+                                  {% else %}
+                                  <img src="{{MEDIA_URL}}images/avatar2.jpg" class="img-xs img-circle">
+                                  {% endif %}
+
+                                  <b class="caret"></b>
+                              </a>
+                              <ul class="dropdown-menu" style="margin-top: 1px;">
+                                <li><a href="" class="dropdown-link"><i class="fa fa-user-md"></i>Profile</a></li>
+                                <li><a href="" class="dropdown-link"><i class="fa fa-sign-out"></i>Logout</a></li>
+                              </ul>
+                        </li>
+                    </ul>
+                 </div>
+            </div>
+        </nav>

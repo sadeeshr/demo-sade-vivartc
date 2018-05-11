@@ -1,0 +1,152 @@
+<div class="lsbrowser">
+    <div class="search">
+        <span><input type="text" class="search-box"></span> 
+    </div>
+
+    <div class="phbook">
+      <div class="category">
+        <div class="heading">
+            <span>Teams</span>
+            <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
+        </div>
+        <div class="body item-list">
+            <ul class="list-unstyled">
+                {% for team in teams %}
+                <li class="media item px-3 my-2">
+                    <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/team.jpg">
+                    <div class="media-body">
+                        <span>{{ team.name }}</span> 
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="category">
+        <div class="heading">
+            <span>Agents</span>
+            <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
+        </div>
+        <div class="body item-list">
+            <ul class="list-unstyled">
+                {% for agent in agents %}
+                <li class="media item px-3 my-2">
+                    {% if agent.photo %}
+                    <img class="mr-3 rounded img-small" src="{{ agent.photo.url }}"> 
+                    {% else %}
+                    <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/avatar2.jpg">
+                    {% endif %}
+                    <div class="media-body">
+                        <span>{{ agent.user.get_full_name }}</span> 
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="category">
+        <div class="heading">
+            <span>Direct Conversations</span>
+            <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
+        </div>
+        <div class="body item-list">
+            <ul class="list-unstyled">
+                <li class="media item px-3 my-2">
+                    <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/avatar2.jpg">
+                    <div class="media-body">
+                        <span>John Smith</span>
+                    </div>
+                </li>
+                <li class="media item px-3 my-2">
+                    <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/avatar3.png">
+                    <div class="media-body">
+                        <span>Maria Kerry</span>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+
+    </div>
+
+    <div class="category">
+        <div class="heading">
+            <span>Bots</span>
+            <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
+        </div>
+        <div class="body item-list">
+            <ul class="list-unstyled">
+                <li class="media item px-3 my-2 me">
+                    <span class="mr-3 rounded img-small"><i class="fa fa-calendar"></i></span>
+                    <div class="media-body">
+                        <span>Schedular Bot</span>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <div class="dialer d-none">
+        <div class="display">
+            <span class="dislay-box"></span>
+        </div>
+        <div class="row no-margin">
+            <div class="col-sm">
+                <button class="btn">1</button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn">2</button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn">3</button> 
+            </div>
+        </div>
+        <div class="row no-margin">
+            <div class="col-sm">
+                <button class="btn">4</button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn">5</button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn">6</button> 
+            </div>
+        </div>
+        <div class="row no-margin">
+            <div class="col-sm">
+                <button class="btn">7</button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn">8</button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn">9</button> 
+            </div>
+        </div>
+        <div class="row no-margin">
+            <div class="col-sm">
+                <button class="btn" disabled>*</button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-call"><i class="fa fa-phone"></i></button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn" disabled>#</button> 
+            </div>
+        </div>
+
+    </div>
+
+    <div class="dial-launcher">
+        <button class="btn btn-launcher" data-toggle="buttons"><i class="fa fa-bars"></i></button>
+
+    </div>
+
+</div>

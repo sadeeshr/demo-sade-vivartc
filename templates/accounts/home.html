@@ -1,0 +1,117 @@
+{% extends "base/root.html" %}
+
+{% block headjs %}
+{% endblock %}
+
+
+{% block content %}
+<div class="row mx-0">
+    <div class="col-sm">
+        <div class="header-content">
+            <div class="clearfix">
+                <div class="float-left">
+                    <span class="title">Sun intermediate 10AM</span>
+                    <p class="desc">5 members</p>
+                </div>
+        
+                <div class="actions float-right">
+                    
+                    <div class="">
+                        <span><i class="fa fa-phone"></i></span>
+                    </div>
+                    <div class="">
+                        <span><i class="fa fa-video-camera"></i></span>
+                    </div>
+        
+                    <div class="search-content">
+                        <input type="text">
+                    </div>
+                    <div class="">
+                        <span><i class="fa fa-info-circle"></i></span>
+                    </div>
+                    <div class="">
+                        <span><i class="fa fa-cog"></i></span>
+                    </div>
+                    <div class="">
+                        <span><i class="fa fa-ellipsis-v"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="messages">
+            <ul class="message-list list-unstyled">
+                <li class="media message">
+                    <img class="mr-3 rounded img-sm" src="{{MEDIA_URL}}images/avatar3.png">
+                    <div class="media-body">
+                        <span><h5 class="title">Maria Kerry</h5></span>
+                        <span class="time">15 mins ago</span>               
+                        <p class="text">I want to re-schedule my class to morning batch.</p>
+                    </div> 
+                </li>
+        
+                <li class="media message me">
+                    <span class="mr-3 rounded img-sm" style="font-size: 28px;"><i class="fa fa-calendar"></i></span>
+                    <div class="media-body">
+                        <span><h5 class="title">Schedular Bot</h5></span>
+                        <span class="time"> 15 mins ago</span>
+        
+                        <p class="text">Select your new schedule from the calendar</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        
+        <div class="input-container">
+            <button class="btn btn-attach"><i class="fa fa-paperclip"></i></button>
+            <div class="msg-input" contenteditable="true" aria-label="Type your message">
+        
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block backdrop %}
+<div class="modal-bkdrop d-none" id="bkModal">
+    <div class="actions float-right"> 
+        <button class="btn-close btn-unstyle float-right">
+            <i class="fa fa-close"></i>
+        </button>
+    </div>
+    <div class="contents-container">
+        <div class="modal-bk-content">
+            <div class="heading">Add Agents</div>
+            <div class="body">
+                <div class="row">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block footer %}
+{% endblock %}
+
+
+{% block js %}
+<script src="{{MEDIA_URL}}js/actions.js"></script>
+<script>
+
+$(document).ready(function() {
+
+    $('.lsbrowser .dialer').css('width', $('.lsbrowser').width());
+
+});
+ 
+</script>
+{% endblock %}
+

@@ -1,0 +1,441 @@
+html {
+    font-size: 14px;
+}
+
+body {
+    font-size: 16px;
+    font-family: 'Muli', "Helvetica", Arial, sans-serif; 
+    font-family: 'Lato', sans-serif;
+    /* background: rgb(232,232,232); */
+    background: rgb(255,255,255);
+    height: 100%;
+    /* overflow-y: scroll; */
+    background-repeat: no-repeat;
+    background-attachment: fixed !important;
+    background-position: center !important;
+    background-size: cover !important;
+}
+
+
+ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+.no-pad {
+    padding: 0 !important;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+input {
+    border-radius: 3px;
+    border: 1px solid #aaa;
+}
+input:focus {
+    outline: none;
+}
+
+/* Images */
+.img-circle {
+    border-radius: 50%;
+}
+
+.img-lg {
+    width: 80px!important;
+    height: 80px!important;
+}
+.img-md {
+    width: 60px!important;
+    height: 60px!important;
+}
+.img-xs {
+    width: 32px!important;
+    height: 32px!important;
+}
+.img-sm {
+    width: 40px!important;
+    height: 40px!important;
+}
+.img-small {
+    width: 24px!important;
+    height: 24px!important;
+}
+
+
+/* Left Side Bar */
+/* lsbar.html */
+.user-panel {
+    position: relative;
+    width: 100%;
+    padding: 15px;
+    overflow: hidden;
+}
+
+.lsmenu {
+    background: rgba(25, 40, 60, 0.7);
+}
+
+.lsmenu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 60;
+    height: 100%;
+}
+
+.lsmenu .nav>li {
+    position: relative;
+    display: block;
+    width: 100%;
+}
+
+.lsmenu .nav>li>a {
+    width: 100%;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .lsmenu {
+        width: 56px;
+    }
+
+    .lsmenu .nav-primary > ul > li > a {
+        text-align: center;
+        height: 60px;
+        overflow-y: hidden;
+        border: none;
+        display: inline-block;
+    }
+
+    .lsmenu .nav-primary > ul > li > a i {
+        text-align: center;
+        overflow: hidden;
+        float: none;
+        font-size: 24px;
+        line-height: 50px;
+        border: none !important;
+        -webkit-transition: margin-top 0.2s;
+        transition: margin-top 0.2s;
+        color: #ECB32D;
+    }
+
+    .lsmenu .nav-primary > ul > li > a span {
+        display: table-cell;
+        vertical-align: middle;
+        height: 50px;
+    } 
+}
+
+
+/* Left browser */
+.lsbrowser {
+    background: rgba(232,232,232, 0.4);
+    height: 100%;
+    margin-left: 56px;
+    padding: .9em 0;
+
+}
+
+.lsbrowser .search {
+    padding: 0 .6em;
+}
+
+.search .search-box {
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    width: 100%;
+    height: 32px; 
+    padding: .3em .6em;
+}
+
+.lsbrowser .category {
+    padding: .4em 0;
+}
+.lsbrowser .category {
+    padding-left: -0.6em;
+    padding-right: -0.6em;
+}
+
+
+.lsbrowser .category .heading {
+    color: rgb(77,57,75);
+    color: rgb(242,242,242);
+    text-transform: uppercase;
+    padding: .6em .6em;
+}
+
+.category .item-list {
+    color: #000;
+}
+
+.lsbrowser .item {
+    padding: 0.2em 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(77,57,75);
+    color: #000;
+}
+
+.category .item.active {
+    background: rgba(69, 147, 120, 0.4);
+    color: #333;
+}
+
+/* main content */
+.main-panel {
+    background: rgba(255,255,255,0.95)
+}
+.content {
+    overflow: hidden;
+}
+
+.content > .row {
+    height: 100%;
+}
+
+/* Navigation module */
+.header-content {
+    height: 60px;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    padding: .6em;
+    color: rgb(25,40,60);
+}
+
+.header-content input {
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    height: 32px; 
+}
+
+.header-content .title {
+    font-weight: 700;
+}
+.header-content .desc {
+    color: #777;
+    font-size: 14px;
+}
+
+.actions > div {
+    padding: 0 .5em;
+    display: inline-block;
+}
+
+
+/* IM */
+.media-body > span {
+    display: inline-block;
+}
+span.time {
+    font-size: 12px;
+    padding-left: 1em;
+    color: #aaa;
+}
+
+.messages {
+    padding: 1em 1.5em;
+}
+
+.messages .message {
+    border-radius: .3em;
+    padding: 0.4em 0;
+    width: 100%;
+}
+
+.message h5 {
+    margin: 0;
+}
+
+.message p {
+    margin: 0;
+}
+/*
+.message.me {
+    background: rgb(220,249,247);
+}
+*/
+
+.message .title {
+    font-size: 15px;
+    font-weight: 800; 
+}
+.message .text {
+    font-size: 15px;
+}
+
+.input-container {
+    position: absolute;
+    bottom: 10;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+}
+
+.input-container .msg-input {
+    padding: 5px 15px;
+    border: 2px solid #756666;
+    border-radius: 3px;
+    min-height: 32px;
+    max-height: 300px;
+    height: 100%;
+    -moz-appearance: textfield-multiline;
+    -webkit-appearance: textarea;
+    margin-left: 33px
+
+}
+
+.input-container .btn-attach {
+    position: absolute;
+    bottom: 15;
+    left: 15;
+    min-height: 38px;
+    border-top: 2px solid #756666;
+    border-bottom: 2px solid #756666;
+    border-left: 2px solid #756666;
+    background: inherit;
+}
+
+/* dialer */
+.lsbrowser .dialer {
+    padding: 15px;
+    position: absolute;
+    bottom: 0;
+    left: 56;
+    padding-bottom: 45px;
+    width: 100%;
+    background: rgb(242,242,242, 0.2);
+}
+
+.dialer .display {
+    height: 40px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.0825em;
+    margin: 0 -15px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(242,242,242, 0.2);
+    padding-left: 15px;
+    text-align: center;
+}
+
+.dialer > .row {
+    padding: 5px 0;
+}
+
+.dialer button {
+    width: 48px;
+    height: 42px;
+    background: rgba(25,40,60, 0.4);
+    color: #fff;
+    border: 1px solid rgb(25,40,60);
+}
+
+.dialer button:hover {
+    background: rgba(25,40,60, 0.2);
+}
+
+/* dial launcher */
+.lsbrowser .dial-launcher {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+}
+.dial-launcher button {
+    background: rgba(77,57,75, 0.4);
+    color: #fff;
+    width: 48px;
+    height: 32px;
+}
+
+.btn.focus, .btn:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(243,156,18,.25);
+}
+
+
+/* backdrop modal */
+#bkModal {
+    background: #fff;
+    position: fixed;
+    top:0;
+    left: 0;
+    z-index: 1001;
+    font-size: 18px;
+    height: 100%;
+    width: 100%;
+    line-height: 1.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translateY(5px);
+    -moz-transform: translateY(5px);
+    -ms-transform: translateY(5px);
+    transform: translateY(5px);
+    -moz-transition: opacity 150ms cubic-bezier(.2,.8,.5,1) .1s,transform 150ms cubic-bezier(.2,.8,.5,1) .1s,top 0s linear 250ms;
+    transition: opacity 150ms cubic-bezier(.2,.8,.5,1) .1s,transform 150ms cubic-bezier(.2,.8,.5,1) .1s,top 0s linear 250ms;
+    -webkit-transition: opacity 150ms cubic-bezier(.2,.8,.5,1) .1s,-webkit-transform 150ms cubic-bezier(.2,.8,.5,1) .1s,top 0s linear 250ms;
+}
+
+.modal-bkdrop .actions {
+    position: absolute;
+    top: 3rem;
+    right: 5em;
+    width: 4rem;
+    height: 4rem;
+    z-index: 1;
+    text-align: center;
+
+}
+
+.modal-bkdrop .btn-close {
+    cursor: pointer;
+    color: #717274;
+    font-size: 2rem;
+    line-height: 1.5rem;
+    border-radius: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.btn-unstyle {
+    background: 0 0;
+    border: none;
+    padding: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    outline: 0;
+}
+
+.modal-bkdrop .contents-container {
+    background: #fff !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    -ms-flex-pack: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 15vh 2rem 2rem;
+}
+
+.modal-bkdrop .modal-bk-content .heading {
+    font-size: 2em;
+    font-weight: 300;
+    color: #777;
+}

@@ -1,0 +1,118 @@
+
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, p, .navbar, .brand, a, .td-name, td {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'Muli', "Helvetica", Arial, sans-serif; }
+
+h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
+  font-weight: 400;
+  margin: 30px 0 15px; }
+
+h1, .h1 {
+  font-size: 3.2em; }
+
+h2, .h2 {
+  font-size: 2.6em; }
+
+h3, .h3 {
+  font-size: 1.825em;
+  line-height: 1.4;
+  margin: 20px 0 10px; }
+
+h4, .h4 {
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1.2em; }
+
+h5, .h5 {
+  font-size: 1.25em;
+  font-weight: 400;
+  line-height: 1.4em;
+  margin-bottom: 15px; }
+
+h6, .h6 {
+  font-size: 0.9em;
+  font-weight: 600;
+  text-transform: uppercase; }
+p {
+  font-size: 16px;
+  line-height: 1.4em; }
+
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, .h1 small, .h2 small, .h3 small, .h4 small, .h5 small, .h6 small, h1 .small, h2 .small, h3 .small, h4 .small, h5 .small, h6 .small, .h1 .small, .h2 .small, .h3 .small, .h4 .small, .h5 .small, .h6 .small {
+  color: #9A9A9A;
+  font-weight: 300;
+  line-height: 1.4em; }
+
+h1 small, h2 small, h3 small, h1 .small, h2 .small, h3 .small {
+  font-size: 60%; }
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: 'Muli', "Helvetica", Arial, sans-serif; }
+
+
+
+
+.login-page .card-login .heading {
+    width: 65px;
+    margin: 0 auto;
+    margin-bottom: 25px;
+}
+
+.btn-signup,
+.btn-login {
+    background-color: #459378 !important;
+}
+.btn-signup:hover,
+.btn-login:hover {
+    background-color: #63c1a0 !important;
+}
+
+nav.navbar {
+    min-height: 50px;
+}
+
+.navbar .navbar-brand {
+    padding: 5px 15px;    
+    max-height: 40px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    display: flex;
+    align-items:center;
+}
+
+.navbar .navbar-nav > li > a {
+    margin: 0;
+}
+
+.logo-img {
+    position: absolute;
+    left: -70px;
+}
+
+@media (min-width: 768px) {
+    .logo-img {
+    } 
+}
+
+.social-accounts .account {
+    font-size: 20px;
+    padding: 15px;
+    display: inline-block;
+}
+
+.social-accounts .account a {
+    color: inherit;
+}
+.social-accounts .account a:hover {
+    color: #63c1a0;
+}
+
+.login-form input ,
+.signup-form input {
+    font-size: 14px;
+}

@@ -1,0 +1,82 @@
+<html lang="en" class="app">
+<head>
+    <meta charset="utf-8" />
+    <title>Viva Communication | Contact Centre </title>
+    <link rel="apple-touch-icon" sizes="76x76" href="{{MEDIA_URL}}plugins/paper/assets/img/apple-icon.png">
+    <link rel="SHORTCUT ICON" href="{{MEDIA_URL}}/images/logo/k1ico.png">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="app, web app, responsive, admin dashboard, admin, flat, flat ui, ui kit, off screen nav" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0 user-scalable=0" />
+    {% block base_css %}
+    <link rel="stylesheet" href="{{MEDIA_URL}}plugins/bootstrap-4.0.0/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="{{MEDIA_URL}}plugins/font-awesome/css/font-awesome.min.css" type="text/css" />
+    <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link rel="stylesheet" href="{{MEDIA_URL}}plugins/pnotify/pnotify.custom.min.css" type="text/css" />
+    {% endblock %}
+    {% block css %}
+
+    {% endblock %}
+    <link rel="stylesheet" href="{{ MEDIA_URL }}plugins/jquery-ui/jquery-ui.min.css" />
+    <link rel="stylesheet" href="{{MEDIA_URL}}css/colors.css" type="text/css" />
+    <link rel="stylesheet" href="{{MEDIA_URL}}css/style.css" type="text/css" />
+    <script src="{{MEDIA_URL}}plugins/jquery/jquery-3.2.1.min.js"></script>
+    <script src="{{MEDIA_URL}}plugins/bootstrap-4.0.0/js/bootstrap.min.js"></script>
+    {% block headjs %}
+
+    {% endblock %}
+</head>
+<body style="background-image:url({{MEDIA_URL}}images/pixabay/test1)">
+{% comment %}
+<body>
+{% endcomment %}
+    {% block top_header %}
+    {% endblock %}
+
+    {% block left_menu %}
+    {% include "base/lsbar.html" %}
+    {% endblock %}
+
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col-lg-3 col-md-4 no-pad">
+                {% block left_ex_menu %}
+                {% include "base/left_extn.html" %}
+                {% endblock %}
+            </div>
+
+            <div class="main-panel col-lg-9 col-md-8 no-pad">
+
+                {% block module_menu %}
+                {% endblock %}
+
+                <div class="content" style="background: {{contentbg}}">
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+
+            </div>
+            {% block right_menu %}
+            {% endblock %}
+        </div>
+
+    </div>
+    {% block backdrop %}
+
+    {% endblock %}
+
+    <script type="text/javascript" src="{{ MEDIA_URL }}plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="{{MEDIA_URL}}plugins/pnotify/pnotify.custom.min.js"></script>
+    <script src="{{MEDIA_URL}}js/root.js"></script>
+
+    {% block js %}
+
+    {% endblock %}
+
+
+    <script type="text/javascript">
+    </script>
+</body>
+</html>

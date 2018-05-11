@@ -1,0 +1,21 @@
+#exclude files
+
+*.py[co]
+*.egg-info
+
+# C extensions
+*.so
+
+*.log
+
+#exclude 
+celerybeat-schedule
+zolk_app.session
+celerybeat.pid
+
+#exclude virtualenv directory
+labs/
+
+#exclude temperory directories
+media/tmp/
+

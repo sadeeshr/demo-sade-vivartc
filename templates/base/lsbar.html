@@ -1,0 +1,87 @@
+
+        <aside class="lsmenu aside-md d-none d-sm-block" id="nav">
+            <div class="menu">
+
+                <div class="clearfix dk nav-user hidden-xs">
+                            <div class="user-panel">
+                                    <div class="pull-left image">
+                                      {% if request.company.logo.url %}
+                                          <a href="#" class="submenu-link"><img src="{{request.company.logo.url}}" class="img-circle img-xs"/></a>
+                                      {% else %}
+                                          <img src="{{MEDIA_URL}}images/avatar2.jpg" class="rounded-circle img-xs">
+                                      {% endif %}
+
+                                        <i class="on md b-black"></i>
+                                    </div>
+                            </div>
+                 </div>
+
+                <!-- nav -->
+                <nav class="nav-primary hidden-xs">
+                  <ul class="nav nav-main" data-ride="collapse">
+                    <li {% if 'boards' in request.META.PATH_INFO %} class="active"{% endif %}>
+                         <a href="">
+                            <i class="fa fa-sliders"></i>
+                            <span class="font-bold">Calls</span>
+                         </a>
+                    </li>
+
+
+                    <li{% if 'agents' in request.META.PATH_INFO %} class="active"{% endif %}>
+                      <a href="" class="auto">
+                        <span class="pull-right text-muted">
+                        </span>
+                        <i class="fa fa-users">
+                        </i>
+                        <span class="font-bold lm-h1">Agents</span>
+                      </a>
+                    </li>
+
+                    <li{% if 'teams' in request.META.PATH_INFO %} class="active"{% endif %}>
+                        <a href="" >
+                        <span class="pull-right text-muted">
+                        </span>
+                        <i class="fa fa-clone">
+                        </i>
+                        <span class="font-bold lm-h1">Teams</span>
+                      </a>
+                     </li>
+                    <li{% if 'analytics' in request.META.PATH_INFO %} class="active"{% endif %}>
+                        <a href="" >
+                        <span class="pull-right text-muted">
+                        </span>
+                        <i class="fa fa-line-chart">
+                        </i>
+                        <span class="font-bold lm-h1">Reports</span>
+                      </a>
+                     </li>
+
+            <li{% if 'settings' in request.META.PATH_INFO %} class="active"{% endif %}>
+                        <a href="#" class="auto">
+                        <span class="pull-right text-muted">
+                        </span>
+                       <i class="fa fa-cogs fa-2x lm-icon1">
+                        </i>
+                        <span class="font-bold lm-h1">Settings</span>
+                      </a>
+                     </li>
+
+        </ul>
+
+
+
+
+            {% comment %}
+            <footer class="footer hidden-xs no-padder text-center-nav-xs">
+              <a href="modal.lockme.html" data-toggle="ajaxModal" class="btn btn-icon icon-muted btn-inactive pull-right m-l-xs m-r-xs hidden-nav-xs">
+              </a>
+              <a href="#nav" data-toggle="class:nav-xs" class="btn btn-icon icon-muted btn-inactive m-l-xs m-r-xs">
+                <i class="i i-circleleft text-active lm-h1"></i>
+                <i class="i i-circleright text lm-h1"></i>
+              </a>
+
+            </footer>
+            {% endcomment %}
+        </aside>
+
+
