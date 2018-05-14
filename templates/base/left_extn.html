@@ -30,6 +30,7 @@
         <div class="body item-list">
             <ul class="list-unstyled">
                 {% for agent in agents %}
+                {% if agent != request.user.agent %}
                 <li class="media item px-3 my-2">
                     {% if agent.photo %}
                     <img class="mr-3 rounded img-small" src="{{ agent.photo.url }}"> 
@@ -40,6 +41,7 @@
                         <span>{{ agent.user.get_full_name }}</span> 
                     </div>
                 </li>
+                {% endif %}
                 {% endfor %}
             </ul>
         </div>

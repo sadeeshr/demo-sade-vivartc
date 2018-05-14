@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="row mx-0">
-    <div class="col-sm">
+    <div class="tribe-pad">
         <div class="header-content">
             <div class="clearfix">
                 <div class="float-left">
@@ -38,38 +38,97 @@
                 </div>
             </div>
         </div>
-        
-        <div class="messages">
-            <ul class="message-list list-unstyled">
-                <li class="media message">
-                    <img class="mr-3 rounded img-sm" src="{{MEDIA_URL}}images/avatar3.png">
-                    <div class="media-body">
-                        <span><h5 class="title">Maria Kerry</h5></span>
-                        <span class="time">15 mins ago</span>               
-                        <p class="text">I want to re-schedule my class to morning batch.</p>
-                    </div> 
-                </li>
-        
-                <li class="media message me">
-                    <span class="mr-3 rounded img-sm" style="font-size: 28px;"><i class="fa fa-calendar"></i></span>
-                    <div class="media-body">
-                        <span><h5 class="title">Schedular Bot</h5></span>
-                        <span class="time"> 15 mins ago</span>
-        
-                        <p class="text">Select your new schedule from the calendar</p>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        
-        
-        <div class="input-container">
-            <button class="btn btn-attach"><i class="fa fa-paperclip"></i></button>
-            <div class="msg-input" contenteditable="true" aria-label="Type your message">
-        
-            </div>
+        <div class="body">
+            <div class="col-messages">
+                <ul class="message-list list-unstyled">
+                    <li class="media message d-none">
+                        <img class="mr-3 rounded img-sm" src="{% if request.user.agent.photo %} {{ request.user.agent.photo.url }}{% endif %}">
+                        <div class="media-body">
+                            <span><h5 class="title">{{ request.user.get_full_name }}</h5></span>
+                            <span class="time"></span>               
+                            <p class="text"></p>
+                        </div> 
+                    </li>
             
+                </ul>
+
+                <div class="footer">
+                    <div class="input-container">
+                        <button class="btn btn-attach"><i class="fa fa-paperclip"></i></button>
+                        <div class="msg-input" contenteditable="true" aria-label="Type your message">
+                    
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-scribe">
+                <div class="scribe-container">
+                    <div class="scribe-heading">
+                        <span>Sun Intermediate 10 Am</span>
+                        <span class="float-right"><a class="btn-link link-close align-top" href="#"><i class="fa fa-times"></i></a></span>
+                    </div>    
+                    <div class="scribe-body">
+                        <div class="accordion">
+                            <div class="scribe-item">
+                                <div class="scribe-item-heading" id="headingMem">
+                                      <span class="icon"><i class="fa fa-info-circle"></i></span>
+                                      <span>
+                                          <a class="btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                             Information
+                                          </a>
+                                      </span>
+                                </div>
+                                <div id="collapseOne" class="collapse show" aria-labelledby="headingMem" data-parent="#accordion">
+                                    <div class="scribe-item-body">
+                                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                                    </div>
+                                </div>
+
+                            </div> 
+                            <div class="scribe-item">
+                                <div class="scribe-item-heading" id="headingMem">
+                                      <span class="icon"><i class="fa fa-users"></i></span>
+                                      <span>
+                                          <a class="btn-link" data-toggle="collapse" data-target="#collapseMem" aria-expanded="true" aria-controls="collapseMem">
+                                            Members
+                                          </a>
+                                      </span>
+                                </div>
+                                <div id="collapseMem" class="collapse" aria-labelledby="headingMem" data-parent="#accordion">
+                                    <div class="scribe-item-body">
+                                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="scribe-item">
+                                <div class="scribe-item-heading" id="headLinks">
+                                      <span class="icon"><i class="fa fa-plug"></i></span>
+                                      <span>
+                                          <a class="btn-link" data-toggle="collapse" data-target="#collapseLinks" aria-expanded="true" aria-controls="collapseLinks">
+                                             Connectors
+                                          </a>
+                                      </span>
+                                </div>
+                                <div id="collapseLinks" class="collapse" aria-labelledby="headingLinks" data-parent="#accordion">
+                                    <div class="scribe-item-body">
+                                        <p>Connect data sources to the Channel / Conversations.</p>
+                                        
+                                        <span><a href="#">Add Data Sources</a></span>
+                                    </div>
+                                </div>
+                            </div> 
+
+                        </div>        
+
+                    </div>
+                </div>
+
+            </div>
         </div>
+
+        
+        
     </div>
 </div>
 {% endblock %}
@@ -104,6 +163,7 @@
 
 {% block js %}
 <script src="{{MEDIA_URL}}js/actions.js"></script>
+<script src="{{MEDIA_URL}}js/tribe.js"></script>
 <script>
 
 $(document).ready(function() {

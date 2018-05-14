@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'vox',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -175,4 +176,15 @@ LOGGING = {
             'propagate': False
         },
     }
+}
+
+# channels
+ASGI_APPLICATION = "galaxy.routing.application"
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
 }

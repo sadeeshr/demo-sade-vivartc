@@ -30,7 +30,7 @@ class Enterprise(models.Model):
     def __str__(self):
         return '%s' % self.name 
  
-from vox.models import TelProfile 
+from vox.models import TelProfile, ConfProfile
 
 class Agent(models.Model):
 
@@ -56,6 +56,7 @@ class Team(models.Model):
     description = models.TextField(null=True, blank=True) 
     members = models.ManyToManyField(Agent, through='TeamMembership')
 
+    conf_profile = models.ForeignKey(ConfProfile, null=True, blank=True, related_name='teams')
     account = models.ForeignKey(Enterprise, related_name='teams')
 
     def __str__(self):

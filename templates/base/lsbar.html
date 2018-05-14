@@ -6,9 +6,8 @@
                             <div class="user-panel">
                                     <div class="pull-left image">
                                       {% if request.company.logo.url %}
-                                          <a href="#" class="submenu-link"><img src="{{request.company.logo.url}}" class="img-circle img-xs"/></a>
                                       {% else %}
-                                          <img src="{{MEDIA_URL}}images/avatar2.jpg" class="rounded-circle img-xs">
+                                          <img src="{% if request.user.agent.photo %} {{request.user.agent.photo.url }} {% endif %}" class="rounded-circle img-xs">
                                       {% endif %}
 
                                         <i class="on md b-black"></i>

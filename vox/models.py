@@ -29,6 +29,7 @@ class TelProfile(models.Model):
     account  = models.CharField(max_length=100, null=True, blank=True)
     pswd  = models.CharField(max_length=100, null=True, blank=True)
     switch = models.ForeignKey(TelSwitch, related_name="tel_profiles")
+    # Voice Mail infomation
 
     # multi tenancy
     account = models.ForeignKey(Enterprise, related_name="tel_profiles")
@@ -36,3 +37,12 @@ class TelProfile(models.Model):
     def __str__(self):
         return '%s' % self.extension
 
+class ConfProfile(models.Model):
+    bridge_id =  models.CharField(max_length=20)
+    password = models.CharField(max_length=100, null=True, blank=True)
+    switch = models.ForeignKey(TelSwitch, related_name="conf_profiles") 
+   
+    
+    def __str__(self):
+        return '%s' % self.bridge_id
+ 
