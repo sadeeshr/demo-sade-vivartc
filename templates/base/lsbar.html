@@ -3,17 +3,37 @@
             <div class="menu">
 
                 <div class="clearfix dk nav-user hidden-xs">
-                            <div class="user-panel">
+                    <div class="user-panel" data-account="{{me.tel_profile.user}}" data-pswd="{{me.tel_profile.pswd}}" data-extn="{{me.tel_profile.extn}}"
+                         data-name="{{request.user.get_full_name}}" data-domain="{{me.tel_profile.switch.domain}}" data-addr="{{me.tel_profile.switch.address}}">
                                     <div class="pull-left image">
+                                      <a href="#" class="btn-link ">
                                       {% if request.company.logo.url %}
                                       {% else %}
-                                          <img src="{% if request.user.agent.photo %} {{request.user.agent.photo.url }} {% endif %}" class="rounded-circle img-xs">
+                                      <img src="{% if request.user.agent.photo %} {{request.user.agent.photo.url }} {% endif %}" class="rounded-circle img-xs">
                                       {% endif %}
+                                      </a>
 
                                         <i class="on md b-black"></i>
                                     </div>
-                            </div>
+                    </div>
+                </div>
+
+                 
+                 <div class="sub-menu-container user-panel-submenu d-none">
+                     <div class="sub-menu" >
+                         <div class="media">
+                             <img src="{% if request.user.agent.photo %} {{request.user.agent.photo.url }} {% endif %}"  class="mr-3 img-xs img-circle" />
+                             <div class="media-body"> {{request.user.get_full_name}} </div>
+                         </div>
+                         <ul class="menu-list"  style="margin-top: 5px; ">
+                            <li><i class="fa fa-user text-info-300"></i><a href="#" class="">Profile</a></li>
+                            <li><i class="fa fa-sign-out text-info-300"></i><a href="{% url 'logout' %}" class="">Logout</a></li>
+                         </ul>
+                     </div>
                  </div>
+
+                 
+
 
                 <!-- nav -->
                 <nav class="nav-primary hidden-xs">

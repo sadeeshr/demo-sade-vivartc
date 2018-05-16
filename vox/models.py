@@ -25,8 +25,8 @@ class TelSwitch(models.Model):
         return '%s' % self.name
 
 class TelProfile(models.Model):
-    extension  = models.CharField(max_length=20)
-    account  = models.CharField(max_length=100, null=True, blank=True)
+    extn  = models.CharField(max_length=20)
+    user  = models.CharField(max_length=100, null=True, blank=True)
     pswd  = models.CharField(max_length=100, null=True, blank=True)
     switch = models.ForeignKey(TelSwitch, related_name="tel_profiles")
     # Voice Mail infomation
@@ -35,7 +35,7 @@ class TelProfile(models.Model):
     account = models.ForeignKey(Enterprise, related_name="tel_profiles")
 
     def __str__(self):
-        return '%s' % self.extension
+        return '%s' % self.extn
 
 class ConfProfile(models.Model):
     bridge_id =  models.CharField(max_length=20)

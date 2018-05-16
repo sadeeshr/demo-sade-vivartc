@@ -16,6 +16,7 @@
 
             },
             success: function(result){
+                console.log(result.next);
                 window.location = result.next;
             },
             error: function(xhr) {

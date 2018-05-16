@@ -4,6 +4,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.contrib import auth
 from accounts.models import *
+from django.core.urlresolvers import reverse
+from django.http import JsonResponse
+from django.core import serializers
 
 import json
 
@@ -13,12 +16,15 @@ import logging
 @login_required
 def authenticated_view(request):
 
+    agent = request.user.agent;
     teams = Team.objects.all()
     agents = Agent.objects.all()
 
-    return render(request, 'accounts/home.html', context={ 'teams':teams, 'agents':agents })
+    active_board = teams.first()
 
-@login_required(login_url='/account/login/')
+    return render(request, 'accounts/home.html', context={ 'me': agent, 'teams':teams, 'agents':agents, 'active_board':active_board })
+
+@login_required(login_url='/accounts/login/')
 def home(request):
     try:
         return authenticated_view(request)
@@ -44,7 +50,7 @@ def login(request):
             logging.info("login details {} {} ".format(username,pswd))
             url = request.POST.get('next')
             if url is None:
-                url = '/account/dashboard/'
+                url = '/accounts/home/'
             resp = {'next':url}
             return HttpResponse(json.dumps(resp), content_type='application/json')
 
@@ -66,5 +72,27 @@ def index(request):
 
     return render(request, 'base/index.html', locals())
 
+@login_required
+def tribe_pad(request):
+    try:
+        if request.POST:
+            mode = request.POST.get("mode")
+            key  = request.POST.get("key")
 
+            if mode == '0':
+                agent = Agent.objects.get(id=key)
+                data = {'title': agent.user.get_full_name(), 'extn': agent.tel_profile.extn, 'server': agent.tel_profile.switch.domain}
+                return JsonResponse(data, safe=False)
+
+            elif mode == '1':
+                Team.objects.get(id=key)
+
+            serialized_object = serializers.serialize('json', [data,])
+            return JsonResponse(serialized_object, safe=False)
+
+    except Exception as err:
+        logging.warning("Error in login {}".format(str(err)))
+        return HttpResponse(status=404, reason=str(err))
+
+    
 

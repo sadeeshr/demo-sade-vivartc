@@ -15,7 +15,7 @@ var started = false;
 var spinner = null;
 
 var selectedApproach = null;
-ar registered = false;
+var registered = false;
 
 var incoming = null;
 var localJsep = null;
@@ -23,6 +23,64 @@ var hold = false;
 
 var calls = [];
 var in_call = false;
+
+VoxPhone.dial = function(calleeName, calleeNumber, calleePic) {
+    $('.vox-container').find('.peer-image > img').attr('src', calleePic);
+    $('.vox-container').find('.peer-name > span').html(calleeName);
+    $('.vox-container').find('.peer-number > span').html(calleeNumber);
+    $('.vox-modal').removeClass('hide');
+}
+VoxPhone.progress = function(line) {
+
+}
+VoxPhone.incoming = function(callerNumber, line) {
+    // $('<audio id="chatAudio"> <source src="/media/audio/iphone.mp3" type="audio/mpeg"></audio>').appendTo('body');
+    // $('#chatAudio')[0].play();
+    $('.vox-container').find('.peer-number > span').html(callerNumber);
+    $('.vox-modal').removeClass('hide');
+
+}
+VoxPhone.connected = function(line) {
+
+/*    if($('#chatAudio').length > 0) {
+        $('#chatAudio')[0].pause();
+        $('#chatAudio').remove();
+    }
+ */
+    // $('.vox-container').find('.sp-actions .btn-action.transfer').removeClass('disabled');
+    console.log("Recieved Connect Notification");
+    $('.tribe-pad').find('.action-item.phone').addClass('connected');
+    calls.push(line);
+}
+
+VoxPhone.hold = function() {
+
+}
+VoxPhone.transfer = function() {
+
+}
+
+VoxPhone.hangUp = function(line) {
+    calls = jQuery.grep(calls, function(value) {
+        return value != line;
+    });
+    console.log(calls);
+    if(calls.length > 0)
+        return;
+
+/*
+    if($('#chatAudio').length > 0) {
+        $('#chatAudio')[0].pause();
+        $('#chatAudio').remove();
+    }
+*/
+    $('.tribe-pad').find('.action-item.phone').removeClass('connected');
+
+}
+
+function VoxPhone() {
+    console.log("vox phone initialized");
+}
 
 
 $(document).ready(function() {
@@ -409,11 +467,198 @@ $(document).ready(function() {
 
     });
 
+    $('body').on('click', '.tribe-pad .action-item.phone .btn-link', function() {
+        var item = $(this).closest('.action-item');
+
+        if(item.hasClass('connected')) {
+            endCall();
+
+        } else {
+            //var pic = user.data('pic');
+            //var name = user.data('name');
+            var extn = item.data('extn');
+            var server = item.data('server');
+
+            // VoxPhone.dial(name, extn, pic, server);
+            var callee = 'sip:'+extn+'@'+server;
+            doCall(callee);
+        }
+
+    });
+
+
 });
 
+function registerUser() {
+    // Let's see if the user provided a server address
+    //      NOTE WELL! Even though the attribute we set in the request is called "proxy",
+    //      this is actually the _registrar_. If you want to set an outbound proxy (for this
+    //      REGISTER request and for all INVITEs that will follow), you'll need to set the
+    //      "outbound_proxy" property in the request instead. The two are of course not
+    //      mutually exclusive. If you set neither, the domain part of the user identity
+    //      will be used as the target of the REGISTER request the plugin might send.
+    var vox_extn = $('.lsmenu .user-panel').data('extn');
+    var vox_account = $('.lsmenu .user-panel').attr('data-account');
+    var vox_pswd = $('.lsmenu .user-panel').data('pswd');
+    var vox_server = $('.lsmenu .user-panel').data('domain');
+    var agentName = $('.lsmenu .user-panel').data('name');
+
+    console.log(vox_extn);
+    console.log(vox_server);
+
+    var sipserver = 'sip:'+vox_server+':5060';
+    if(sipserver !== "" && sipserver.indexOf("sip:") != 0 && sipserver.indexOf("sips:") !=0) {
+        return;
+    }
+    var username = 'sip:'+vox_extn+'@'+vox_server;
+    if(username === "" || username.indexOf("sip:") != 0 || username.indexOf("@") < 0) {
+       return;
+    }
+
+    var register = {
+        "request" : "register",
+        "username" : username
+    };
+    register["secret"] = vox_pswd;
+    var authuser = vox_account;
+    if(authuser !== "") {
+        register.authuser = authuser;
+    }
+    console.log(authuser);
+
+    var displayname = agentName;
+    if(displayname !== "") {
+        register.display_name = displayname;
+    }
+
+    if(sipserver === "") {
+        sipcall.send({"message": register});
+    } else {
+        register["proxy"] = sipserver;
+        register["outbound_proxy"] = sipserver;
+        // Uncomment this if you want to see an outbound proxy too
+        //~ register["outbound_proxy"] = "sip:outbound.example.com";
+        sipcall.send({"message": register});
+    }
+}
 
 
 
+function doCall(callee) {
+    // Call someone
+    var username = callee;
+    if(username === "") {
+        bootbox.alert('Please insert a valid SIP address (e.g., sip:pluto@example.com)');
+        $('#peer').removeAttr('disabled');
+        $('#dovideo').removeAttr('disabled');
+        return;
+    }
+    if(username.indexOf("sip:") != 0 || username.indexOf("@") < 0) {
+        bootbox.alert('Please insert a valid SIP address (e.g., sip:pluto@example.com)');
+        $('#peer').removeAttr('disabled').val("");
+        $('#dovideo').removeAttr('disabled').val("");
+        return;
+    }
 
 
+    if(localJsep != null) {
+        alert("jsep not null");
+        var body = { request: "call", uri: username };
+        localJsep["dtls-reset"] = true;
+        sipcall.send({"message": body, "jsep": localJsep});
+        return;
+    }
+    // Call this URI
+    doVideo = $('#dovideo').is(':checked');
+    Janus.log("This is a SIP " + (doVideo ? "video" : "audio") + " call (dovideo=" + doVideo + ")");
+    sipcall.createOffer(
+        {
+            update: false,
+            media: {
+                audioSend: true, audioRecv: true,       // We DO want audio
+                videoSend: false, videoRecv: false  // We MAY want video
+            },
+            success: function(jsep) {
+                Janus.debug("Got SDP!");
+                Janus.debug(jsep);
+                // By default, you only pass the SIP URI to call as an
+                // argument to a "call" request. Should you want the
+                // SIP stack to add some custom headers to the INVITE,
+                // you can do so by adding an additional "headers" object,
+                // containing each of the headers as key-value, e.g.:
+                //      var body = { request: "call", uri: $('#peer').val(),
+                //          headers: {
+                //              "My-Header": "value",
+                //              "AnotherHeader": "another string"
+                //          }
+                //      };
+                var body = { request: "call", uri: username, force_ice:true };
+                jsep["dtls-reset"] = true;
+                // Note: you can also ask the plugin to negotiate SDES-SRTP, instead of the
+                // default plain RTP, by adding a "srtp" attribute to the request. Valid
+                // values are "sdes_optional" and "sdes_mandatory", e.g.:
+                //      var body = { request: "call", uri: $('#peer').val(), srtp: "sdes_optional" };
+                // "sdes_optional" will negotiate RTP/AVP and add a crypto line,
+                // "sdes_mandatory" will set the protocol to RTP/SAVP instead.
+                // Just beware that some endpoints will NOT accept an INVITE
+                // with a crypto line in it if the protocol is not RTP/SAVP,
+                // so if you want SDES use "sdes_optional" with care.
+                sipcall.send({"message": body, "jsep": jsep});
+                localJsep = jsep;
+            },
+            error: function(error) {
+                Janus.error("WebRTC error...", error);
+                bootbox.alert("WebRTC error... " + JSON.stringify(error));
+            }
+        });
+}
+
+
+function doHangup() {
+    VoxPhone.hangUp();
+    // Hangup a call
+    var hangup = { "request": "hangup" };
+    sipcall.send({"message": hangup});
+    if(calls.length == 0) {
+        $('#call').attr('disabled', true).unbind('click');
+        sipcall.hangup();
+    }
+}
+
+function endCall() {
+    // Hangup a call
+    VoxPhone.hangUp();
+    var hangup = { "request": "hangup", "line": 0};
+    sipcall.send({"message": hangup});
+    if(calls.length == 0) {
+        sipcall.hangup();
+        in_call = false;
+    }
+}
+
+function holdCall() {
+    // Hangup a call
+    var msg;
+    if(hold) {
+        msg = { "request": "unhold", "line": 0};
+        sipcall.send({"message": msg});
+        hold = false;
+    } else {
+        msg = { "request": "hold", "line": 0};
+        sipcall.send({"message": msg});
+        hold = true;
+    }
+}
+
+function transferCall(target) {
+    // Hangup a call
+    var msg = { "request": "transfer", "target": target};
+    sipcall.send({"message": msg});
+}
+
+function attendedTransfer(transferee, target) {
+    var msg = { "request": "transfer", "mode": 2, "line": 0, "target_line": 1};
+    sipcall.send({"message": msg});
+
+}
 

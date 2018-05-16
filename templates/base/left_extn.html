@@ -12,10 +12,10 @@
         <div class="body item-list">
             <ul class="list-unstyled">
                 {% for team in teams %}
-                <li class="media item px-3 my-2">
+                <li class="media item px-3 py-2 {% if team == active_board %}active{% endif %}">
                     <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/team.jpg">
                     <div class="media-body">
-                        <span>{{ team.name }}</span> 
+                        <span><a class="btn-link" href="#">{{ team.name }}</a></span> 
                     </div>
                 </li>
                 {% endfor %}
@@ -31,14 +31,14 @@
             <ul class="list-unstyled">
                 {% for agent in agents %}
                 {% if agent != request.user.agent %}
-                <li class="media item px-3 my-2">
+                <li class="media item agent px-3 py-2" data-id="{{ agent.id }}">
                     {% if agent.photo %}
                     <img class="mr-3 rounded img-small" src="{{ agent.photo.url }}"> 
                     {% else %}
                     <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/avatar2.jpg">
                     {% endif %}
                     <div class="media-body">
-                        <span>{{ agent.user.get_full_name }}</span> 
+                        <span><a class="btn-link" href="#">{{ agent.user.get_full_name }}</a></span> 
                     </div>
                 </li>
                 {% endif %}
@@ -54,7 +54,7 @@
         </div>
         <div class="body item-list">
             <ul class="list-unstyled">
-                <li class="media item px-3 my-2">
+                <li class="media item px-3 py-2">
                     <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/avatar2.jpg">
                     <div class="media-body">
                         <span>John Smith</span>

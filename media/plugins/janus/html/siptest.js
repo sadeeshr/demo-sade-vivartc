@@ -466,15 +466,13 @@ $(document).ready(function() {
 				});
 	}});
 
-    $('body').on('click', '.klip .card-action', function() {
-        var user = $(this).closest('.klip-card.agent');
+    $('body').on('click', '.tribe-pad .action-item.phone .btn-link', function() {
+        var item = $(this).closest('.action-item');
 
-        var pic = user.data('pic');
-        var name = user.data('name');
-        var extn = user.data('extn');
-        var server = user.data('server');
+        var extn = item.data('extn');
+        var server = item.data('server');
 
-        VoxPhone.dial(name, extn, pic, server);
+        // VoxPhone.dial(name, extn, pic, server);
         var callee = 'sip:'+extn+'@'+server;
         doCall(callee);
 
@@ -537,6 +535,12 @@ function registerUser() {
     //      "outbound_proxy" property in the request instead. The two are of course not
     //      mutually exclusive. If you set neither, the domain part of the user identity
     //      will be used as the target of the REGISTER request the plugin might send.
+    var vox_extn = $('.lsmenu .user-panel').data('extn');
+    var vox_account = $('.lsmenu .user-panel').attr('data-account');
+    var vox_pswd = $('.lsmenu .user-panel').data('pswd');
+    var vox_server = $('.lsmenu .user-panel').data('domain');
+    var agentName = $('.lsmenu .user-panel').data('name');
+
     var sipserver = 'sip:'+vox_server+':5060';
     if(sipserver !== "" && sipserver.indexOf("sip:") != 0 && sipserver.indexOf("sips:") !=0) {
         return;
@@ -606,7 +610,7 @@ function doCall(callee) {
             update: false,
 			media: {
 				audioSend: true, audioRecv: true,		// We DO want audio
-				videoSend: doVideo, videoRecv: doVideo	// We MAY want video
+				videoSend: false, videoRecv: false	// We MAY want video
 			},
 			success: function(jsep) {
 				Janus.debug("Got SDP!");
