@@ -45,7 +45,7 @@
                          </a>
                     </li>
 
-
+                    {% comment %}
                     <li{% if 'agents' in request.META.PATH_INFO %} class="active"{% endif %}>
                       <a href="" class="auto">
                         <span class="pull-right text-muted">
@@ -55,6 +55,7 @@
                         <span class="font-bold lm-h1">Agents</span>
                       </a>
                     </li>
+                    {% endcomment %}
 
                     <li{% if 'teams' in request.META.PATH_INFO %} class="active"{% endif %}>
                         <a href="" >
@@ -65,6 +66,7 @@
                         <span class="font-bold lm-h1">Teams</span>
                       </a>
                      </li>
+                    {% comment %}
                     <li{% if 'analytics' in request.META.PATH_INFO %} class="active"{% endif %}>
                         <a href="" >
                         <span class="pull-right text-muted">
@@ -74,6 +76,7 @@
                         <span class="font-bold lm-h1">Reports</span>
                       </a>
                      </li>
+                    {% endcomment %}
 
             <li{% if 'settings' in request.META.PATH_INFO %} class="active"{% endif %}>
                         <a href="#" class="auto">

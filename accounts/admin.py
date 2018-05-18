@@ -5,4 +5,5 @@ from accounts.models import *
 admin.site.register(Enterprise)
 admin.site.register(Agent)
 admin.site.register(Team)
+admin.site.register(TeamMembership)
 

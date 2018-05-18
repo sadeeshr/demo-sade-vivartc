@@ -217,6 +217,11 @@ input:focus {
     color: #000;
 }
 
+.contact-list .contact p {
+    font-size: 12px;
+    font-weight: 400;
+}
+
 .category .item.active {
     background: rgba(69, 147, 120, 0.4);
     color: #333;
@@ -410,7 +415,7 @@ span.time {
 
 .scribe-item-heading {
     cursor: pointer;
-    font-size: 1.4em;
+    font-size: 1.2em;
 }
 .scribe-item-heading .icon {
     color: #777 !important;
@@ -424,6 +429,22 @@ span.time {
     font-size: 14px;
     margin:0;
 }
+
+.incall-widget {
+
+}
+.incall-widget button {
+    width: 56px;
+    height: 50px; 
+    background: rgb(255,255,255);
+    border: 1px solid #777;
+    font-size: 20px;
+}
+.incall-widget button:hover {
+    background: rgb(242,242,242);
+}
+
+
 
 /* dialer */
 .lsbrowser .dialer {
@@ -444,7 +465,6 @@ span.time {
     margin: 0 -15px;
     margin-bottom: 15px;
     border-bottom: 1px solid rgba(242,242,242, 0.2);
-    padding-left: 15px;
     text-align: center;
 }
 
@@ -462,6 +482,18 @@ span.time {
 
 .dialer button:hover {
     background: rgba(25,40,60, 0.2);
+}
+
+.btn-dial {
+    font-size: 20px;
+    width:100% !important;
+    background: #009688!important;
+}
+
+.btn-erase {
+    font-size: 20px;
+    background: #777 !important;
+    width:100% !important;
 }
 
 /* dial launcher */

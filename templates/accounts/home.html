@@ -11,7 +11,7 @@
             <div class="clearfix">
                 <div class="float-left">
                     <span class="title">{{ active_board.name }}</span>
-                    <p class="desc">5 members</p>
+                    <p class="desc">{{active_board.members.count}} members</p>
                 </div>
         
                 <div class="actions float-right">
@@ -64,7 +64,7 @@
             <div class="col-scribe">
                 <div class="scribe-container">
                     <div class="scribe-heading">
-                        <span>Sun Intermediate 10 Am</span>
+                        <span>{{ active_board.name }}</span>
                         <span class="float-right"><a class="btn-link link-close align-top" href="#"><i class="fa fa-times"></i></a></span>
                     </div>    
                     <div class="scribe-body">
@@ -78,9 +78,9 @@
                                           </a>
                                       </span>
                                 </div>
-                                <div id="collapseOne" class="collapse show" aria-labelledby="headingMem" data-parent="#accordion">
-                                    <div class="scribe-item-body">
-                                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                                <div id="collapseOne" class="collapse" aria-labelledby="headingMem" data-parent="#accordion">
+                                    <div class="scribe-item-body py-3">
+                                    {{active_board.description}}
                                     </div>
                                 </div>
 
@@ -93,10 +93,27 @@
                                             Members
                                           </a>
                                       </span>
+
+                                      <span class="badge badge-pill badge-info px-2 ml-3">3<span>
                                 </div>
                                 <div id="collapseMem" class="collapse" aria-labelledby="headingMem" data-parent="#accordion">
                                     <div class="scribe-item-body">
-                                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                                        <ul class="list-unstyled py-3">
+                                            {% for agent in active_board.members.all %}
+                                            <li class="media item agent px-0 py-2" data-id="{{ agent.id }}">
+                                                {% if agent.photo %}
+                                                <img class="mr-3 rounded img-small" src="{{ agent.photo.url }}">
+                                                {% else %}
+                                                <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/avatar2.jpg">
+                                                {% endif %}
+                                                <div class="media-body">
+                                                    <span><a class="btn-link" href="#">{{ agent.user.get_full_name }}</a></span>
+                                                </div>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+
+
                                     </div>
                                 </div>
                             </div> 
@@ -110,13 +127,47 @@
                                       </span>
                                 </div>
                                 <div id="collapseLinks" class="collapse" aria-labelledby="headingLinks" data-parent="#accordion">
-                                    <div class="scribe-item-body">
+                                    <div class="scribe-item-body py-3">
                                         <p>Connect data sources to the Channel / Conversations.</p>
                                         
                                         <span><a href="#">Add Data Sources</a></span>
                                     </div>
                                 </div>
                             </div> 
+
+
+                            <div class="scribe-item scribe-incall d-none">
+                                <div class="scribe-item-heading" id="headPad">
+                                    <span class="icon"><i class="fa fa-phone"></i></span>
+                                    <span>
+                                        <a class="btn-link number" data-toggle="collapse" data-target="#collapsePad" aria-expanded="true" aria-controls="collapsePad"></a>
+                                    </span>
+                                </div>
+                                <div id="collapsePad" class="collapse show" aria-labelledby="headPad" data-parent="#accordion"> 
+                                    <div class="scribe-item-body incall-widget py-3">
+                                        <div class="row no-margin">
+                                            <div class="col-sm">
+                                                <button class="btn btn-hold" ><i class="fa fa-microphone-slash"></i></button>
+                                            </div>
+                                            <div class="col-sm">
+                                                <button class="btn btn-speaker" ><i class="fa fa-volume-up"></i></button>
+                                            </div>
+                                            <div class="col-sm">
+                                                <button class="btn btn-digits" ><i class="fa fa-th"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row no-margin pt-3">
+                                            <div class="col-sm">
+                                            </div>
+                                            <div class="col-sm">
+                                                <button class="btn btn-hangup" ><i class="fa fa-phone text-danger"></i></button>
+                                            </div>
+                                            <div class="col-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                           
 
                         </div>        
 

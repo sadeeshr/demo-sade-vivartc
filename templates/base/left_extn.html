@@ -3,6 +3,16 @@
         <span><input type="text" class="search-box"></span> 
     </div>
 
+    <div class="contacts d-none">
+        <div class="category">
+            <div class="body">
+                <ul class="contact-list list-unstyled">
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div class="phbook">
       <div class="category">
         <div class="heading">
@@ -21,8 +31,8 @@
                 {% endfor %}
             </ul>
         </div>
-    </div>
-    <div class="category">
+      </div>
+      <div class="category">
         <div class="heading">
             <span>Agents</span>
             <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
@@ -45,8 +55,9 @@
                 {% endfor %}
             </ul>
         </div>
-    </div>
+      </div>
 
+    {% comment %}
     <div class="category">
         <div class="heading">
             <span>Direct Conversations</span>
@@ -69,11 +80,10 @@
             </ul>
 
         </div>
-
-
     </div>
+    {% endcomment %}
 
-    <div class="category">
+      <div class="category">
         <div class="heading">
             <span>Bots</span>
             <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
@@ -96,58 +106,64 @@
 
 
     <div class="dialer d-none">
-        <div class="display">
-            <span class="dislay-box"></span>
-        </div>
+        <div class="display"></div>
         <div class="row no-margin">
             <div class="col-sm">
-                <button class="btn">1</button> 
+                <button class="btn btn-digit" data-value="1">1</button> 
             </div>
             <div class="col-sm">
-                <button class="btn">2</button> 
+                <button class="btn btn-digit" data-value="2">2</button> 
             </div>
             <div class="col-sm">
-                <button class="btn">3</button> 
-            </div>
-        </div>
-        <div class="row no-margin">
-            <div class="col-sm">
-                <button class="btn">4</button> 
-            </div>
-            <div class="col-sm">
-                <button class="btn">5</button> 
-            </div>
-            <div class="col-sm">
-                <button class="btn">6</button> 
+                <button class="btn btn-digit" data-value="3">3</button> 
             </div>
         </div>
         <div class="row no-margin">
             <div class="col-sm">
-                <button class="btn">7</button> 
+                <button class="btn btn-digit" data-value="4">4</button> 
             </div>
             <div class="col-sm">
-                <button class="btn">8</button> 
+                <button class="btn btn-digit" data-value="5">5</button> 
             </div>
             <div class="col-sm">
-                <button class="btn">9</button> 
+                <button class="btn btn-digit" data-value="6">6</button> 
             </div>
         </div>
         <div class="row no-margin">
             <div class="col-sm">
-                <button class="btn" disabled>*</button> 
+                <button class="btn btn-digit" data-value="7">7</button> 
             </div>
             <div class="col-sm">
-                <button class="btn btn-call"><i class="fa fa-phone"></i></button> 
+                <button class="btn btn-digit" data-value="8">8</button> 
             </div>
             <div class="col-sm">
-                <button class="btn" disabled>#</button> 
+                <button class="btn btn-digit" data-value="9">9</button> 
+            </div>
+        </div>
+        <div class="row no-margin">
+            <div class="col-sm">
+                <button class="btn btn-digit" data-value="*">*</button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-digit" data-value="0">0</button> 
+            </div>
+            <div class="col-sm">
+                <button class="btn btn-digit" data-value="#">#</button> 
+            </div>
+        </div>
+        <div class="row no-margin">
+            <div class="col-sm-6">
+                <button class="btn btn-dial"><i class="fa fa-phone"></i></button> 
+            </div>
+            <div class="col-sm-6 pl-0" style="padding-right: 25px; ">
+                <button class="btn btn-erase" ><i class="fa fa-long-arrow-left"></i></button> 
             </div>
         </div>
 
     </div>
 
     <div class="dial-launcher">
-        <button class="btn btn-launcher" data-toggle="buttons"><i class="fa fa-bars"></i></button>
+        <button class="btn btn-launcher" data-toggle="buttons"><i class="fa fa-th-list"></i></button>
 
     </div>
 

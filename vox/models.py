@@ -46,3 +46,20 @@ class ConfProfile(models.Model):
     def __str__(self):
         return '%s' % self.bridge_id
  
+class Contact(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100, null=True, blank=True)
+    mobile = models.CharField(max_length=20, null=True, blank=True)
+    work = models.CharField(max_length=20, null=True, blank=True)
+    title = models.CharField(max_length=100, null=True, blank=True)
+    company = models.CharField(max_length=100, null=True, blank=True)
+    email = models.CharField(max_length=100, null=True, blank=True)
+    photo = models.ImageField(upload_to='photo', null=True, blank=True)
+
+    # add source later
+    
+    def __str__(self):
+        return '%s' % self.first_name
+
+    def full_name(self):
+        return '{} {}'.format(self.first_name, self.last_name)

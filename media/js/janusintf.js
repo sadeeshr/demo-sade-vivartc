@@ -1,5 +1,5 @@
 /*
- * Janus interface 
+ * Janus interface
  */
 var server = null;
 if(window.location.protocol === 'http:')
@@ -75,13 +75,14 @@ VoxPhone.hangUp = function(line) {
     }
 */
     $('.tribe-pad').find('.action-item.phone').removeClass('connected');
+    $('.scribe-incall').addClass('d-none');    
+    $('.scribe-incall').find('.number').text('');
 
 }
 
 function VoxPhone() {
     console.log("vox phone initialized");
 }
-
 
 $(document).ready(function() {
     // Initialize the library (all console debuggers enabled)
@@ -110,7 +111,7 @@ $(document).ready(function() {
                         Janus.log("Plugin attached! (" + sipcall.getPlugin() + ", id=" + sipcall.getId() + ")");
                         // Prepare the username registration
                         registerUser();
-                    }, 
+                    },
                     error: function(error) {
                         Janus.error("  -- Error attaching plugin...", error);
                         bootbox.alert("  -- Error attaching plugin... " + error);
@@ -128,7 +129,7 @@ $(document).ready(function() {
                                     color: '#aaa',
                                     top: '10px',
                                     left: (navigator.mozGetUserMedia ? '-100px' : '300px')
-                                } 
+                                }
                             });
                         } else {
                             // Restore screen
@@ -214,7 +215,7 @@ $(document).ready(function() {
                                 var extra = "";
                                 if(offerlessInvite)
                                     extra = " (no SDP offer provided)"
-                                
+
                                 incoming = bootbox.dialog({
                                     message: "Incoming call from " + result["username"] + "!" + rtpType + extra,
                                     title: "Incoming call",
@@ -271,7 +272,7 @@ $(document).ready(function() {
                                             }
                                         }
                                     }
-                                }); 
+                                });
                             } else if(event === 'accepting') {
                                 // Response to an offerless INVITE, let's wait for an 'accepted'
                             } else if(event === 'progress') {
@@ -408,9 +409,11 @@ $(document).ready(function() {
             },
             error: function(error) {
                 Janus.error(error);
+                /*
                 bootbox.alert(error, function() {
                     window.location.reload();
                 });
+                */
             },
             destroyed: function() {
                 window.location.reload();
@@ -419,23 +422,6 @@ $(document).ready(function() {
         });
     }});
 
-    $('body').on('click', '.klip .card-action', function() {
-        var user = $(this).closest('.klip-card.agent');
-
-        var pic = user.data('pic');
-        var name = user.data('name');
-        var extn = user.data('extn');
-        var server = user.data('server');
-
-        VoxPhone.dial(name, extn, pic, server);
-        var callee = 'sip:'+extn+'@'+server;
-        doCall(callee);
-
-    });
-
-    $('body').on('click', '.vox-container .hangup', function() {
-        endCall();
-    });
 
     $('body').on('click', '.vox-container .hold', function() {
         holdCall();
@@ -457,7 +443,6 @@ $(document).ready(function() {
         doCall(target);
 
     });
-
 
     $('body').on('click', '.vox-container .attended-transfer', function() {
 
@@ -486,6 +471,25 @@ $(document).ready(function() {
 
     });
 
+    $('body').on('click', '.dialer .btn-dial', function() {
+        var number = $(this).closest('.dialer').find('.display').text();
+        var vox_server = $('.lsmenu .user-panel').data('domain');  
+        var callee = 'sip:'+number+'@'+vox_server;
+        doCall(callee);
+
+        $('.scribe-incall').find('.number').text($('.lsbrowser').find('.display').text());
+        $('.scribe-incall').removeClass('d-none'); 
+
+        $('.lsbrowser').find('.display').html('');
+        $('.lsbrowser').find('.dialer').toggleClass('d-none');
+        $('.lsbrowser').find('.phbook').toggleClass('d-none');
+        $('.lsbrowser').find('.contacts').toggleClass('d-none');
+        $('.lsbrowser').find('.contact-list').empty()
+    });
+
+    $('body').on('click', '.btn-hangup', function() {
+        endCall();
+    });
 
 });
 
@@ -541,8 +545,6 @@ function registerUser() {
         sipcall.send({"message": register});
     }
 }
-
-
 
 function doCall(callee) {
     // Call someone
@@ -612,7 +614,6 @@ function doCall(callee) {
             }
         });
 }
-
 
 function doHangup() {
     VoxPhone.hangUp();
