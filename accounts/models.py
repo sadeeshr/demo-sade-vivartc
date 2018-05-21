@@ -54,7 +54,7 @@ class Team(models.Model):
     
     name = models.CharField(max_length=40)   
     description = models.TextField(null=True, blank=True) 
-    members = models.ManyToManyField(Agent, through='TeamMembership')
+    members = models.ManyToManyField(Agent, through='TeamMembership', related_name='teams')
 
     conf_profile = models.ForeignKey(ConfProfile, null=True, blank=True, related_name='teams')
     account = models.ForeignKey(Enterprise, related_name='teams')

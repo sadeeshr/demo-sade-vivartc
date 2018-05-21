@@ -32,7 +32,7 @@
             </ul>
         </div>
       </div>
-      <div class="category">
+      <div class="category agents">
         <div class="heading">
             <span>Agents</span>
             <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
@@ -41,14 +41,14 @@
             <ul class="list-unstyled">
                 {% for agent in agents %}
                 {% if agent != request.user.agent %}
-                <li class="media item agent px-3 py-2" data-id="{{ agent.id }}">
+                <li class="media item agent px-3 py-2" data-id="{{ agent.id }}" data-user="{{agent.user.username}}">
                     {% if agent.photo %}
                     <img class="mr-3 rounded img-small" src="{{ agent.photo.url }}"> 
                     {% else %}
                     <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/avatar2.jpg">
                     {% endif %}
                     <div class="media-body">
-                        <span><a class="btn-link" href="#">{{ agent.user.get_full_name }}</a></span> 
+                        <span><a class="btn-link fullname" href="#">{{ agent.user.get_full_name }}</a></span> 
                     </div>
                 </li>
                 {% endif %}

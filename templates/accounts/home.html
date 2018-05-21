@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="row mx-0">
-    <div class="tribe-pad">
+    <div class="tribe-pad" data-id="{{active_board.id}}" data-mode="0">
         <div class="header-content">
             <div class="clearfix">
                 <div class="float-left">
@@ -255,6 +255,7 @@
 
 <script>
 var csrf_token = "{{csrf_token}}";
+var user = "{{request.user.username}}";
 </script>
 
 <script src="{{MEDIA_URL}}plugins/janus/html/janus.js"></script>
