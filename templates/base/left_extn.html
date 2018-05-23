@@ -14,7 +14,7 @@
     </div>
 
     <div class="phbook">
-      <div class="category">
+      <div class="category teams viewable" data-mode="1">
         <div class="heading">
             <span>Teams</span>
             <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
@@ -22,17 +22,20 @@
         <div class="body item-list">
             <ul class="list-unstyled">
                 {% for team in teams %}
-                <li class="media item px-3 py-2 {% if team == active_board %}active{% endif %}">
+                <li class="media item team px-3 py-2 {% if team == active_board %}active{% endif %}" data-id="{{team.id}}">
                     <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/team.jpg">
                     <div class="media-body">
                         <span><a class="btn-link" href="#">{{ team.name }}</a></span> 
+                    </div>
+                    <div class="media-right">
+                        <span class="badge badge-pill badge-info text-white py-2"></span>
                     </div>
                 </li>
                 {% endfor %}
             </ul>
         </div>
       </div>
-      <div class="category agents">
+      <div class="category agents viewable" data-mode="0">
         <div class="heading">
             <span>Agents</span>
             <span class="action float-right"><i class="fa fa-plus-circle"></i></span>

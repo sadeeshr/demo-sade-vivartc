@@ -18,30 +18,43 @@
 
     });
 
-    $('body').on('click', '.agent .btn-link', function() {
+ 
+    /* Team View */
+    $('body').on('click', '.teams.viewable .btn-link', function() {
         var menuItem = $(this).closest('.item'); 
         var key = $(this).closest('.item').data("id");
-        console.log(key);
         
         $.ajax({
-            type:"POST",
+            type:"GET",
             cache:false,
-            url: '/accounts/tribe/pad/',
+            url: '/accounts/team/record',
             data:{
-                'mode': 0,
                 'key': key,
-                'csrfmiddlewaretoken': csrf_token
             },
             success:function(result) {
-                console.log(result);
-
-                $('.tribe-pad .header-content').find('.title').html(result.title);
+                $('.tribe-pad').data('id', result.id);
+                $('.tribe-pad .header-content').find('.title').html(result.name);
                 $('.tribe-pad .header-content').find('.desc').html('');
-
-                $('.tribe-pad .header-content').find('.action-item.phone').data('extn', result.extn);
-                $('.tribe-pad .header-content').find('.action-item.phone').data('server', result.server);
+                // $('.tribe-pad .header-content').find('.action-item.phone').data('extn', result.extn);
+                //$('.tribe-pad .header-content').find('.action-item.phone').data('server', result.server);
+                $('.message-list').find('li.visible').remove();
                 $('.lsbrowser').find('.active').removeClass('active');
+                menuItem.find('.badge').text('');
                 menuItem.addClass('active');
+
+                if($('.col-scribe').length > 0) {
+                    $('.scribe-heading .title').text('').text(result.name);
+                    $('.scribe-item.info').find('.scribe-item-body').text('').text(result.description);
+                    $('.scribe-item.members').find('.badge').text('').text(result.members.length);
+                    $('.scribe-item.members').find('ul').empty();
+                    $.each(result.members, function(key, item) {
+                        var li = "<li class='media item agent px-0 py-2' data-id='"+item.id+"'>\
+                                  <img class='mr-3 rounded img-small' src='"+item.photo+"'>\
+                                  <div class='media-body'><span><a class='' href='#'>"+item.display_name+"</a></span></div>\
+                                  </li>";
+                        $('.scribe-item.members').find('ul').append(li);
+                    });
+                }
                
             },
             error: function(xhr, error) {

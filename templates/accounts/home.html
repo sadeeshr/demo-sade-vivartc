@@ -1,5 +1,9 @@
 {% extends "base/root.html" %}
 
+{% block css %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}plugins/atjs/dist/css/jquery.atwho.min.css" />
+{% endblock %}
+
 {% block headjs %}
 {% endblock %}
 
@@ -48,6 +52,16 @@
                             <p class="text"></p>
                         </div> 
                     </li>
+                    {% for message in active_board.messages.all %}
+                    <li class="media message visible">
+                        <img class="mr-3 rounded img-sm" src="{% if message.author.agent.photo %} {{ message.author.agent.photo.url }}{% endif %}">
+                        <div class="media-body">
+                             <span><h5 class="title">{{ message.author.get_full_name }}</h5></span>
+                             <span class="time">{{ message.timestamp|date:"P" }}</span>
+                             <p class="text">{{ message.content|safe }}</p>
+                        </div>
+                    </li>
+                    {% endfor %}
             
                 </ul>
 
@@ -64,12 +78,12 @@
             <div class="col-scribe">
                 <div class="scribe-container">
                     <div class="scribe-heading">
-                        <span>{{ active_board.name }}</span>
+                        <span class="title">{{ active_board.name }}</span>
                         <span class="float-right"><a class="btn-link link-close align-top" href="#"><i class="fa fa-times"></i></a></span>
                     </div>    
                     <div class="scribe-body">
                         <div class="accordion">
-                            <div class="scribe-item">
+                            <div class="scribe-item info">
                                 <div class="scribe-item-heading" id="headingMem">
                                       <span class="icon"><i class="fa fa-info-circle"></i></span>
                                       <span>
@@ -85,7 +99,7 @@
                                 </div>
 
                             </div> 
-                            <div class="scribe-item">
+                            <div class="scribe-item members">
                                 <div class="scribe-item-heading" id="headingMem">
                                       <span class="icon"><i class="fa fa-users"></i></span>
                                       <span>
@@ -94,7 +108,7 @@
                                           </a>
                                       </span>
 
-                                      <span class="badge badge-pill badge-info px-2 ml-3">3<span>
+                                      <span class="badge badge-pill badge-info px-2 ml-3">{{active_board.members.count}}<span>
                                 </div>
                                 <div id="collapseMem" class="collapse" aria-labelledby="headingMem" data-parent="#accordion">
                                     <div class="scribe-item-body">
@@ -252,10 +266,14 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.1.0/bootbox.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.3/toastr.min.js"></script>
+<script src="{{MEDIA_URL}}plugins/moment/moment.min.js"></script>
+<script src="{{MEDIA_URL}}plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="{{MEDIA_URL}}plugins/atjs/dist/js/jquery.atwho.min.js"></script>
 
 <script>
 var csrf_token = "{{csrf_token}}";
 var user = "{{request.user.username}}";
+var mykey = "{{request.user.id}}";
 </script>
 
 <script src="{{MEDIA_URL}}plugins/janus/html/janus.js"></script>
@@ -266,6 +284,14 @@ var user = "{{request.user.username}}";
 $(document).ready(function() {
 
     $('.lsbrowser .dialer').css('width', $('.lsbrowser').width());
+
+    var msgListHt = $('.col-messages').height() - $('.col-messages .footer').outerHeight();
+    $('.col-messages .message-list').css('height', msgListHt);   
+    $('.col-messages .message-list').css('max-height', msgListHt);   
+    $('.col-messages .message-list').slimScroll({
+        height: msgListHt,
+        scrollTo: msgListHt
+    });
 
 });
  

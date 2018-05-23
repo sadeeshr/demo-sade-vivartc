@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('accounts.urls')),
     url(r'^vox/', include('vox.urls')),
+    url(r'^iris/', include('iris.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
