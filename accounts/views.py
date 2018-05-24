@@ -105,6 +105,21 @@ def tribe_pad(request):
         return HttpResponse(status=404, reason=str(err))
 
 #DRF views
+class AgentViewSet(viewsets.ViewSet):    
+    serializer_class = AgentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def record(self, request):
+        try:
+            key = request.GET.get("key",'')
+            agent = Agent.objects.get(id=key)
+            serialized = AgentSerializer(agent)
+            return Response(serialized.data) 
+        except Exception as err:
+            logging.error("Error in Agent Record {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+
 class TeamViewSet(viewsets.ViewSet):    
     serializer_class = TeamSerializer
     permission_classes = [IsAuthenticated]

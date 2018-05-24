@@ -18,3 +18,19 @@ class MentionInputViewSet(viewsets.ViewSet):
         serialized = MentionInputSerializer(queryset, many=True) 
         return Response(serialized.data)
 
+class MessageViewSet(viewsets.ViewSet):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def all(self, request):
+        try:
+            t = request.GET.get('team','')
+            team = Team.objects.get(id=t)
+            messages = team.messages.all()
+            serialized = MessageSerializer(messages, many=True)
+            return Response(serialized.data)
+        except Exception as err:
+            logging.error("Error in Message all {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+

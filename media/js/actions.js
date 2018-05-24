@@ -11,11 +11,15 @@
             $(this).closest('.lsbrowser').find('.contact-list').empty()
     });
     $('body').on('click', '.scribe-heading .link-close', function() {
-        $(this).closest('.col-scribe').remove();
+        $(this).closest('.col-scribe').addClass('d-none');
     });
     $('body').on('click', '.user-panel .btn-link', function() {
         $(this).closest('.menu').find('.user-panel-submenu').toggleClass('d-none');
 
+    });
+
+    $('body').on('click', '.action-item .btn-link.info', function() {
+        $(this).closest('.tribe-pad').find('.col-scribe').toggleClass('d-none');
     });
 
  
@@ -55,6 +59,8 @@
                         $('.scribe-item.members').find('ul').append(li);
                     });
                 }
+
+                syncTeamMessages(result.id);
                
             },
             error: function(xhr, error) {
@@ -63,6 +69,46 @@
         });
 
     });
+
+    /* agent view */
+    $('body').on('click', '.agents.viewable .btn-link', function() {
+        var menuItem = $(this).closest('.item'); 
+        var key = $(this).closest('.item').data("id");
+        
+        $.ajax({
+            type:"GET",
+            cache:false,
+            url: '/accounts/agent/record',
+            data:{
+                'key': key,
+            },
+            success:function(result) {
+                $('.tribe-pad').data('id', result.id);
+                $('.tribe-pad .header-content').find('.title').html(result.display_name);
+                $('.tribe-pad .header-content').find('.desc').html('');
+                if (result.tel_profile) {
+                    $('.tribe-pad .header-content').find('.action-item.phone').data('extn', result.tel_profile.extn)
+                }
+                //$('.tribe-pad .header-content').find('.action-item.phone').data('server', result.server);
+                $('.message-list').find('li.visible').remove();
+                $('.lsbrowser').find('.active').removeClass('active');
+                menuItem.find('.badge').text('');
+                menuItem.addClass('active');
+
+                $('.scribe-item.members').find('.badge').text('');
+                $('.scribe-item.members').find('ul').empty();
+                $('.scribe-item.info').find('.scribe-item-body').text('');
+                $('.scribe-heading .title').text('').text(result.display_name);
+                    
+               
+            },
+            error: function(xhr, error) {
+                console.log(error);
+            }
+        });
+
+    });
+
 
    
     $('body').on('click', '.dialer .btn-digit', function() {
@@ -117,3 +163,35 @@
 */
 
 })();
+
+
+function syncTeamMessages(teamId) {
+    console.log("requesting for messages");
+
+        $.ajax({
+            type:"GET",
+            cache:false,
+            url: '/iris/team/messages',
+            data:{
+                'team': teamId,
+            },
+            success:function(result) {
+                console.log(result);
+                $.each(result, function(key, message) {
+                    var li = "<li class='media message visible'>\
+                              <img class='mr-3 rounded img-sm' src='"+message.author_photo+"'>\
+                              <div class='media-body'>\
+                              <span><h5 class='title'>"+message.author+"</h5></span>\
+                              <span class='time'>"+message.time+"</span>\
+                              <p class='text'>"+message.content+"</p>\
+                              </div>\
+                              </li>"
+                    $('.message-list').append(li);
+                });
+            },
+            error: function(xhr, error) {
+                console.log(error);
+            }
+        });
+
+}

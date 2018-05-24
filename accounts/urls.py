@@ -9,7 +9,8 @@ urlpatterns = [
 
     # Tribe pad/board
     url(r'^tribe/pad/$', tribe_pad, name='tribe-pad'),
-
+    # rest APIs
     url(r'^team/record/$',TeamViewSet.as_view({'get': 'record',}), name='team-record'),
+    url(r'^agent/record/$',AgentViewSet.as_view({'get': 'record',}), name='agent-record'),
 
 ]
