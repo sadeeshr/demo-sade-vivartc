@@ -25,7 +25,7 @@ SECRET_KEY = 's%i)xq53p7%eb&227^(y8a&_+v20@yuox^%7bgtp^zw6e!!5b-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['klipdesk.com','192.168.2.12',]
+ALLOWED_HOSTS = ['109.74.204.108','klipie.com','klipdesk.com',]
 
 
 # Application definition
@@ -86,7 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'sirius',                      # Or path to database file if using sqlite3.
-        'USER': 'klipworker',                      # Not used with sqlite3.
+        'USER': 'lordzeus',                      # Not used with sqlite3.
         'PASSWORD': 'kl1pr0cks',
         'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '5432',

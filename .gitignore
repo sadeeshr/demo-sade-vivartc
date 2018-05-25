@@ -16,6 +16,7 @@ celerybeat.pid
 #exclude virtualenv directory
 labs/
 
+
 #exclude temperory directories
 media/tmp/
-
+media/photo/
