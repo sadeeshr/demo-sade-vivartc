@@ -1,6 +1,11 @@
 $(function() {
     console.log(window.location.host);
-    socket = new WebSocket("ws://" + window.location.host + "/iris/tribe/");
+    var server = "";
+    if(window.location.protocol === 'http:')
+        server = "ws://" + window.location.host + "/iris/tribe/";
+    else
+        server = "wss://" + window.location.host + "/iris/tribe/";
+    socket = new WebSocket(server);
 
     socket.onopen = function() {
         console.log("Web Socket connected");

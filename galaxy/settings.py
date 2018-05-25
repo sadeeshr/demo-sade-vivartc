@@ -25,7 +25,7 @@ SECRET_KEY = 's%i)xq53p7%eb&227^(y8a&_+v20@yuox^%7bgtp^zw6e!!5b-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['109.74.204.108','klipie.com','klipdesk.com',]
+ALLOWED_HOSTS = ['klipie.com','www.klipie.com', 'klipdesk.com','www.klipdesk.com',]
 
 
 # Application definition
