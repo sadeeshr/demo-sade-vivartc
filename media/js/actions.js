@@ -11,7 +11,7 @@
             $(this).closest('.lsbrowser').find('.contact-list').empty()
     });
     $('body').on('click', '.scribe-heading .link-close', function() {
-        $(this).closest('.col-scribe').addClass('d-none');
+        $(this).closest('.col-scribe').removeClass('d-md-block');
     });
     $('body').on('click', '.user-panel .btn-link', function() {
         $(this).closest('.menu').find('.user-panel-submenu').toggleClass('d-none');
@@ -19,7 +19,7 @@
     });
 
     $('body').on('click', '.action-item .btn-link.info', function() {
-        $(this).closest('.tribe-pad').find('.col-scribe').toggleClass('d-none');
+        $(this).closest('.tribe-pad').find('.col-scribe').toggleClass('d-md-block');
     });
 
  

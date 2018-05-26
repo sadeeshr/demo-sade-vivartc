@@ -9,7 +9,7 @@
                                       <a href="#" class="btn-link ">
                                       {% if request.company.logo.url %}
                                       {% else %}
-                                      <img src="{% if request.user.agent.photo %} {{request.user.agent.photo.url }} {% endif %}" class="rounded-circle img-xs">
+                                      <img src="{{MEDIA_URL}}/images/logo/k1.png" class="rounded-circle img-xs">
                                       {% endif %}
                                       </a>
 
@@ -22,7 +22,7 @@
                  <div class="sub-menu-container user-panel-submenu d-none">
                      <div class="sub-menu" >
                          <div class="media">
-                             <img src="{% if request.user.agent.photo %} {{request.user.agent.photo.url }} {% endif %}"  class="mr-3 img-xs img-circle" />
+                             <img src="{% if request.user.agent.photo %}{{request.user.agent.photo.url }}{% endif %}"  class="mr-3 img-xs img-circle" />
                              <div class="media-body"> {{request.user.get_full_name}} </div>
                          </div>
                          <ul class="menu-list"  style="margin-top: 5px; ">
