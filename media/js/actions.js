@@ -1,5 +1,21 @@
 (function() {
 
+    window.onresize = function(){
+        document.body.height = window.innerHeight;
+        var ht = (window.innerHeight - 60);
+        $('html body .col-messages').css('height', ht);
+
+        // you can change here what you prefer
+      if (/android|webos|iphone|ipad|ipod|blackberry|nokia|opera mini|opera mobi|skyfire|maemo|windows phone|palm|iemobile|symbian|symbianos|fennec/i.test(navigator.userAgent.toLowerCase())) {
+          var theminheight = Math.min(document.documentElement.clientHeight, window.screen.height, window.innerHeight);
+          //now apply height ... if needed...add html & body ... i need and i use it
+          $('html body .col-messages').css('height', theminheight-60);
+      }
+    }
+    window.onresize();
+
+    
+
     $('body').on('click', '.dial-launcher .btn', function() {
         if(!$(this).closest('.lsbrowser').find('.dialer').hasClass('d-none'))
             $(this).closest('.lsbrowser').find('.display').html('');

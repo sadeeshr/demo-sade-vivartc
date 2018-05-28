@@ -59,7 +59,7 @@ textarea {
 .login-page .card-login .heading {
     width: 65px;
     margin: 0 auto;
-    margin-bottom: 25px;
+    margin-bottom: 32px;
 }
 
 .btn-signup,
@@ -115,4 +115,9 @@ nav.navbar {
 .login-form input ,
 .signup-form input {
     font-size: 14px;
+}
+
+a.disabled {
+    pointer-events: none;
+    opacity: 0.5;
 }
