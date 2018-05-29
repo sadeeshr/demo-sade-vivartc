@@ -409,10 +409,10 @@ $(document).ready(function() {
         var digit = $(this).data('value');
         if(Janus.webRTCAdapter.browserDetails.browser === 'chrome') {
             // Send DTMF tone (inband)
-            // sipcall.dtmf({dtmf: { tones: digit }});
+            sipcall.dtmf({dtmf: { tones: digit }});
         } else {
             // Try sending the DTMF tone using SIP INFO
-            // sipcall.send({message: {request: "dtmf_info", digit: digit}});
+            sipcall.send({message: {request: "dtmf_info", digit: digit}});
         }
 
         var existing = $(this).closest('.scribe-incall').children('.scribe-item-heading').find('.digits').text();
