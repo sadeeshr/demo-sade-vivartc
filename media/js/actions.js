@@ -38,6 +38,23 @@
         $(this).closest('.tribe-pad').find('.col-scribe').toggleClass('d-md-block');
     });
 
+    $('body').on('click', '.btn-transfer', function() {
+        $(this).closest('.scribe-incall').find('.callid-container').toggleClass('d-none')
+                                         .siblings('.transfer-input').toggleClass('d-none')
+                                         .find('.editable').html('');
+        
+        
+    });
+
+    $('body').on('click', '.btn-digits', function() {
+        $(this).closest('.incall-widget').find('.features-container').toggleClass('d-none')
+                                         .siblings('.digits-container').toggleClass('d-none');
+        $(this).closest('.scribe-incall').find('.callid-container').toggleClass('d-none')
+                                         .siblings('.digits-input').toggleClass('d-none');
+
+    });
+
+    
  
     /* Team View */
     $('body').on('click', '.teams.viewable .btn-link', function() {

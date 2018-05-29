@@ -23,7 +23,7 @@
             <ul class="list-unstyled">
                 {% for team in teams %}
                 <li class="media item team px-3 py-2 {% if team == active_board %}active{% endif %}" data-id="{{team.id}}">
-                    <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/team.jpg">
+                    <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/team64x64.png">
                     <div class="media-body">
                         <span><a class="btn-link" href="#">{{ team.name }}</a></span> 
                     </div>
@@ -107,6 +107,52 @@
 
 
     </div>
+
+                            {% comment %}
+                            <div class="category">
+                                <div class="heading" id="headPad">
+                                    <span class="icon"><i class="fa fa-phone"></i></span>
+                                    <span>
+                                        <a class="btn-link number" data-toggle="collapse" data-target="#collapsePad" aria-expanded="true" aria-controls="collapsePad">Active Calls</a>
+                                    </span>
+                                </div>
+                                <div id="collapsePad" class="collapse show" aria-labelledby="headPad" data-parent="#accordion">
+                                    <div class="incall-widget py-3">
+                                        <div class="row no-margin">
+                                            <div class="col-sm">
+                                                <button class="btn btn-hold" title="Hold Call" ><i class="fa fa-microphone-slash"></i></button>
+                                            </div>
+                                            <div class="col-sm">
+                                                <button class="btn btn-pause" ><img src="/media/images/callhold_64.png"></img></button>
+                                            </div>
+                                            <div class="col-sm">
+                                                <button class="btn btn-record" title="Start Recording" ><i class="fa fa-play"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row no-margin pt-3">
+                                            <div class="col-sm">
+                                                <button class="btn btn-transfer" title="Transfer Call"><i class="fa fa-exchange"></i></button>
+                                            </div>
+                                            <div class="col-sm">
+                                                <button class="btn btn-record" ><i class="fa fa-plus"></i></button>
+                                            </div>
+                                            <div class="col-sm">
+                                                <button class="btn btn-digits" ><i class="fa fa-th"></i></button>
+                                            </div>
+                                        </div>
+                                        <div class="row no-margin pt-3">
+                                            <div class="col-sm">
+                                            </div>
+                                            <div class="col-sm">
+                                                <button class="btn btn-hangup bg-danger btn-rounded" ><i class="fa fa-phone"></i></button>
+                                            </div>
+                                            <div class="col-sm">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endcomment %}
 
 
 

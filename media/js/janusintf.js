@@ -359,23 +359,6 @@ $(document).ready(function() {
                                         'Send DTMF: <span id="dtmf" class="btn-group btn-group-xs"></span>');
                         $('#videoright').append(
                                         '<video class="rounded centered hide" id="remotevideo" width=320 height=240 autoplay/>');
-                        for(var i=0; i<12; i++) {
-                            if(i<10)
-                                $('#dtmf').append('<button class="btn btn-info dtmf">' + i + '</button>');
-                            else if(i == 10)
-                                $('#dtmf').append('<button class="btn btn-info dtmf">#</button>');
-                            else if(i == 11)
-                                $('#dtmf').append('<button class="btn btn-info dtmf">*</button>');
-                        }
-                        $('.dtmf').click(function() {
-                            if(Janus.webRTCAdapter.browserDetails.browser === 'chrome') {
-                                // Send DTMF tone (inband)
-                                sipcall.dtmf({dtmf: { tones: $(this).text()}});
-                            } else {
-                                // Try sending the DTMF tone using SIP INFO
-                                sipcall.send({message: {request: "dtmf_info", digit: $(this).text()}});
-                            }
-                        });
                         // Show the peer and hide the spinner when we get a playing event
                         $("#remotevideo").bind("playing", function () {
                             $('#waitingvideo').remove();
@@ -422,26 +405,37 @@ $(document).ready(function() {
         });
     }});
 
+    $('body').on('click', '.btn-dtmf', function() {
+        var digit = $(this).data('value');
+        if(Janus.webRTCAdapter.browserDetails.browser === 'chrome') {
+            // Send DTMF tone (inband)
+            // sipcall.dtmf({dtmf: { tones: digit }});
+        } else {
+            // Try sending the DTMF tone using SIP INFO
+            // sipcall.send({message: {request: "dtmf_info", digit: digit}});
+        }
 
+        var existing = $(this).closest('.scribe-incall').children('.scribe-item-heading').find('.digits').text();
+        $(this).closest('.scribe-incall').children('.scribe-item-heading').find('.digits').text(existing+digit);
+
+    });
     $('body').on('click', '.btn-hold', function() {
         holdCall();
         VoxPhone.hold();
     });
-
-    $('body').on('click', '.vox-container .transfer', function() {
-        var target = 'sip:44012345230@'+vox_server;
-        // var target = 'sip:44012345111@'+vox_server;
+    $('body').on('click', '.btn-link.transfer', function() {
+        var tranferTo = $(this).closest('.transfer-input').find('.editable').html(); 
+        var voxServer = $('.lsmenu .user-panel').data('domain');
+        var target = 'sip:'+tranferTo+'@'+voxServer;
+        console.log("Transfering the call to :-"+target); 
         transferCall(target);
         VoxPhone.transfer();
-
     });
 
     $('body').on('click', '.vox-container .reinvite', function() {
-
         var target = 'sip:44012345230@'+vox_server;
         // var target = 'sip:44012345111@'+vox_server;
         doCall(target);
-
     });
 
     $('body').on('click', '.vox-container .attended-transfer', function() {
@@ -457,6 +451,7 @@ $(document).ready(function() {
 
         if(item.hasClass('connected')) {
             endCall();
+            $('.scribe-incall').addClass('d-none');
 
         } else {
             //var pic = user.data('pic');
@@ -467,6 +462,9 @@ $(document).ready(function() {
             // VoxPhone.dial(name, extn, pic, server);
             var callee = 'sip:'+extn+'@'+server;
             doCall(callee);
+
+            $('.scribe-incall').find('.number').text(extn);
+            $('.scribe-incall').removeClass('d-none'); 
         }
 
     });
@@ -477,7 +475,7 @@ $(document).ready(function() {
         var callee = 'sip:'+number+'@'+vox_server;
         doCall(callee);
 
-        $('.scribe-incall').find('.number').text($('.lsbrowser').find('.display').text());
+        $('.scribe-incall').find('.number').text(number);
         $('.scribe-incall').removeClass('d-none'); 
 
         $('.lsbrowser').find('.display').html('');
@@ -489,6 +487,7 @@ $(document).ready(function() {
 
     $('body').on('click', '.btn-hangup', function() {
         endCall();
+        $('.scribe-incall').addClass('d-none');
     });
 
 });
