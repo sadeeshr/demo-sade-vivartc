@@ -56,7 +56,10 @@ $(function() {
                 scrollTo: msgListHt
             });
         } else {
-            if (message.code == 100) { 
+            if (message.code == 80) {
+                
+
+            } else if (message.code == 100) { 
                 
 
             } else if (message.code == 101) {
@@ -87,8 +90,6 @@ $(function() {
             code = 201;
             if(mode == "0") code = 101; 
             var msg  = {'code':code, 'id': id, 'message': text};  
-
-            console.log(msg);
             socket.send(JSON.stringify(msg));
 
             $(this).html('');
@@ -107,4 +108,25 @@ $(function() {
         insertTpl: "<span class='at-mention'>${atwho-at}${display_name}</span>",
     });
 
+
+    $('body').on('click', '.sub-menu-container .btn-link.status-text', function() {
+        var text = $(this).closest('.inline-editable').find('input').val();
+        var status = $('.user-panel-submenu').find('.status').data("value");
+        $(this).closest('.inline-editable').addClass('d-none').parent().find('.editable-link').text(text).removeClass('d-none');
+        
+        // code: 80 stands for presence
+        var msg  = {'code': 80, 'status':status, 'status-text': text};
+        socket.send(JSON.stringify(msg));
+
+    });
+
+
+    $('body').on('change', '.sub-menu-container .status-choices', function() {
+        var status = $(this).find("option:selected").text()
+        var statusText = $('.user-panel-submenu').find('.status-text').text();
+        $(this).closest('.inline-editable').addClass('d-none').parent().find('.editable-link').text(status).data('value', $(this).val()).removeClass('d-none');
+
+        var msg  = {'code': 80, 'status':$(this).val(), 'status-text':statusText };
+        socket.send(JSON.stringify(msg));
+    });
 });

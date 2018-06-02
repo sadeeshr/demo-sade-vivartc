@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from jsonfield import JSONField
 
 
 # Create your models here.
@@ -45,6 +46,7 @@ class Agent(models.Model):
     tel_profile = models.ForeignKey(TelProfile, null=True, blank=True, related_name='agents')
     account = models.ForeignKey(Enterprise, related_name='agents')
     
+    settings = JSONField(default={})
 
     def __str__(self):
         return '%s' % self.user

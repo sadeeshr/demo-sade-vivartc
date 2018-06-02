@@ -14,7 +14,7 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import *
-
+import os
 import json
 
 import logging
@@ -31,8 +31,11 @@ def authenticated_view(request):
         teams = agent.teams.all()
 
     active_board = teams.first()
+    path = "media/images/pixabay/"
+    bkimages=os.listdir(path)
 
-    return render(request, 'accounts/home.html', context={ 'me': agent, 'teams':teams, 'agents':agents, 'active_board':active_board })
+
+    return render(request, 'accounts/home.html', context={ 'me': agent, 'teams':teams, 'agents':agents, 'active_board':active_board,'bkimages':bkimages })
 
 @login_required(login_url='/accounts/login/')
 def home(request):
@@ -117,6 +120,25 @@ class AgentViewSet(viewsets.ViewSet):
             return Response(serialized.data) 
         except Exception as err:
             logging.error("Error in Agent Record {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def ws_settings(self, request):
+        try:
+            mode = request.POST.get('mode')
+            skin = request.POST.get('skin')
+            if 'photos' in mode:
+                bk = {'mode': 1, 'url': skin}
+            else:
+                bk = {'mode': 0, 'code': skin}
+            settings = {'background': bk}
+            agent = request.user.agent
+            agent.settings = settings
+            agent.save()
+
+            return Response("Success")
+
+        except Exception as err:
+            logging.error("Error in WS Skin {}".format(str(err)))
             return Response(status=status.HTTP_404_NOT_FOUND)
         
 

@@ -1,3 +1,4 @@
+{% load wstags %}
 <div class="lsbrowser d-none d-sm-block">
     <div class="search">
         <span><input type="text" class="search-box"></span> 
@@ -25,7 +26,7 @@
                 <li class="media item team px-3 py-2 {% if team == active_board %}active{% endif %}" data-id="{{team.id}}">
                     <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/team64x64.png">
                     <div class="media-body">
-                        <span><a class="btn-link" href="#">{{ team.name }}</a></span> 
+                        <span class="title"><a class="btn-link" href="#">{{ team.name }}</a></span> 
                     </div>
                     <div class="media-right">
                         <span class="badge badge-pill badge-info text-white py-2"></span>
@@ -46,12 +47,14 @@
                 {% if agent != request.user.agent %}
                 <li class="media item agent px-3 py-2" data-id="{{ agent.id }}" data-user="{{agent.user.username}}">
                     {% if agent.photo %}
-                    <img class="mr-3 rounded img-small" src="{{ agent.photo.url }}"> 
+                    <img class="align-self-center mr-3 rounded img-xs" src="{{ agent.photo.url }}"> 
                     {% else %}
-                    <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/avatar2.jpg">
+                    <img class="align-self-center mr-3 rounded img-xs" src="{{MEDIA_URL}}images/avatar2.jpg">
                     {% endif %}
                     <div class="media-body">
-                        <span><a class="btn-link fullname" href="#">{{ agent.user.get_full_name }}</a></span> 
+                        <span class="title"><a class="btn-link fullname" href="#">{{ agent.user.get_full_name }}</a></span> 
+                        <span class="status-icon pl-3"><i class="{{ agent.user|statusicon }}"></i></span>
+                        <p class="mb-0 status-text">{% if agent.user.presence %} {{agent.user.presence.text}} {% endif %}</p>
                     </div>
                 </li>
                 {% endif %}

@@ -2,6 +2,23 @@ from django.db import models
 from accounts.models import *
 
 # Create your models here.
+class Presence(models.Model):
+    STATUS_CHOICES = (
+        ('0', 'Offline'),
+        ('1', 'Online'),
+        ('2', 'Busy'),
+        ('3', 'Do not Disturb'),
+        ('4', 'Away'),
+    )    
+
+    user = models.OneToOneField(User)    
+    status = models.CharField(choices=STATUS_CHOICES, default='0', max_length=2)
+    text = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return '{}'.format(self.get_status_display())
+
+
 class Message(models.Model):
 
     author  = models.ForeignKey(User, related_name="own_messages") 

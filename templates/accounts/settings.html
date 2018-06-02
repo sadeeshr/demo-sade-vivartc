@@ -1,0 +1,52 @@
+<div class="settings-container">
+    <div class="heading">
+        <span class="icon pr-2"><i class="fa fa-cogs"></i></span>
+        <span class="title">System Settings</span>        
+    </div>
+    <div class="body">
+        <div class="item-list settings-list">
+            <div class="item settings-item" data-target="skin-settings">
+                <div class="title">Appeareance</div>
+                <p>Change the Background skin</p>
+            </div>
+        </div> 
+     
+        <div class="settings d-none" id="skin-settings">
+             
+            <div class="bk-tiles item-list">
+                <div class="title">
+                    <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                    <span>Skin Settings</span>
+                </div>
+                <div class="bk-tile item colors pr-3 " data-target="colors">
+                    <div class="thumbnail"></div>
+                    <div class="title">Colours</div>
+                </div>
+                <div class="bk-tile item photos pl-3" data-target="photos">
+                    <div class="thumbnail"></div>
+                    <div class="title">Photos</div>
+                </div>
+            </div>
+            <div class="skins d-none" id="photos">
+                <div class="item-list">
+                    <div class="title mb-3">
+                        <span class="icon pr-2"><a class="btn-back"><i class="fa fa-arrow-left"></a></i></span>
+                        <span>Change Skin</span>
+                    </div>
+                    <div class="type-tiles">
+                        {% for bkimage in bkimages %}
+                        <div class="type-tile" >
+                            <div class="snap" style="background-image:url('/media/images/pixabay/{{bkimage}}')" data-value="/media/images/pixabay/{{bkimage}}"></div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>

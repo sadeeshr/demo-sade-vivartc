@@ -42,8 +42,6 @@
         $(this).closest('.scribe-incall').find('.callid-container').toggleClass('d-none')
                                          .siblings('.transfer-input').toggleClass('d-none')
                                          .find('.editable').html('');
-        
-        
     });
 
     $('body').on('click', '.btn-digits', function() {
@@ -54,6 +52,10 @@
 
     });
 
+    $('body').on('click', '.editable-link', function() {
+        $(this).addClass('d-none').closest('.editable-container').find('.inline-editable').removeClass('d-none');
+
+    });
     
  
     /* Team View */
@@ -194,6 +196,55 @@
         }
     });
 */
+
+    /* LS MENU ITEMS*/
+    $('body').on('click', '.btn-menu-item.settings', function() {
+        $('.modal-bkdrop').removeClass('d-none');
+    });
+    /* BK DROP deactive */
+    $('body').on('click', '.modal-bkdrop>.actions .btn-close', function() {
+        $(this).closest('.modal-bkdrop').addClass('d-none');
+    });
+
+    /* SETTINGS */
+    $('body').on('click', '.settings-container .item', function() {
+        var target = $(this).data('target'); 
+        $(this).closest('.item-list').addClass('d-none').siblings('#'+target).removeClass('d-none');
+
+    });
+    $('body').on('click', '.item-list .btn-back', function() {
+        $(this).closest('.item-list').parent().addClass('d-none').siblings('.item-list').removeClass('d-none'); 
+    });
+    /* Change Skin */
+    $('body').on('click', '.type-tile .snap', function() {
+        var selected = $(this).data('value');
+        var mode = $(this).closest('.skins').attr('id');
+
+        $.ajax({
+             type:"POST",
+             cache:false,
+             data:{
+                 'csrfmiddlewaretoken': csrf_token,
+                 'mode': mode,
+                 'skin': selected
+             },
+             url: '/accounts/ws/settings/',
+             success:function(resp) {
+                 console.log(resp);
+                 if(mode=='photos') {
+                     $('body').css('background','');
+                     $('body').css('background-image', "url('"+selected+"')");
+                 } else {
+                     $('body').css('background-image','');
+                     $('body').css('background',selected);
+                 }
+            },
+            error:function(resp) {
+
+            }
+        });
+    });
+
 
 })();
 

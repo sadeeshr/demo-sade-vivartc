@@ -27,10 +27,8 @@
 
     {% endblock %}
 </head>
-<body style="background-image:url({{MEDIA_URL}}images/pixabay/test1)">
-{% comment %}
-<body>
-{% endcomment %}
+{% load wstags %}
+<body style="{{ request.user|bodybg }}">
     {% block top_header %}
     {% endblock %}
 

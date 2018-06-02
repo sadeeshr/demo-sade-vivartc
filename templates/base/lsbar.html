@@ -22,11 +22,34 @@
                  <div class="sub-menu-container user-panel-submenu d-none">
                      <div class="sub-menu" >
                          <div class="media">
-                             <img src="{% if request.user.agent.photo %}{{request.user.agent.photo.url }}{% endif %}"  class="mr-3 img-xs img-circle" />
-                             <div class="media-body"> {{request.user.get_full_name}} </div>
+                             <img src="{% if request.user.agent.photo %}{{request.user.agent.photo.url }}{% endif %}"  class="align-self-center mr-3 img-sm img-circle" />
+                             <div class="media-body"> 
+                                 <span class="title font-weight-bold mb-2">{{request.user.get_full_name}}</span>
+                                 <div class="editable-container">
+                                     <a class="editable-link status" data-value="{% if request.user.presence %}{{request.user.presence.status}}{% else %}1{% endif %}">
+                                         {% if request.user.presence %}{{request.user.presence.get_status_display}}{% else %}Online{% endif %}
+                                     </a>
+                                     <div class="inline-editable d-none"> 
+                                         <select class="status-choices"> 
+                                             <option data-icon="fa fa-circle text-green" value="1">Online</option>
+                                             <option data-icon="fa fa-circle text-red" value="2">Busy</option>
+                                             <option data-icon="fa fa-minus-circle text-red" value="3">Do Not Disturb</option>
+                                             <option data-icon="fa fa-minus-circle text-red" value="4">Away</option>
+                                         </select>
+                                     </div>
+                                 </div>
+                                 <div class="editable-container">
+                                     <a class="editable-link status-text font-italic">{% if request.user.presence %} {{request.user.presence.text}} {% else %}Enter your status text {% endif %}</a>
+                                     <div class="inline-editable d-none">
+                                         <input class="input-status-text" placeholder="Enter your status text" {% if request.user.presence %}value="{{request.user.presence.text}}" {% endif %} />
+                                         <a class="btn-link status-text" href="#"><i class="fa fa-paper-plane-o fa-rotate-30"></i></a>
+                                     </div>
+                                 </div>
+
+                                 
+                             </div>
                          </div>
                          <ul class="menu-list"  style="margin-top: 5px; ">
-                            <li><i class="fa fa-user text-info-300"></i><a href="#" class="">Profile</a></li>
                             <li><i class="fa fa-sign-out text-info-300"></i><a href="{% url 'logout' %}" class="">Logout</a></li>
                          </ul>
                      </div>
@@ -79,14 +102,12 @@
                     {% endcomment %}
 
             <li{% if 'settings' in request.META.PATH_INFO %} class="active"{% endif %}>
-                        <a href="#" class="auto">
-                        <span class="pull-right text-muted">
-                        </span>
-                       <i class="fa fa-cogs fa-2x lm-icon1">
-                        </i>
-                        <span class="font-bold lm-h1">Settings</span>
-                      </a>
-                     </li>
+                <a href="#" class="btn-menu-item settings auto">
+                    <span class="pull-right text-muted"></span>
+                    <i class="fa fa-cogs fa-2x lm-icon1"></i>
+                    <span class="font-bold lm-h1">Settings</span>
+                </a>
+            </li>
 
         </ul>
 
