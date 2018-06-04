@@ -57,6 +57,12 @@ $(function() {
             });
         } else {
             if (message.code == 80) {
+                $('.lsbrowser .agents').find(`[data-user='${message.user}']`).find('.status-container').find('.status-icon').html('')
+                              .html(getStatusIconHtml(message.status));
+
+            } else if (message.code == 81) {
+                
+                $('.lsbrowser .agents').find(`[data-user='${message.user}']`).find('.status-container').find('.status-text').text('').text(message.status_text);
                 
 
             } else if (message.code == 100) { 
@@ -115,7 +121,7 @@ $(function() {
         $(this).closest('.inline-editable').addClass('d-none').parent().find('.editable-link').text(text).removeClass('d-none');
         
         // code: 80 stands for presence
-        var msg  = {'code': 80, 'status':status, 'status-text': text};
+        var msg  = {'code': 81, 'status':status, 'status_text': text};
         socket.send(JSON.stringify(msg));
 
     });
@@ -126,7 +132,29 @@ $(function() {
         var statusText = $('.user-panel-submenu').find('.status-text').text();
         $(this).closest('.inline-editable').addClass('d-none').parent().find('.editable-link').text(status).data('value', $(this).val()).removeClass('d-none');
 
-        var msg  = {'code': 80, 'status':$(this).val(), 'status-text':statusText };
+        var msg  = {'code': 80, 'status':$(this).val(), 'status_text':"" };
         socket.send(JSON.stringify(msg));
     });
+
+
+    $('body').on('click', '.btn-logout', function() {
+        var msg  = {'code': 80, 'status': 0, 'status_text': ""};
+        socket.send(JSON.stringify(msg));
+
+    });
+
 });
+
+function getStatusIconHtml(status) {
+    if(status == 1)
+        return "<i class='fa fa-circle text-online'></i>";
+    else if(status == 2)
+        return "<i class='fa fa-circle text-busy'></i>"; 
+    else if(status == 3)
+        return "<i class='fa fa-minus-circle text-busy'></i>"; 
+    else if(status == 4)
+        return "<i class='fa fa-clock-o text-away'></i>"; 
+    else
+        return "<i class='fa fa-circle text-offline'></i>"; 
+    
+}

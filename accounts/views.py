@@ -16,7 +16,7 @@ from rest_framework import status
 from .serializers import *
 import os
 import json
-
+from iris.models import Presence
 import logging
 
 # Create your views here.
@@ -55,11 +55,18 @@ def login(request):
             return render(request, 'base/index.html', {})
     else:
         try:
+            
             username = request.POST.get('uname')
             pswd = request.POST.get('pswd')
             cek_auth = auth.authenticate(username=username, password=pswd)
             auth.login(request, cek_auth)
+            try:
+                presence = request.user.presence
+            except Presence.DoesNotExist:
+                presence = Presence.objects.create(user=request.user)
 
+            presence.status = '1'
+            presence.save()
             url = request.POST.get('next')
             if url is None:
                 url = '/accounts/home/'
@@ -73,7 +80,15 @@ def login(request):
 @login_required
 def logout(request):
     if request.user.is_authenticated():
-        auth.logout(request)
+        try:
+            presence = request.user.presence
+            presence.status = '0'
+            presence.save()
+            auth.logout(request)
+
+        except Presence.DoesNotExist:
+            auth.logout(request)
+
 
     return HttpResponseRedirect(reverse('index'))
 

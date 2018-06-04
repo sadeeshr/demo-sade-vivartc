@@ -53,8 +53,10 @@
                     {% endif %}
                     <div class="media-body">
                         <span class="title"><a class="btn-link fullname" href="#">{{ agent.user.get_full_name }}</a></span> 
-                        <span class="status-icon pl-3"><i class="{{ agent.user|statusicon }}"></i></span>
-                        <p class="mb-0 status-text">{% if agent.user.presence %} {{agent.user.presence.text}} {% endif %}</p>
+                        <div class="status-container">
+                            <span class="status-icon pr-1"><i class="{{ agent.user|statusicon }}"></i></span>
+                            <span class="mb-0 status-text">{{ agent.user|statustext }}</span>
+                        </div>
                     </div>
                 </li>
                 {% endif %}

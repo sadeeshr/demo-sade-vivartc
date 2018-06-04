@@ -38,3 +38,15 @@ def statusicon(user):
 
     except Exception:
         return "fa fa-circle text-offline"
+
+@register.filter
+def statustext(user):
+    try:
+        if user.presence.text is None:
+             return user.presence.get_status_display()
+        else:
+             return user.presence.text
+
+    except Exception:
+        return "Offline"
+
