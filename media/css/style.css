@@ -768,7 +768,7 @@ li.notiication {
 
 @media (min-width: 767px) {
     .modal-bkdrop .bkdrop {
-        width: 600px;        
+        width: 720px;        
     }
 }
 
@@ -813,6 +813,10 @@ li.notiication {
     padding-bottom: .5em
 }
 .settings-container a {
+    cursor: pointer;
+}
+
+.settings-container .item-list > .item {
     cursor: pointer;
 }
 
@@ -863,7 +867,16 @@ li.notiication {
     width: 100%;
 }
 
+.text-underline {
+    text-decoration: underline;
+}
 
+.item-list .record {
+    border-bottom: 1px solid #ccc;
+}
+.item-list .link-new {
+    font-size: 20px;
+}
 
 .navbar .navbar-toggler {
     width: 37px;

@@ -5,6 +5,10 @@
     </div>
     <div class="body">
         <div class="item-list settings-list">
+            <div class="item settings-item" data-target="pbx-settings">
+                <div class="title">PBX Settings</div>
+                <p>Manage Soft Swicth, Telephone and Conference profiles</p>
+            </div>
             <div class="item settings-item" data-target="skin-settings">
                 <div class="title">Appeareance</div>
                 <p>Change the Background skin</p>
@@ -14,7 +18,7 @@
         <div class="settings d-none" id="skin-settings">
              
             <div class="bk-tiles item-list">
-                <div class="title">
+                <div class="title mb-3">
                     <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
                     <span>Skin Settings</span>
                 </div>
@@ -44,6 +48,91 @@
             </div>
 
         </div>
+
+        <!-- PBX Settings Start -->
+        <div class="settings d-none" id="pbx-settings">
+            <div class="item-list">
+                <div class="title mb-3">
+                    <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                    <span>PBX Settings</span>
+                </div>
+                <div class="item settings-item" data-target="switch-profiles">
+                    <div class="title">Switch Profiles</div>
+                    <p>Create or manage Soft Switch Profiles.</p>
+                </div>
+                <div class="item settings-item" data-target="tel-profiles">
+                    <div class="title">Telephone Profiles</div>
+                    <p>Create or manage Telephone profiles.</p>
+                </div>
+            </div>
+            <!-- Switch Profiles -->
+            <div class="d-none" id="switch-profiles">
+                <div class="item-list">
+                    <div class="title">
+                        <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                         <span>Switch Profiles</span>
+                    </div>
+                    {% for switch in switches %} 
+                    <div class="switch record row py-3" data-target="">
+                        <div class="font-weight-bold col-sm-4">{{switch.name}}</div>
+                        <div class="font-weight-bold col-sm-3">{{switch.domain}}</div>
+                        <div class="font-weight-bold col-sm-3">{{switch.address}}</div>
+                        <div class="font-weight-bold col-sm-2">
+                            <span><i class="fa fa-trash text-danger pr-4"></i></span>
+                            <span><i class="fa fa-edit text-info"></i></span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="item link-new py-3" data-target="switch-new">
+                        <span><i class="fa fa-plus-circle pr-3"></i></span>
+                        <span class="text-info">Add New Switch</span> 
+                    </div>
+                </div>
+                
+            </div>
+            <!-- Switch Profiles End -->
+            <!-- Tel Profiles Start -->
+            <div class="d-none" id="tel-profiles">
+                <div class="item-list">   
+                    <div class="title">
+                        <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                         <span>Telephone Profiles</span>
+                    </div> 
+                    {% for tel in tel_profiles %}
+                    <div class="tel-profile record row py-3" >
+                        <div class="font-weight-bold col-sm-2">{{tel.extn}}</div>
+                        <div class="font-weight-bold col-sm-3">{{tel.user}}</div>
+                        <div class="font-weight-bold col-sm-4">{{tel.switch}}</div>
+                        <div class="font-weight-bold col-sm-3">
+                            <span><i class="fa fa-trash text-danger pr-4"></i></span>
+                            <span><i class="fa fa-edit text-info"></i></span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <div class="item link-new py-3" data-target="tel-profile-new">
+                        <span><i class="fa fa-plus-circle pr-3"></i></span>
+                        <span class="text-info">Add New Telephone profile</span>
+                    </div>
+                </div>
+                <div class="d-none" id="tel-profile-new">
+                    <div class="item-list">
+                        <div class="title">
+                            <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                            <span>New Profile</span>
+                        </div>
+                    </div>
+                </div>
+ 
+                
+
+
+            </div>
+            <!-- Tel Profiles Start -->
+
+                 
+
+        </div>
+        <!-- PBX Settings End -->
 
 
     </div>
