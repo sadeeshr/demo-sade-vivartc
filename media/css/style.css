@@ -878,6 +878,31 @@ li.notiication {
     font-size: 20px;
 }
 
+#newSwitchForm .form-group,
+.tp-form-container .form-group {
+    width: 60%;
+}
+
+.form-footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    padding: 10px 15px;
+    background: rgb(242,242,242, 0.6);
+}
+@media (min-width: 767px) {
+    .modal-bkdrop .form-footer {
+        width: 720px;
+    }
+}
+
+.btn-cancel {
+    color: #fff;
+}
+
+
+
 .navbar .navbar-toggler {
     width: 37px;
     height: 27px;

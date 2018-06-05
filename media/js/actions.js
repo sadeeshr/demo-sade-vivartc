@@ -197,24 +197,7 @@
     });
 */
 
-    /* LS MENU ITEMS*/
-    $('body').on('click', '.btn-menu-item.settings', function() {
-        $('.modal-bkdrop').removeClass('d-none');
-    });
-    /* BK DROP deactive */
-    $('body').on('click', '.modal-bkdrop>.actions .btn-close', function() {
-        $(this).closest('.modal-bkdrop').addClass('d-none');
-    });
-
     /* SETTINGS */
-    $('body').on('click', '.settings-container .item', function() {
-        var target = $(this).data('target'); 
-        $(this).closest('.item-list').addClass('d-none').siblings('#'+target).removeClass('d-none');
-
-    });
-    $('body').on('click', '.item-list .btn-back', function() {
-        $(this).closest('.item-list').parent().addClass('d-none').siblings('.item-list').removeClass('d-none'); 
-    });
     /* Change Skin */
     $('body').on('click', '.type-tile .snap', function() {
         var selected = $(this).data('value');

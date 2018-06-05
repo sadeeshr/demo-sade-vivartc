@@ -17,7 +17,7 @@ from .serializers import *
 import os
 import json
 from iris.models import Presence
-from vox.models  import TelSwitch,TelProfile
+from vox.models  import SwitchModel, TelSwitch,TelProfile
 import logging
 
 # Create your views here.
@@ -35,6 +35,7 @@ def authenticated_view(request):
     path = "media/images/pixabay/"
     bkimages=os.listdir(path)
 
+    switch_models = SwitchModel.objects.all() 
     switches = TelSwitch.objects.filter(account=agent.account)
     tel_profiles = TelProfile.objects.filter(account=agent.account)
 
@@ -42,6 +43,7 @@ def authenticated_view(request):
                                                            'teams':teams, 
                                                            'agents':agents, 
                                                            'active_board':active_board,
+                                                           'switch_models': switch_models,
                                                            'switches':switches,
                                                            'tel_profiles':tel_profiles,
                                                            'bkimages':bkimages })

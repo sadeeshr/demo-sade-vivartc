@@ -1,0 +1,40 @@
+                    <!-- New Tel Profile -->
+                    <div class="item-list">
+                        <div class="title">
+                            <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                            <span>New Switch Profile</span>
+                        </div>
+                        <div class="sp-form-container py-3">
+                            <form id="newSwitchForm">
+                                <div class="form-group">
+                                    <label for="name" class="pb-2">Extension</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Name of the Switch ?">
+                                </div>
+                                <div class="form-group">
+                                    <label for="domain" class="pb-2">Domain</label>
+                                    <input type="text" class="form-control" id="domain" placeholder="Domain name ?">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address" class="pb-2">Outbound Proxy Address</label>
+                                    <input type="text" class="form-control" id="address" placeholder="Outbound proxy ?">
+                                </div>
+                                <div class="form-group">
+                                    <label for="switchModel" class="pb-2">Switch Model</label>
+                                    <select class="form-control" id="switchModel">
+                                        {% for model in switch_models %}
+                                        <option value="{{model.id}}">{{model.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-footer">
+                                    <div class="container-fluid">
+                                        <div class="pull-right">
+                                            <button class="btn btn-cancel bg-grey mr-2">Cancel</button>
+                                            <button class="btn btn-save bg-info">Save Profile</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>

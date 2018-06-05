@@ -74,19 +74,22 @@
                     </div>
                     {% for switch in switches %} 
                     <div class="switch record row py-3" data-target="">
-                        <div class="font-weight-bold col-sm-4">{{switch.name}}</div>
-                        <div class="font-weight-bold col-sm-3">{{switch.domain}}</div>
-                        <div class="font-weight-bold col-sm-3">{{switch.address}}</div>
-                        <div class="font-weight-bold col-sm-2">
+                        <div class="col-sm-4">{{switch.name}}</div>
+                        <div class="col-sm-3">{{switch.domain}}</div>
+                        <div class="col-sm-3">{{switch.address}}</div>
+                        <div class="col-sm-2">
                             <span><i class="fa fa-trash text-danger pr-4"></i></span>
                             <span><i class="fa fa-edit text-info"></i></span>
                         </div>
                     </div>
                     {% endfor %}
-                    <div class="item link-new py-3" data-target="switch-new">
+                    <div class="item link-new py-3" data-target="switchNew">
                         <span><i class="fa fa-plus-circle pr-3"></i></span>
                         <span class="text-info">Add New Switch</span> 
                     </div>
+                </div>
+                <div class="d-none" id="switchNew">
+                    {% include "vox/switch_new.html" %}
                 </div>
                 
             </div>
@@ -101,8 +104,8 @@
                     {% for tel in tel_profiles %}
                     <div class="tel-profile record row py-3" >
                         <div class="font-weight-bold col-sm-2">{{tel.extn}}</div>
-                        <div class="font-weight-bold col-sm-3">{{tel.user}}</div>
-                        <div class="font-weight-bold col-sm-4">{{tel.switch}}</div>
+                        <div class="col-sm-3">{{tel.user}}</div>
+                        <div class="col-sm-4">{{tel.switch}}</div>
                         <div class="font-weight-bold col-sm-3">
                             <span><i class="fa fa-trash text-danger pr-4"></i></span>
                             <span><i class="fa fa-edit text-info"></i></span>
@@ -115,12 +118,7 @@
                     </div>
                 </div>
                 <div class="d-none" id="tel-profile-new">
-                    <div class="item-list">
-                        <div class="title">
-                            <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
-                            <span>New Profile</span>
-                        </div>
-                    </div>
+                    {% include "vox/tel_profile_new.html" %}
                 </div>
  
                 

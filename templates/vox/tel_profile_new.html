@@ -1,0 +1,40 @@
+                    <!-- New Tel Profile -->
+                    <div class="item-list">
+                        <div class="title">
+                            <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                            <span>New Telephone Profile</span>
+                        </div>
+                        <div class="tp-form-container py-3">
+                            <form id="newTelProfileForm">
+                                <div class="form-group">
+                                    <label for="extn" class="pb-2">Extension</label>
+                                    <input type="tel" class="form-control" id="extn" placeholder="Enter extension">
+                                </div>
+                                <div class="form-group">
+                                    <label for="account" class="pb-2">Account</label>
+                                    <input type="text" class="form-control" id="account" placeholder="Enter Account Id">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password" class="pb-2">Password</label>
+                                    <input type="password" class="form-control" id="pswd" placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="switchProfile" class="pb-2">Switch</label>
+                                    <select class="form-control" id="switchProfile">
+                                        {% for switch in switches %}
+                                        <option value="{{switch.id}}">{{switch.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-footer">
+                                    <div class="container-fluid">
+                                        <div class="pull-right">
+                                            <button class="btn btn-cancel bg-grey mr-2">Cancel</button>
+                                            <button class="btn btn-save bg-info">Save Profile</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
