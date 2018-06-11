@@ -1,11 +1,10 @@
 
         <aside class="lsmenu aside-md d-none d-sm-block" id="nav">
             <div class="menu">
-
                 <div class="clearfix dk nav-user hidden-xs">
                     <div class="user-panel" data-account="{{me.tel_profile.user}}" data-pswd="{{me.tel_profile.pswd}}" data-extn="{{me.tel_profile.user}}"
                          data-name="{{request.user.get_full_name}}" data-domain="{{me.tel_profile.switch.domain}}" data-addr="{{me.tel_profile.switch.address}}">
-                                    <div class="pull-left image">
+                        <div class="pull-left image">
                                       <a href="#" class="btn-link ">
                                       {% if request.company.logo.url %}
                                       {% else %}
@@ -14,7 +13,7 @@
                                       </a>
 
                                         <i class="on md b-black"></i>
-                                    </div>
+                        </div>
                     </div>
                 </div>
 
@@ -60,59 +59,33 @@
 
                 <!-- nav -->
                 <nav class="nav-primary hidden-xs">
-                  <ul class="nav nav-main" data-ride="collapse">
-                    <li {% if 'boards' in request.META.PATH_INFO %} class="active"{% endif %}>
-                         <a href="">
-                            <i class="fa fa-sliders"></i>
-                            <span class="font-bold">Calls</span>
-                         </a>
-                    </li>
-
-                    {% comment %}
-                    <li{% if 'agents' in request.META.PATH_INFO %} class="active"{% endif %}>
-                      <a href="" class="auto">
-                        <span class="pull-right text-muted">
-                        </span>
-                        <i class="fa fa-users">
-                        </i>
-                        <span class="font-bold lm-h1">Agents</span>
-                      </a>
-                    </li>
-                    {% endcomment %}
-
-                    <li{% if 'teams' in request.META.PATH_INFO %} class="active"{% endif %}>
-                        <a href="" >
-                        <span class="pull-right text-muted">
-                        </span>
-                        <i class="fa fa-clone">
-                        </i>
-                        <span class="font-bold lm-h1">Teams</span>
-                      </a>
-                     </li>
-                    {% comment %}
-                    <li{% if 'analytics' in request.META.PATH_INFO %} class="active"{% endif %}>
-                        <a href="" >
-                        <span class="pull-right text-muted">
-                        </span>
-                        <i class="fa fa-line-chart">
-                        </i>
-                        <span class="font-bold lm-h1">Reports</span>
-                      </a>
-                     </li>
-                    {% endcomment %}
-
-            <li{% if 'settings' in request.META.PATH_INFO %} class="active"{% endif %}>
-                <a href="#" class="btn-menu-item settings auto">
-                    <span class="pull-right text-muted"></span>
-                    <i class="fa fa-cogs fa-2x lm-icon1"></i>
-                    <span class="font-bold lm-h1">Settings</span>
-                </a>
-            </li>
-
-        </ul>
-
-
-
+                    <ul class="nav nav-main" data-ride="collapse">
+                        <li {% if 'boards' in request.META.PATH_INFO %} class="active"{% endif %}>
+                             <a href="">
+                                <i class="fa fa-sliders"></i>
+                                <span class="font-bold">Channels</span>
+                             </a>
+                        </li>
+                        {% if request.user.is_superuser or request.user.agent == '1' %}
+                        <li{% if 'agents' in request.META.PATH_INFO %} class="active"{% endif %}>
+                          <a href="" class="btn-menu-item agent-settings auto">
+                            <span class="pull-right text-muted">
+                            </span>
+                            <i class="fa fa-users">
+                            </i>
+                            <span class="font-bold lm-h1">Agents</span>
+                          </a>
+                        </li>
+                        {% endif %}
+                        <li{% if 'settings' in request.META.PATH_INFO %} class="active"{% endif %}>
+                            <a href="#" class="btn-menu-item settings auto">
+                                <span class="pull-right text-muted"></span>
+                                <i class="fa fa-cogs fa-2x lm-icon1"></i>
+                                <span class="font-bold lm-h1">Settings</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
 
             {% comment %}
             <footer class="footer hidden-xs no-padder text-center-nav-xs">
@@ -125,6 +98,7 @@
 
             </footer>
             {% endcomment %}
+            </div>
         </aside>
 
 

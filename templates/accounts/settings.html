@@ -3,16 +3,120 @@
         <span class="icon pr-2"><i class="fa fa-cogs"></i></span>
         <span class="title">System Settings</span>        
     </div>
-    <div class="body">
+    <div class="body nested-settings">
         <div class="item-list settings-list">
+            {% if request.user.is_superuser or request.user.agent.role == '1' %}
             <div class="item settings-item" data-target="pbx-settings">
                 <div class="title">PBX Settings</div>
                 <p>Manage Soft Swicth, Telephone and Conference profiles</p>
+            </div>
+            {% endif %}
+            <div class="item settings-item" data-target="profile-settings">
+                <div class="title">Update Profile</div>
+                <p>Update user profile</p>
             </div>
             <div class="item settings-item" data-target="skin-settings">
                 <div class="title">Appeareance</div>
                 <p>Change the Background skin</p>
             </div>
+        </div> 
+
+        <div class="settings d-none" id="profile-settings">
+            <div class="item-list">
+                <div class="title">
+                    <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                    <span>Profile</span>
+                </div>
+                <div class="tp-form-container py-3">
+                    <form id="updateAgentForm">                  
+                        <div class="row">
+                        <div class="col-sm-8">
+                            <div class="editable-container " data-field="fname">
+                                <div class="editable-info"> 
+                                    <span class="badge badge-secondary mr-4 p-2">First Name</span>
+                                    <span><a class="editable-link">{{request.user.first_name}}</a></span>
+                                </div>
+                                <div class="form-group inline-editable d-none m-0">
+                                    <input type="text" class="form-control field p-0" name="fname" value="{{request.user.first_name}}">
+                                    <div class="inline-actions"> 
+                                        <span class="text-success"><a href="#" class="link-tick"><i class="fa fa-check-square-o"></i></a></span>
+                                        <span class="text-grey"><a href="#" class="link-close"><i class="fa fa-window-close-o"></i></a></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="editable-container " data-field="lname">
+                                <div class="editable-info"> 
+                                    <span class="badge badge-secondary mr-4 p-2">Last Name</span>
+                                    <span><a class="editable-link">{{request.user.last_name}}</a></span>
+                                </div>
+                                <div class="form-group inline-editable d-none m-0">
+                                    <input type="text" class="form-control field p-0" name="lname" value="{{request.user.last_name}}">
+                                    <div class="inline-actions"> 
+                                        <span class="text-success"><a href="#" class="link-tick"><i class="fa fa-check-square-o"></i></a></span>
+                                        <span class="text-grey"><a href="#" class="link-close"><i class="fa fa-window-close-o"></i></a></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="editable-container " data-field="uname">
+                                <div class="editable-info"> 
+                                    <span class="badge badge-secondary mr-4 p-2">Username</span>
+                                </div>
+                                <span>{{request.user.username}}</span>
+                            </div>
+                            <div class="editable-container" data-field="pswd">
+                                <div class="editable-info"> 
+                                    <span class="badge badge-secondary mr-4 p-2">Password</span>
+                                    <span><a class="editable-link">********</a></span>
+                                </div>
+                                <div class="form-group inline-editable d-none m-0">
+                                    <input type="password" class="form-control field p-0" name="password" placeholder="New password ??">
+                                    <div class="inline-actions"> 
+                                        <span class="text-success"><a href="#" class="link-tick"><i class="fa fa-check-square-o"></i></a></span>
+                                        <span class="text-grey"><a href="#" class="link-close"><i class="fa fa-window-close-o"></i></a></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="editable-container" data-field="title">
+                                <div class="editable-info"> 
+                                    <span class="badge badge-secondary mr-4 p-2">Title</span>
+                                    <span><a class="editable-link">{{request.user.agent.title}}</a></span>
+                                </div>
+                                <div class="form-group inline-editable d-none m-0">
+                                    <input type="text" class="form-control field p-0" name="fname" value="{{request.user.agent.title}}">
+                                    <div class="inline-actions"> 
+                                        <span class="text-success"><a href="#" class="link-tick"><i class="fa fa-check-square-o"></i></a></span>
+                                        <span class="text-grey"><a href="#" class="link-close"><i class="fa fa-window-close-o"></i></a></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="editable-container">
+                                <div class="editable-info"> 
+                                    <span class="badge badge-secondary mr-4 p-2">Extension</span>
+                                </div>
+                                <span>{{request.user.agent.tel_profile}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="photo-container" style="position: absolute; left: 0; top: 10%; margin: auto; height: 160px; width: 160px;">
+                                <a href="#" class="edit-link" onclick="triggerImageChange();">
+                                    <div class="edit-container">
+                                        <span><i class="fa fa-camera"></i> <p>Change your profile Photo</p></span>
+                                    </div>
+                                </a>
+                                <input type="file" id="fileInput" name="photo" />
+                                {% if user.agent.photo %}
+                                <img src="{{ user.agent.photo.url }}" id="editimg">
+                                {% else %}
+                                <img src="{{MEDIA_URL}}images/avatar2.jpg" id="editimg">
+                                {% endif %}
+                            </div>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+              
+            </div>
+
         </div> 
      
         <div class="settings d-none" id="skin-settings">

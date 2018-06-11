@@ -21,6 +21,9 @@ a {
     color: inherit !important;
 }
 
+ul {
+  list-style-type: none;
+}
 ul, li {
     margin: 0;
     padding: 0;
@@ -663,7 +666,7 @@ li.notiication {
 
 .inline-editable input{
     border: 0;
-    font-style: italic;
+    /*font-style: italic; */
 }
 
 .inline-editable select {
@@ -688,6 +691,86 @@ li.notiication {
 .inline-editable .bootstrap-select .dropdown-menu {
     min-height: 100px;
 }
+
+.editable-container .inline-editable,
+.editable-container .editable-info {
+    display: inline-block;
+    position: relative;
+}
+.nested-settings .editable-container {
+    padding: .7em 0;
+}
+.nested-settings .inline-editable input {
+    font-size: 16px;
+    outline: none !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #777;
+    border-radius: 0;
+}
+.nested-settings .inline-editable input:focus {
+    outline: none;
+    outline-color: transparent;
+    outline-style: none;
+    box-shadow: none !important;
+}
+.editable-info .badge {
+    width: 8em;
+}
+
+.inline-actions {
+    position: absolute;
+    bottom:   4;
+    right: 2;
+}
+.inline-actions > span {
+    padding: 0 .2em; 
+    font-size: 20px;
+}
+
+.photo-container .edit-link {
+    position: absolute;
+    cursor: pointer;
+    width: 160px;
+    height: 160px;
+    right: 0;
+    top: 0;
+    border: 1px solid rgb(180,180,180);
+    border-radius: 5px;
+}
+
+.edit-link .edit-container {
+    color: #fff;
+    font-size: 20px;
+    display: none;
+    background: rgba(120,120,120, 0.6);
+    height: 100%;
+}
+.edit-link:hover  div {
+    display: block;
+}
+.photo-container img {
+    width: 160px;
+    height: 160px;
+}
+
+.edit-container > span {
+    position: absolute;
+    top: 40%;
+}
+
+.edit-container p {
+    font-size: 22px;
+    margin-left: 1em;
+}
+.edit-container i {
+    margin-left: 60px;
+    font-size: 24px;
+    vertical-align: center;
+}
+#fileInput {
+    display: none;
+}
+
 
 /* backdrop modal */
 #bkModal {
@@ -797,13 +880,13 @@ li.notiication {
     padding: 10px 20px;
 }
 
-.settings-container .settings-item {
+.nested-settings .settings-item {
     padding: 0.5em 0; 
     cursor: pointer;
     border-bottom: 1px solid #ccc;
    
 }
-.settings-container .settings-item .title {
+.nested-settings .settings-item .title {
     font-weight: 700;
     padding-bottom: .5em;
     font-size: 20px; 
@@ -812,11 +895,12 @@ li.notiication {
     font-size: 20px;
     padding-bottom: .5em
 }
-.settings-container a {
+
+.nested-settings a {
     cursor: pointer;
 }
 
-.settings-container .item-list > .item {
+.neseted-settings .item-list > .item {
     cursor: pointer;
 }
 
@@ -876,6 +960,7 @@ li.notiication {
 }
 .item-list .link-new {
     font-size: 20px;
+    cursor: pointer;
 }
 
 #newSwitchForm .form-group,

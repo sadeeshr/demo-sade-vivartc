@@ -35,6 +35,12 @@ from vox.models import TelProfile, ConfProfile
 
 class Agent(models.Model):
 
+    ROLE_CHOICE = (
+        ('1', 'Admin'), #Administrator
+        ('2', 'Supervisor'),
+        ('3', 'Crew'),
+    )
+
     user = models.OneToOneField(User)
     title = models.CharField(max_length=100, null=True)
 
@@ -46,6 +52,8 @@ class Agent(models.Model):
     tel_profile = models.ForeignKey(TelProfile, null=True, blank=True, related_name='agents')
     account = models.ForeignKey(Enterprise, related_name='agents')
     
+    role = models.CharField(choices=ROLE_CHOICE, default='3', max_length=1)
+
     settings = JSONField(default={})
 
     def __str__(self):
@@ -54,7 +62,7 @@ class Agent(models.Model):
 
 class Team(models.Model):
     
-    name = models.CharField(max_length=40)   
+    name = models.CharField(max_length=40, unique=True)   
     description = models.TextField(null=True, blank=True) 
     members = models.ManyToManyField(Agent, through='TeamMembership', related_name='teams')
 
@@ -72,6 +80,5 @@ class TeamMembership(models.Model):
     )
     user = models.ForeignKey(Agent)
     team = models.ForeignKey(Team)
-    account = models.ForeignKey(Enterprise)
     role = models.CharField(choices=ROLE_CHOICE, default='2', max_length=1)
 

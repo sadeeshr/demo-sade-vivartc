@@ -148,6 +148,58 @@ class AgentViewSet(viewsets.ViewSet):
             logging.error("Error in Agent Record {}".format(str(err)))
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    def new(self, request):
+        try:
+            uname = request.POST.get("uname",'')
+            email = request.POST.get("email",'')
+            fname = request.POST.get("fname", '')
+            lname = request.POST.get("lname", '')
+            tp = request.POST.get("telprofile", '')
+            tel_profile = TelProfile.objects.get(id=tp)
+
+            account = request.user.agent.account
+            # Temeperorary
+            tmp_pswd = 'v1var0cks'
+            user = User.objects.create_user(username=uname, email=email, password=tmp_pswd, first_name = fname, last_name=lname)
+            # create agent
+            agent = Agent.objects.create(user=user, tel_profile=tel_profile, account=account)
+            settings = {'background': {'mode': 1, 'url': "/media/images/pixabay/italy-2080072_1920.jpg"}}
+            agent.photo = '/images/avatar2.jpg'
+            agent.settings = settings
+            agent.save()
+            serialized = AgentSerializer(agent)
+            return Response(serialized.data)
+
+        except Exception as err:
+            logging.error("Error in creating New agent {}".format(str(err)))
+
+    def profile_update(self, request):
+        try:
+            field = request.POST.get("field",'')            
+            value = request.POST.get("value",'')
+            user = request.user
+            agent = user.agent
+
+            if 'fname' in field:
+                user.first_name = value 
+            elif 'lname' in field:
+                user.last_name  = value
+            elif 'password' in field:
+                user.set_password(value)
+            elif 'title' in field:
+                agent.title = value 
+            elif 'photo' in field:
+                photo = request.FILES.get('photo')
+                agent.photo = photo
+
+            user.save()
+            agent.save()
+            serialized = AgentSerializer(agent)
+            return Response(serialized.data)
+
+        except Exception as err:
+            logging.error("Error in creating New agent {}".format(str(err)))
+
     def ws_settings(self, request):
         try:
             mode = request.POST.get('mode')
@@ -176,6 +228,23 @@ class TeamViewSet(viewsets.ViewSet):
         queryset = Team.objects.all()
         serialized = TeamSerializer(queryset, many=True)
         return Response(serialized.data)
+
+    def new(self, request):
+        try:
+            name = request.POST.get('name')
+            desc = request.POST.get('desc')
+            members = request.POST.get('members')
+            agent = request.user.agent
+            team = Team.objects.create(name=name, description=desc, account=agent.account)
+            for member in json.loads(members):
+                agent = Agent.objects.get(id=member)
+                TeamMembership.objects.create(user=agent, team=team)
+
+            serialized = TeamSerializer(team)
+            return Response(serialized.data)
+        except Exception as err:
+            logging.error("Error in team new {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def record(self, request):
         try:

@@ -17,7 +17,7 @@ class AgentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Agent
-        fields = ('id', 'display_name', 'photo', 'tel_profile')
+        fields = ('id', 'display_name', 'title', 'photo', 'tel_profile')
 
     def get_display_name(self, obj):
         return obj.user.get_full_name()

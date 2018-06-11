@@ -1,0 +1,55 @@
+                    <!-- New Agent Profile -->
+                    <div class="item-list">
+                        <div class="title">
+                            <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                            <span class="px-3">New Team</span>
+                        </div>
+                        <div class="py-3">
+                            <form id="newTeamForm">
+                                <div class="row">
+                                    <div class="col-sm-8 pr-4" style="border-right: 1px solid #ccc;">
+                                        <div class="form-group">
+                                            <label for="name" class="pb-2">Name</label>
+                                            <input type="text" class="form-control" name="name" placeholder="Name of the team">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="desc" class="pb-2">Description</label>
+                                            <textarea type="text" class="form-control" name="desc" placeholder="Short Description"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="telProfile" class="pb-2">Add Members</label>
+                                            <select class="form-control members" name="agent">
+                                                {% for agent in agents %}
+                                                <option value="{{agent.id}}">{{agent.user.get_full_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        {% comment %}
+                                        <div class="form-group">
+                                            <label for="telProfile" class="pb-2">Switch</label>
+                                            <select class="form-control" id="telProfile">
+                                                {% for conf_profile in conf_profiles %}
+                                                <option value="{{tel_profile.id}}">{{tel_profile.extn}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        {% endcomment %}
+
+                                    </div>
+                                    <div class="col-sm-4 pl-4">
+                                        <ul class="member-list list-unstyled">     
+                                        </ul>
+                                    </div>
+                                </div>
+                                        <div class="form-footer">
+                                            <div class="container-fluid">
+                                                <div class="pull-right">
+                                                    <button class="btn btn-cancel bg-grey mr-2">Cancel</button>
+                                                    <button class="btn btn-save bg-info">Save Profile</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                            </form>
+                        </div>
+                    </div>
+

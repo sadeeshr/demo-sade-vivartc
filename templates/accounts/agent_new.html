@@ -1,0 +1,45 @@
+                    <!-- New Agent Profile -->
+                    <div class="item-list">
+                        <div class="title">
+                            <span class="icon pr-2"><a class="btn-back" href="#"><i class="fa fa-arrow-left"></i></a></span>
+                            <span>New Agent</span>
+                        </div>
+                        <div class="tp-form-container py-3">
+                            <form id="newAgentForm">
+                                <div class="form-group">
+                                    <label for="fname" class="pb-2">First Name</label>
+                                    <input type="text" class="form-control" id="fname" placeholder="First Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lname" class="pb-2">Last Name</label>
+                                    <input type="text" class="form-control" id="lname" placeholder="Last Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="uname" class="pb-2">Username</label>
+                                    <input type="text" class="form-control" id="uname" placeholder="Enter Username">
+                                </div>
+                                <div class="form-group">
+                                    <label for="agentEmail" class="pb-2">Email</label>
+                                    <input type="email" class="form-control" id="agentEmail" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="telProfile" class="pb-2">Switch</label>
+                                    <select class="form-control" id="telProfile">
+                                        {% for tel_profile in tel_profiles %}
+                                        <option value="{{tel_profile.id}}">{{tel_profile.extn}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="form-footer">
+                                    <div class="container-fluid">
+                                        <div class="pull-right">
+                                            <button class="btn btn-cancel bg-grey mr-2">Cancel</button>
+                                            <button class="btn btn-save bg-info">Save Profile</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
