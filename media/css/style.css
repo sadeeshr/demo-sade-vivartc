@@ -374,6 +374,16 @@ span.time {
     height: calc(100vh - 60px);
 }
 
+.col-videos {
+    padding: 1em;
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction:column;
+    min-width: 1px;
+    height: calc(100vh - 60px);
+}
+
 .col-messages .message {
     border-radius: .3em;
     padding: 0.4em 0;

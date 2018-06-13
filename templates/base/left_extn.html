@@ -18,7 +18,7 @@
       <div class="category teams viewable" data-mode="1">
         <div class="heading">
             <span>Teams</span>
-            <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
+            <span class="action float-right"></span>
         </div>
         <div class="body item-list">
             <ul class="list-unstyled">
@@ -39,13 +39,13 @@
       <div class="category agents viewable" data-mode="0">
         <div class="heading">
             <span>Agents</span>
-            <span class="action float-right"><i class="fa fa-plus-circle"></i></span>
+            <span class="action float-right"></span>
         </div>
         <div class="body item-list">
             <ul class="list-unstyled">
                 {% for agent in agents %}
                 {% if agent != request.user.agent %}
-                <li class="media item agent px-3 py-2" data-id="{{ agent.id }}" data-user="{{agent.user.username}}">
+                <li class="media item agent px-3 py-2" data-id="{{ agent.id }}" data-user="{{agent.user.username}}" data-extn="{{agent.tel_profile.extn}}">
                     {% if agent.photo %}
                     <img class="align-self-center mr-3 rounded img-xs" src="{{ agent.photo.url }}"> 
                     {% else %}

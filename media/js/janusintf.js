@@ -77,6 +77,8 @@ VoxPhone.hangUp = function(line) {
     $('.tribe-pad').find('.action-item.phone').removeClass('connected');
     $('.scribe-incall').addClass('d-none');    
     $('.scribe-incall').find('.number').text('');
+    $('.tribe-pad').find('.col-messages').removeClass('d-none')
+                                         .siblings('.col-videos').addClass('d-none');
 
 }
 
@@ -226,7 +228,10 @@ $(document).ready(function() {
                                             className: "btn-success",
                                             callback: function() {
                                                 incoming = null;
-                                                $('#peer').val(result["username"]).attr('disabled', true);
+                                                if (doVideo) {
+                                                    $('.tribe-pad').find('.col-messages').addClass('d-none')
+                                                                                         .siblings('.col-videos').removeClass('d-none'); 
+                                                }
                                                 // Notice that we can only answer if we got an offer: if this was
                                                 // an offerless call, we'll need to create an offer ourselves
                                                 var sipcallAction = (offerlessInvite ? sipcall.createOffer : sipcall.createAnswer);
@@ -319,9 +324,10 @@ $(document).ready(function() {
                     onlocalstream: function(stream) {
                         Janus.debug(" ::: Got a local stream :::");
                         Janus.debug(stream);
-                        $('#videos').removeClass('hide').show();
+                        $('#videos').removeClass('d-none').show();
+                        // check if video container is already present or not
                         if($('#myvideo').length === 0)
-                        $('#videoleft').append('<video class="rounded centered" id="myvideo" width=320 height=240 autoplay muted="muted"/>');
+                            $('#videoleft').append('<video class="rounded centered" id="myvideo" width=320 height=240 autoplay muted="muted"/>');
                         Janus.attachMediaStream($('#myvideo').get(0), stream);
                         $("#myvideo").get(0).muted = "muted";
                         // No remote video yet
@@ -335,7 +341,7 @@ $(document).ready(function() {
                         var videoTracks = stream.getVideoTracks();
                         if(videoTracks === null || videoTracks === undefined || videoTracks.length === 0) {
                             // No webcam
-                            $('#myvideo').hide();
+                            $('#myvideo').addClass('d-none');
                             $('#videoleft').append('<div class="no-video-container">' +
                                                    '<i class="fa fa-video-camera fa-5 no-video-icon"></i>' +
                                                    '<span class="no-video-text">No webcam available</span>' +
@@ -351,19 +357,19 @@ $(document).ready(function() {
                             if(videoTracks && videoTracks.length > 0 && !videoTracks[0].muted) {
                                 $('#novideo').remove();
                                 if($("#remotevideo").get(0).videoWidth)
-                                    $('#remotevideo').show();
+                                    $('#remotevideo').removeClass('d-none');
                             }
                             return;
                         }
                         $('#videoright').parent().find('h3').html(
                                         'Send DTMF: <span id="dtmf" class="btn-group btn-group-xs"></span>');
                         $('#videoright').append(
-                                        '<video class="rounded centered hide" id="remotevideo" width=320 height=240 autoplay/>');
+                                        '<video class="rounded centered d-none" id="remotevideo" width=320 height=240 autoplay/>');
                         // Show the peer and hide the spinner when we get a playing event
                         $("#remotevideo").bind("playing", function () {
                             $('#waitingvideo').remove();
                             if(this.videoWidth)
-                                $('#remotevideo').removeClass('hide').show();
+                                $('#remotevideo').removeClass('d-none').show();
                             if(spinner !== null && spinner !== undefined)
                                 spinner.stop();
                             spinner = null;
@@ -446,25 +452,30 @@ $(document).ready(function() {
 
     });
 
-    $('body').on('click', '.tribe-pad .action-item.phone .btn-link', function() {
-        var item = $(this).closest('.action-item');
+    $('body').on('click', '.tribe-pad .btn-link.new-call', function() {
+        var voxServer = $('.lsmenu .user-panel').data('domain');
+        var isVideoCall = false;
+        if ($(this).closest('.action-item').data('action') == 'video') {
+            isVideoCall = true;
+        }
 
-        if(item.hasClass('connected')) {
+        if($(this).closest('.action-item').hasClass('connected')) {
             endCall();
             $('.scribe-incall').addClass('d-none');
 
         } else {
             //var pic = user.data('pic');
             //var name = user.data('name');
-            var extn = item.data('extn');
-            var server = item.data('server');
-
+            var extn = $(this).closest('.tribe-pad').data('extn');
             // VoxPhone.dial(name, extn, pic, server);
-            var callee = 'sip:'+extn+'@'+server;
-            doCall(callee);
-
-            $('.scribe-incall').find('.number').text(extn);
-            $('.scribe-incall').removeClass('d-none'); 
+            var callee = 'sip:'+extn+'@'+voxServer;
+            doCall(callee, isVideoCall);
+            if(isVideoCall)
+                $('.tribe-pad').find('.col-messages').addClass('d-none')
+                                                     .siblings('.col-videos').removeClass('d-none');
+                                    
+            $('.scribe-incall').removeClass('d-none')
+                               .find('.number').text(extn);
         }
 
     });
@@ -545,7 +556,7 @@ function registerUser() {
     }
 }
 
-function doCall(callee) {
+function doCall(callee, isVideoCall) {
     // Call someone
     var username = callee;
     if(username === "") {
@@ -570,14 +581,13 @@ function doCall(callee) {
         return;
     }
     // Call this URI
-    doVideo = $('#dovideo').is(':checked');
-    Janus.log("This is a SIP " + (doVideo ? "video" : "audio") + " call (dovideo=" + doVideo + ")");
+    Janus.log("This is a SIP " + (isVideoCall ? "video" : "audio") + " call (dovideo=" + isVideoCall + ")");
     sipcall.createOffer(
         {
             update: false,
             media: {
                 audioSend: true, audioRecv: true,       // We DO want audio
-                videoSend: false, videoRecv: false  // We MAY want video
+                videoSend: isVideoCall, videoRecv: isVideoCall  // We MAY want video
             },
             success: function(jsep) {
                 Janus.debug("Got SDP!");

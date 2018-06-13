@@ -53,11 +53,11 @@
                 </div>
         
                 <div class="actions float-right">
-                    <div class="action-item phone">
-                        <a href="#" class="btn-link"><i class="fa fa-phone"></i></a>
+                    <div class="action-item" data-action="audio">
+                        <a href="#" class="btn-link new-call" ><i class="fa fa-phone"></i></a>
                     </div>
-                    <div class="">
-                        <span><i class="fa fa-video-camera"></i></span>
+                    <div class="action-item" data-action="video">
+                        <a href="#" class="btn-link new-call"><i class="fa fa-video-camera"></i></a>
                     </div>
         
                     <div class="search-content sm-hide">
@@ -122,6 +122,28 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-videos d-none">
+               <div id="videos" class="d-none">
+                    <div class="col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">You</h3>
+                            </div>
+                            <div class="panel-body" id="videoleft"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Remote UA</h3>
+                            </div>
+                            <div class="panel-body" id="videoright"></div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+
             <div class="col-scribe d-none d-md-block">
                 <div class="scribe-container">
                     <div class="scribe-heading">

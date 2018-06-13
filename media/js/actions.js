@@ -119,12 +119,10 @@
             },
             success:function(result) {
                 $('.tribe-pad').data('id', result.id);
+                $('.tribe-pad').data('extn', result.tel_profile.extn);
                 $('.tribe-pad .header-content').find('.title').html(result.display_name);
                 $('.tribe-pad .header-content').find('.desc').html('');
-                if (result.tel_profile) {
-                    $('.tribe-pad .header-content').find('.action-item.phone').data('extn', result.tel_profile.extn)
-                }
-                //$('.tribe-pad .header-content').find('.action-item.phone').data('server', result.server);
+
                 $('.message-list').find('li.visible').remove();
                 $('.lsbrowser').find('.active').removeClass('active');
                 menuItem.find('.badge').text('');
