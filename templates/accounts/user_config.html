@@ -27,8 +27,10 @@
                     <div class="col-sm-3">{{agent.title}}</div>
                     <div class="col-sm-3">{{agent.tel_profile}}</div>
                     <div class="col-sm-2">
-                        <span><i class="fa fa-trash text-danger pr-4"></i></span>
-                        <span><i class="fa fa-edit text-info"></i></span>
+                        {% if not agent.user.is_superuser %}
+                        <span><a class="btn-delete" title="Delete Record"><i class="fa fa-trash text-danger pr-4"></i></a></span>
+                        <span><a class="btn-edit" title="Edit Record"><i class="fa fa-edit text-info"></i></a></span>
+                        {% endif %}
                     </div> 
                 </div> 
                 {% endfor %}

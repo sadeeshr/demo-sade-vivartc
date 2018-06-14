@@ -781,6 +781,20 @@ li.notiication {
     display: none;
 }
 
+.nested-settings .btn-edit,
+.nested-settings .btn-delete {
+    font-size: 20px;
+    opacity: .5;
+    transition: opacity .5s ease-out;
+    -moz-transition: opacity .5s ease-out;
+    -webkit-transition: opacity .5s ease-out;
+    -o-transition: opacity .5s ease-out;
+}
+ 
+.nested-settings .btn-delete:hover,
+.nested-settings .btn-edit:hover {
+    opacity: 1;
+}
 
 /* backdrop modal */
 #bkModal {

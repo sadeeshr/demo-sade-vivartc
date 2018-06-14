@@ -68,6 +68,18 @@ class TelSwitchViewSet(viewsets.ViewSet):
             logging.error("Error in TelSwitch New {}".format(str(err)))
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    def delete(self, request):
+        try:
+            key = request.POST.get("key",'')
+            switch = TelSwitch.objects.get(id=key)
+            switch.delete()
+            return Response("Successful")
+
+        except Exception as err:
+            logging.error("Error in Switch delete {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
 class TelProfileViewSet(viewsets.ViewSet):
    
     serializer_class = TelProfileSerializer
@@ -101,4 +113,16 @@ class TelProfileViewSet(viewsets.ViewSet):
 
         except Exception as err:
             logging.error("Error in TelProfile New {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+    def delete(self, request):
+        try:
+            key = request.POST.get("key",'')
+            telp = TelProfile.objects.get(id=key)
+            telp.delete()
+            return Response("Successful")
+
+        except Exception as err:
+            logging.error("Error in Telprofile delete {}".format(str(err)))
             return Response(status=status.HTTP_404_NOT_FOUND)

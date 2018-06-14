@@ -64,11 +64,13 @@
             },
             success:function(resp) {
                 console.log(resp);
-                var record = "<div class='switch record row py-3' data-target=''>\
+                var record = "<div class='switch record row py-3' data-id='"+resp.id+"' data-target=''>\
                     <div class='col-sm-4'>"+resp.name+"</div>\
                     <div class='col-sm-3'>"+resp.domain+"</div>\
                     <div class='col-sm-3'>"+resp.address+"</div>\
-                    <div class='col-sm-2'><span><i class='fa fa-trash text-danger pr-4'></i></span><span><i class='fa fa-edit text-info'></i></span></div></div>";
+                    <div class='col-sm-2'>\
+                    <span><a class='btn-delete'><i class='fa fa-trash text-danger pr-4'></i><a/></span>\
+                    <span><a class='btn-edit'><i class='fa fa-edit text-info'></i></a></span></div></div>";
                               
                 obj.closest('.item-list').parent().addClass('d-none').siblings('.item-list').removeClass('d-none')
                                                                                             .find('.title').after(record);
@@ -108,11 +110,13 @@
             },
             success:function(resp) {
                 console.log(resp);
-                var record = "<div class='tel-profile record row py-3' data-target=''>\
+                var record = "<div class='tel-profile record row py-3' data-id='"+resp.id+"' data-target=''>\
                     <div class='col-sm-2'>"+resp.extn+"</div>\
                     <div class='col-sm-3'>"+resp.user+"</div>\
                     <div class='col-sm-4'>"+resp.switch+"</div>\
-                    <div class='col-sm-2'><span><i class='fa fa-trash text-danger pr-4'></i></span><span><i class='fa fa-edit text-info'></i></span></div></div>";
+                    <div class='col-sm-2'>\
+                    <span><a class='btn-delete'><i class='fa fa-trash text-danger pr-4'></i></a></span>\
+                    <span><a class='btn-edit'><i class='fa fa-edit text-info'></i></a></span></div></div>";
                               
                 obj.closest('.item-list').parent().addClass('d-none').siblings('.item-list').removeClass('d-none')
                                                                                             .find('.title').after(record);
@@ -151,14 +155,20 @@
             },
             success:function(resp) {
                 console.log(resp);
-                var record = "<div class='record row py-3' data-target=''>\
+                var record = "<div class='record row py-3' data-id='"+resp.id+"' data-target=''>\
                     <div class='col-sm-4'>"+resp.display_name+"</div>\
                     <div class='col-sm-3'>"+resp.title+"</div>\
                     <div class='col-sm-3'>"+resp.tel_profile.extn+"</div>\
-                    <div class='col-sm-2'><span><i class='fa fa-trash text-danger pr-4'></i></span><span><i class='fa fa-edit text-info'></i></span></div></div>";
+                    <div class='col-sm-2'>\
+                    <span><a class='btn-delete'><i class='fa fa-trash text-danger pr-4'></i></a></span>\
+                    <span><a class='btn-edit'><i class='fa fa-edit text-info'></i></a></span></div></div>";
 
                 obj.closest('.item-list').parent().addClass('d-none').siblings('.item-list').removeClass('d-none')
                                                                                             .find('.title').after(record);
+
+                var option = "<option value='"+resp.id+"'>"+resp.display_name+"</option>";
+                $('#teamProfiles').find('form select[name="agent"]').append(option);
+                
                 $('#newAgentForm')[0].reset();
             },
             error:function(resp) {
@@ -236,8 +246,9 @@
                              <div class='col-sm-4'>"+resp.name+"</div>\
                              <div class='col-sm-3'></div>\
                              <div class='col-sm-3'></div>\
-                             <div class='col-sm-2'><span><i class='fa fa-trash text-danger pr-4'></i></span>\
-                             <span><i class='fa fa-edit text-info'></i></span></div></div>";
+                             <div class='col-sm-2'>\
+                             <span><a class='btn-delete'><i class='fa fa-trash text-danger pr-4'></i></a></span>\
+                             <span><a class='btn-edit'><i class='fa fa-edit text-info'></i></a></span></div></div>";
                 obj.closest('.item-list').parent().addClass('d-none').siblings('.item-list').removeClass('d-none')
                                                                                             .find('.title').after(record);
             },
@@ -249,7 +260,105 @@
         
     });
 
-     
+    /* DELETE PROFILES */ 
+    /* AGENT */
+    $('body').on('click', '#agentProfiles .btn-delete', function(e) {
+        e.preventDefault();
+        var item = $(this).closest('.record');
+        var id = $(this).closest('.record').data('id');
+        $.ajax({
+             type:"POST",
+             cache:false,
+             data:{
+                 'csrfmiddlewaretoken': csrf_token,
+                 'key': id
+             },
+             url: '/accounts/agent/delete/',
+             success:function(resp) {
+                 console.log(resp);
+                 $('#teamProfiles').find('form select[name="agent"]').find('option[value="'+id+'"]').remove();
+                 item.remove();
+            },
+            error:function(resp) {
+
+            }
+        });
+    }); 
+
+    /* TEAM */
+    $('body').on('click', '#teamProfiles .btn-delete', function(e) {
+        e.preventDefault();
+        var item = $(this).closest('.record');
+        var id = $(this).closest('.record').data('id');
+        $.ajax({
+             type:"POST",
+             cache:false,
+             data:{
+                 'csrfmiddlewaretoken': csrf_token,
+                 'key': id
+             },
+             url: '/accounts/team/delete/',
+             success:function(resp) {
+                 console.log(resp);
+                 item.remove();
+            },
+            error:function(resp) {
+
+            }
+        });
+    });
+
+    /* TEL SWITCH */
+    $('body').on('click', '#switch-profiles .btn-delete', function(e) {
+        e.preventDefault();
+        var item = $(this).closest('.record');
+        var id = $(this).closest('.record').data('id');
+        $.ajax({
+             type:"POST",
+             cache:false,
+             data:{
+                 'csrfmiddlewaretoken': csrf_token,
+                 'key': id
+             },
+             url: '/vox/switch/delete/',
+             success:function(resp) {
+                 console.log(resp);
+                 item.closest('#switch-profiles').siblings('#tel-profiles').find('form #switchProfile')
+                                                                           .find('option[value="'+id+'"]').remove();
+                 item.remove();
+                 console.log(test);
+            },
+            error:function(resp) {
+
+            }
+        });
+    });
+
+    /* TEL PROFILE */
+    $('body').on('click', '#tel-profiles .btn-delete', function(e) {
+        e.preventDefault();
+        var item = $(this).closest('.record');
+        var id = $(this).closest('.record').data('id');
+        $.ajax({
+             type:"POST",
+             cache:false,
+             data:{
+                 'csrfmiddlewaretoken': csrf_token,
+                 'key': id
+             },
+             url: '/vox/telprofile/delete/',
+             success:function(resp) {
+                 console.log(resp);
+                 $('#agentProfiles').find('form #telProfile').find('option[value="'+id+'"]').remove();
+                 item.remove();
+            },
+            error:function(resp) {
+
+            }
+        });
+    });
+
+
 
 })();
 

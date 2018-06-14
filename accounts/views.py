@@ -172,6 +172,18 @@ class AgentViewSet(viewsets.ViewSet):
 
         except Exception as err:
             logging.error("Error in creating New agent {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request):
+        try:
+            key = request.POST.get("key",'')
+            agent = Agent.objects.get(id=key)
+            agent.user.delete()
+            return Response("Successful")
+
+        except Exception as err:
+            logging.error("Error in Agent delete {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def profile_update(self, request):
         try:
@@ -244,6 +256,17 @@ class TeamViewSet(viewsets.ViewSet):
             return Response(serialized.data)
         except Exception as err:
             logging.error("Error in team new {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request):
+        try:
+            key = request.POST.get("key",'')
+            team = Team.objects.get(id=key)
+            team.delete()
+            return Response("Successful")
+
+        except Exception as err:
+            logging.error("Error in Team delete {}".format(str(err)))
             return Response(status=status.HTTP_404_NOT_FOUND)
 
     def record(self, request):
