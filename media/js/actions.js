@@ -109,6 +109,7 @@
     $('body').on('click', '.agents.viewable .btn-link', function() {
         var menuItem = $(this).closest('.item'); 
         var key = $(this).closest('.item').data("id");
+        $('.tribe-pad').data('uname', $(this).closest('.item').data('user'));
         
         $.ajax({
             type:"GET",

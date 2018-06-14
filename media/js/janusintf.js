@@ -49,7 +49,7 @@ VoxPhone.connected = function(line) {
  */
     // $('.vox-container').find('.sp-actions .btn-action.transfer').removeClass('disabled');
     console.log("Recieved Connect Notification");
-    $('.tribe-pad').find('.action-item.phone').addClass('connected');
+    $('.tribe-pad').find('.action-item.audio').addClass('connected');
     calls.push(line);
 }
 
@@ -74,7 +74,7 @@ VoxPhone.hangUp = function(line) {
         $('#chatAudio').remove();
     }
 */
-    $('.tribe-pad').find('.action-item.phone').removeClass('connected');
+    $('.tribe-pad').find('.action-item.audio').removeClass('connected');
     $('.scribe-incall').addClass('d-none');    
     $('.scribe-incall').find('.number').text('');
     $('.tribe-pad').find('.col-messages').removeClass('d-none')
@@ -185,9 +185,6 @@ $(document).ready(function() {
                             } else if(event === 'calling') {
                                 Janus.log("Waiting for the peer to answer...");
                                 // TODO Any ringtone?
-                                $('#call').removeAttr('disabled').html('Hangup')
-                                          .removeClass("btn-success").addClass("btn-danger")
-                                          .unbind('click').click(doHangup);
                             } else if(event === 'incomingcall') {
                                 Janus.log("Incoming call from " + result["username"] + "!");
                                 VoxPhone.incoming(result["username"], result['line']);
@@ -232,6 +229,7 @@ $(document).ready(function() {
                                                     $('.tribe-pad').find('.col-messages').addClass('d-none')
                                                                                          .siblings('.col-videos').removeClass('d-none'); 
                                                 }
+                                                console.log("Incoming call accepted");
                                                 // Notice that we can only answer if we got an offer: if this was
                                                 // an offerless call, we'll need to create an offer ourselves
                                                 var sipcallAction = (offerlessInvite ? sipcall.createOffer : sipcall.createAnswer);
@@ -252,11 +250,9 @@ $(document).ready(function() {
                                                         // if SDES is available, and you don't want plain RTP. If it
                                                         // is not available, you'll get an error (452) back.
                                                         sipcall.send({"message": body, "jsep": jsep});
-                                                        $('#call').removeAttr('disabled').html('Hangup')
-                                                                  .removeClass("btn-success").addClass("btn-danger")
-                                                                  .unbind('click').click(doHangup);
                                                     },
                                                     error: function(error) {
+                                                        console.log("Error - hangup the call");
                                                         Janus.error("WebRTC error:", error);
                                                         bootbox.alert("WebRTC error... " + JSON.stringify(error));
                                                         // Don't keep the caller waiting any longer, but use a 480 instead of the default 486 to clarify the cause
@@ -294,6 +290,7 @@ $(document).ready(function() {
                                 Janus.log(jsep);
                                 // Call can start, now: handle the remote answer
                                 if(jsep !== null && jsep !== undefined && !in_call) {
+                                    console.log("Inside Remote jsep");
                                     sipcall.handleRemoteJsep({jsep: jsep, error: doHangup });
                                 }
                                 toastr.success("Call accepted!");
@@ -303,6 +300,7 @@ $(document).ready(function() {
                                 console.log("Media Update");
                                 sipcall.handleRemoteJsep({jsep: jsep, error: doHangup });
                             } else if(event === 'hangup') {
+                                console.log("Incoming event - hangup the call");
                                 if(incoming != null) {
                                     incoming.modal('hide');
                                     incoming = null;
@@ -378,7 +376,7 @@ $(document).ready(function() {
                         var videoTracks = stream.getVideoTracks();
                         if(videoTracks === null || videoTracks === undefined || videoTracks.length === 0 || videoTracks[0].muted) {
                             // No remote video
-                            $('#remotevideo').hide();
+                            $('#remotevideo').addClass('d-none');
                             $('#videoright').append('<div id="novideo" class="no-video-container">' +
                                                     '<i class="fa fa-video-camera fa-5 no-video-icon"></i>' +
                                                     '<span class="no-video-text">No remote video available</span>' +
@@ -452,12 +450,13 @@ $(document).ready(function() {
 
     });
 
-    $('body').on('click', '.tribe-pad .btn-link.new-call', function() {
+    $('body').on('click', '.tribe-pad .new-call', function() {
         var voxServer = $('.lsmenu .user-panel').data('domain');
         var isVideoCall = false;
         if ($(this).closest('.action-item').data('action') == 'video') {
             isVideoCall = true;
         }
+
 
         if($(this).closest('.action-item').hasClass('connected')) {
             endCall();
@@ -590,8 +589,8 @@ function doCall(callee, isVideoCall) {
                 videoSend: isVideoCall, videoRecv: isVideoCall  // We MAY want video
             },
             success: function(jsep) {
-                Janus.debug("Got SDP!");
-                Janus.debug(jsep);
+                Janus.log("Got SDP!");
+                Janus.log(jsep);
                 // By default, you only pass the SIP URI to call as an
                 // argument to a "call" request. Should you want the
                 // SIP stack to add some custom headers to the INVITE,
@@ -603,8 +602,8 @@ function doCall(callee, isVideoCall) {
                 //              "AnotherHeader": "another string"
                 //          }
                 //      };
-                var body = { request: "call", uri: username, force_ice:true };
-                jsep["dtls-reset"] = true;
+                var body = { request: "call", uri: username};
+                // jsep["dtls-reset"] = true;
                 // Note: you can also ask the plugin to negotiate SDES-SRTP, instead of the
                 // default plain RTP, by adding a "srtp" attribute to the request. Valid
                 // values are "sdes_optional" and "sdes_mandatory", e.g.:
@@ -625,17 +624,19 @@ function doCall(callee, isVideoCall) {
 }
 
 function doHangup() {
+    console.log("Inside doHangup");
     VoxPhone.hangUp();
     // Hangup a call
-    var hangup = { "request": "hangup" };
+    var hangup = { "request": "hangup","line": 0 };
     sipcall.send({"message": hangup});
     if(calls.length == 0) {
-        $('#call').attr('disabled', true).unbind('click');
         sipcall.hangup();
+        in_call = false;
     }
 }
 
 function endCall() {
+    console.log("Inside endcall");
     // Hangup a call
     VoxPhone.hangUp();
     var hangup = { "request": "hangup", "line": 0};

@@ -232,7 +232,7 @@
             },
             success:function(resp) {
                 console.log(resp);
-                var record = "<div class='record row py-3'>\
+                var record = "<div class='record row py-3' data-id='"+resp.id+"'>\
                              <div class='col-sm-4'>"+resp.name+"</div>\
                              <div class='col-sm-3'></div>\
                              <div class='col-sm-3'></div>\

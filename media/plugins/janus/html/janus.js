@@ -1762,6 +1762,7 @@ function Janus(gatewayCallbacks) {
 	}
 
 	function prepareWebrtcPeer(handleId, callbacks) {
+        console.log("Inside Prepare WebRTCPeer");
 		callbacks = callbacks || {};
 		callbacks.success = (typeof callbacks.success == "function") ? callbacks.success : Janus.noop;
 		callbacks.error = (typeof callbacks.error == "function") ? callbacks.error : webrtcError;
@@ -1774,6 +1775,7 @@ function Janus(gatewayCallbacks) {
 			return;
 		}
 		var config = pluginHandle.webrtcStuff;
+        console.log("Before set desc");
 		if(jsep !== undefined && jsep !== null) {
 			if(config.pc === null) {
 				Janus.warn("Wait, no PeerConnection?? if this is an answer, use createAnswer and not handleRemoteJsep");
@@ -1787,6 +1789,7 @@ function Janus(gatewayCallbacks) {
 						callbacks.success();
 					}, callbacks.error);
 		} else {
+            console.log("Invalid JSEP");
 			callbacks.error("Invalid JSEP");
 		}
 	}
