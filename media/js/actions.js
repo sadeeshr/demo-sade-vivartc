@@ -78,7 +78,7 @@
                 $('.tribe-pad .header-content').find('.desc').html(result.description);
                 // $('.tribe-pad .header-content').find('.action-item.phone').data('extn', result.extn);
                 //$('.tribe-pad .header-content').find('.action-item.phone').data('server', result.server);
-                $('.message-list').find('li').remove();
+                $('.message-list').empty();
                 $('.lsbrowser').find('.active').removeClass('active');
                 menuItem.find('.badge').text('');
                 menuItem.addClass('active');
@@ -245,7 +245,7 @@ function syncTeamMessages(teamId) {
             },
             success:function(result) {
                 console.log(result);
-                $.each(result, function(key, message) {
+                /*$.each(result, function(key, message) {
                     var li = "<li class='media message visible'>\
                               <img class='mr-3 rounded img-sm' src='"+message.author_photo+"'>\
                               <div class='media-body'>\
@@ -256,6 +256,8 @@ function syncTeamMessages(teamId) {
                               </li>"
                     $('.message-list').append(li);
                 });
+                */
+                $('.message-list').html(result);
             },
             error: function(xhr, error) {
                 console.log(error);

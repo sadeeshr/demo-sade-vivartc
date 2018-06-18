@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import permissions, viewsets
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
@@ -19,7 +20,8 @@ class MentionInputViewSet(viewsets.ViewSet):
         return Response(serialized.data)
 
 class MessageViewSet(viewsets.ViewSet):
-    serializer_class = MessageSerializer
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'iris/message_list.html'
     permission_classes = [IsAuthenticated]
 
     def all(self, request):
@@ -27,8 +29,8 @@ class MessageViewSet(viewsets.ViewSet):
             t = request.GET.get('team','')
             team = Team.objects.get(id=t)
             messages = team.messages.all()
-            serialized = MessageSerializer(messages, many=True)
-            return Response(serialized.data)
+            return Response({'messages':messages})
+
         except Exception as err:
             logging.error("Error in Message all {}".format(str(err)))
             return Response(status=status.HTTP_404_NOT_FOUND)
