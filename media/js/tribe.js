@@ -9,7 +9,6 @@ $(function() {
 
     socket.onopen = function() {
         console.log("Web Socket connected");
-
     }
 
     socket.onmessage = function(e) {
@@ -18,34 +17,32 @@ $(function() {
 
         if($('.tribe-pad').data("id") == message.board) {
             if (message.code == 100) {
-                if (message.uid != mykey) {
+                /*if (message.uid != mykey) {
                     var item = "<li class='notification text-center'> <span class='user pr-2'>"+message.dn+"\
                                </span><span class='text'>"+message.message+"</span></li>";
                     $('.message-list').append(item);
-                }
+                } */
             } else if (message.code == 102) {
-                if (message.uid != mykey) {
+               /* if (message.uid != mykey) {
                     var item = "<li class='notification text-center'> <span class='user pr-2'>"+message.dn+"\
                                </span><span class='text'>"+message.message+"</span></li>";
                     $('.message-list').append(item);
-                }
+                } */
             } else if(message.code == 101) {
                 var msgList = $('.message-list');
-                var item = msgList.find('li:first').clone();
-                if(message.username != user) {
-                    var agent = $('.lsbrowser .agents').find(`[data-user='${message.username}']`);
-                    var img = agent.find('img').attr('src');
-                    var fullName = agent.find('.fullname').text();
+                var agent = $('.lsbrowser .agents').find(`[data-user='${message.username}']`);
+                var fullName = agent.find('.fullname').text();
+                var img = agent.find('img').attr('src');
 
-                    item.find('img').attr('src', img);
-                    item.find('.title').text(fullName);
-                }
-                item.find('.media-body .text').html("");
-                item.find('.media-body .text').html(message.message);
-                item.removeClass('d-none');
+                var item = "<li class='media message'>\
+                            <img class='mr-3 rounded img-sm' src='"+img+"'>\
+                            <div class='media-body'>\
+                            <span><h5 class='title'>"+fullName+"</h5></span>\
+                            <span class='time'></span>\
+                            <p class='text'>"+message.message+"</p>\
+                            </div>\
+                            </li>"
                 msgList.append(item);
-
-                
 
             } else if(mesasge.code == 201) {
 

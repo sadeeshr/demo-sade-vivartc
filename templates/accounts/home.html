@@ -47,9 +47,10 @@
                         </div>
                     </div>
                     <span class="title">{{ active_board.name }}</span>
-                    {% comment %}
-                    <p class="desc">{{active_board.members.count}} members</p>
-                    {% endcomment %}
+                    <div>
+                         <span class="icon pr-2"><i class="fa fa-star-o"></i></span>
+                         <span class="desc sm-hide">{{active_board.description}}</span>
+                    </div>
                 </div>
         
                 <div class="actions float-right">
@@ -399,6 +400,7 @@
 <script src="{{MEDIA_URL}}plugins/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
 <script src="{{MEDIA_URL}}plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="{{MEDIA_URL}}plugins/atjs/dist/js/jquery.atwho.min.js"></script>
+<script src="{{MEDIA_URL}}plugins/listjs/dist/list.min.js"></script>
 
 <script>
 var csrf_token = "{{csrf_token}}";
@@ -422,6 +424,28 @@ $(document).ready(function() {
         height: msgListHt,
         scrollTo: msgListHt
     });
+    
+    var teamsHt = $('.phbook .teams > .body').outerHeight();
+    console.log(teamsHt);
+    if(teamsHt > 200) {
+        $('.phbook .teams > .body').css('max-height','200px');
+        $('.phbook .teams > .body').css('height','200px');
+        $('.phbook .teams > .body').css('overflow-y','scroll');
+        $('.phbook .teams > .body').slimScroll({
+        });
+ 
+    }
+
+    $('.phbook .agents > .body').css('height','250px');
+    $('.phbook .agents > .body').css('max-height','250px');
+    $('.phbook .agents > .body').slimScroll({
+
+    });
+
+    var options = {
+        valueNames: ['fullname', 'extn']
+    }; 
+    var dirList = new List('directory', options);
 
 });
  

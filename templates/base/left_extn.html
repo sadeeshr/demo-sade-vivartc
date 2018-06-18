@@ -1,7 +1,7 @@
 {% load wstags %}
-<div class="lsbrowser d-none d-sm-block">
+<div class="lsbrowser d-none d-sm-block" id="directory">
     <div class="search">
-        <span><input type="text" class="search-box"></span> 
+        <span><input type="text" class="search search-box"></span> 
     </div>
 
     <div class="contacts d-none">
@@ -41,11 +41,10 @@
             <span>Agents</span>
             <span class="action float-right"></span>
         </div>
-        <div class="body item-list">
-            <ul class="list-unstyled">
+        <div class="body item-list" id="dirAgents">
+            <ul class="list list-unstyled">
                 {% for agent in agents %}
-                {% if agent != request.user.agent %}
-                <li class="media item agent px-3 py-2" data-id="{{ agent.id }}" data-user="{{agent.user.username}}" data-extn="{{agent.tel_profile.extn}}">
+                <li class="media item agent px-3 py-2 {% if agent == request.user.agent %} d-none{% endif %}" data-id="{{ agent.id }}" data-user="{{agent.user.username}}" data-extn="{{agent.tel_profile.extn}}">
                     {% if agent.photo %}
                     <img class="align-self-center mr-3 rounded img-xs" src="{{ agent.photo.url }}"> 
                     {% else %}
@@ -53,13 +52,13 @@
                     {% endif %}
                     <div class="media-body">
                         <span class="title"><a class="btn-link fullname" href="#">{{ agent.user.get_full_name }}</a></span> 
+                        <span class="extn d-none">{{agent.tel_profile.extn}}</span>
                         <div class="status-container">
                             <span class="status-icon pr-1"><i class="{{ agent.user|statusicon }}"></i></span>
                             <span class="mb-0 status-text">{{ agent.user|statustext }}</span>
                         </div>
                     </div>
                 </li>
-                {% endif %}
                 {% endfor %}
             </ul>
         </div>

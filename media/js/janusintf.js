@@ -439,7 +439,7 @@ $(document).ready(function() {
     $('body').on('click', '.vox-container .reinvite', function() {
         var target = 'sip:44012345230@'+vox_server;
         // var target = 'sip:44012345111@'+vox_server;
-        doCall(target);
+        doCall(target, false);
     });
 
     $('body').on('click', '.vox-container .attended-transfer', function() {
@@ -483,7 +483,7 @@ $(document).ready(function() {
         var number = $(this).closest('.dialer').find('.display').text();
         var vox_server = $('.lsmenu .user-panel').data('domain');  
         var callee = 'sip:'+number+'@'+vox_server;
-        doCall(callee);
+        doCall(callee, false);
 
         $('.scribe-incall').find('.number').text(number);
         $('.scribe-incall').removeClass('d-none'); 
@@ -573,7 +573,7 @@ function doCall(callee, isVideoCall) {
 
 
     if(localJsep != null) {
-        alert("jsep not null");
+        // alert("jsep not null");
         var body = { request: "call", uri: username };
         localJsep["dtls-reset"] = true;
         sipcall.send({"message": body, "jsep": localJsep});

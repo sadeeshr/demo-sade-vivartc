@@ -73,10 +73,10 @@
             success:function(result) {
                 $('.tribe-pad').data('id', result.id);
                 $('.tribe-pad .header-content').find('.title').html(result.name);
-                $('.tribe-pad .header-content').find('.desc').html('');
+                $('.tribe-pad .header-content').find('.desc').html(result.description);
                 // $('.tribe-pad .header-content').find('.action-item.phone').data('extn', result.extn);
                 //$('.tribe-pad .header-content').find('.action-item.phone').data('server', result.server);
-                $('.message-list').find('li.visible').remove();
+                $('.message-list').find('li').remove();
                 $('.lsbrowser').find('.active').removeClass('active');
                 menuItem.find('.badge').text('');
                 menuItem.addClass('active');
