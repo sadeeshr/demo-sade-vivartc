@@ -72,6 +72,8 @@
             },
             success:function(result) {
                 $('.tribe-pad').data('id', result.id);
+                if(result.conf_profile)
+                    $('.tribe-pad').data('extn', result.conf_profile.bridge);
                 $('.tribe-pad .header-content').find('.title').html(result.name);
                 $('.tribe-pad .header-content').find('.desc').html(result.description);
                 // $('.tribe-pad .header-content').find('.action-item.phone').data('extn', result.extn);

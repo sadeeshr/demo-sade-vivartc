@@ -229,6 +229,8 @@ $(document).ready(function() {
                                                     $('.tribe-pad').find('.col-messages').addClass('d-none')
                                                                                          .siblings('.col-videos').removeClass('d-none'); 
                                                 }
+                                                $('.scribe-incall').removeClass('d-none')
+                                                                   .find('.number').text(extn);
                                                 console.log("Incoming call accepted");
                                                 // Notice that we can only answer if we got an offer: if this was
                                                 // an offerless call, we'll need to create an offer ourselves

@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="row mx-0">
-    <div class="tribe-pad" data-id="{{active_board.id}}" data-mode="0">
+    <div class="tribe-pad" data-id="{{active_board.id}}" {% if active_board.conf_profile %}data-extn="{{active_board.conf_profile.bridge_id}}" {% endif %} data-mode="0">
         <div class="header-content">
             <div class="clearfix">
                 <div class="float-left sidebar-collapse">
