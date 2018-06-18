@@ -588,7 +588,10 @@ li.notiication {
 .incall-widget .btn-small {
     font-size: 18px;
 }
-
+.item-date {
+    font-size: 14px;
+    font-weight: 700;
+}
 /* dialer */
 .lsbrowser .dialer {
     padding: 15px;

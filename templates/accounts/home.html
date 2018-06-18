@@ -101,7 +101,11 @@
                         </div> 
                     </li>
                     {% for message in active_board.messages.all %}
+                    <li>
+                    {% ifchanged message.timestamp.date %} <div class="item-date text-center"> {{message.timestamp.date}} </div> {% endifchanged %}
+                    </li>
                     <li class="media message visible">
+
                         <img class="mr-3 rounded img-sm" src="{% if message.author.agent.photo %} {{ message.author.agent.photo.url }}{% endif %}">
                         <div class="media-body">
                              <span><h5 class="title">{{ message.author.get_full_name }}</h5></span>
