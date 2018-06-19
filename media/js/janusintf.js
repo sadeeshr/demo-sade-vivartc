@@ -22,13 +22,12 @@ var localJsep = null;
 var hold = false;
 
 var calls = [];
+var active_calls = [];
+
 var in_call = false;
 
-VoxPhone.dial = function(calleeName, calleeNumber, calleePic) {
-    $('.vox-container').find('.peer-image > img').attr('src', calleePic);
-    $('.vox-container').find('.peer-name > span').html(calleeName);
-    $('.vox-container').find('.peer-number > span').html(calleeNumber);
-    $('.vox-modal').removeClass('hide');
+VoxPhone.dial = function() {
+    return calls.length; 
 }
 VoxPhone.progress = function(line) {
 
@@ -51,12 +50,19 @@ VoxPhone.connected = function(line) {
     console.log("Recieved Connect Notification");
     $('.tribe-pad').find('.action-item.audio').addClass('connected');
     calls.push(line);
+    active_calls.push(line);
 }
 
-VoxPhone.hold = function() {
-
+VoxPhone.hold = function(line) {
+    active_calls = jQuery.grep(active_calls, function(value) {
+        return value != line;
+    });
 }
-VoxPhone.transfer = function() {
+VoxPhone.unHold = function(line) {
+    active_calls.push(line);
+}
+
+VoxPhone.transfer = function(line) {
 
 }
 
@@ -64,9 +70,17 @@ VoxPhone.hangUp = function(line) {
     calls = jQuery.grep(calls, function(value) {
         return value != line;
     });
+    active_calls = jQuery.grep(active_calls, function(value) {
+        return value != line;
+    });
+    
+
     console.log(calls);
     if(calls.length > 0)
         return;
+
+    $('#callList').find('.active-call').addClass('d-none');
+    $('#callList').find('.inactive-calls').addClass('d-none');
 
 /*
     if($('#chatAudio').length > 0) {
@@ -74,11 +88,6 @@ VoxPhone.hangUp = function(line) {
         $('#chatAudio').remove();
     }
 */
-    $('.tribe-pad').find('.action-item.audio').removeClass('connected');
-    $('.scribe-incall').addClass('d-none');    
-    $('.scribe-incall').find('.number').text('');
-    $('.tribe-pad').find('.col-messages').removeClass('d-none')
-                                         .siblings('.col-videos').addClass('d-none');
 
 }
 
@@ -229,8 +238,14 @@ $(document).ready(function() {
                                                     $('.tribe-pad').find('.col-messages').addClass('d-none')
                                                                                          .siblings('.col-videos').removeClass('d-none'); 
                                                 }
-                                                $('.scribe-incall').removeClass('d-none')
-                                                                   .find('.number').text(extn);
+                                                if(active_calls.length > 0) {
+                                                    triggerHold();
+                                                }
+                                                var lineId = result['line'];
+                                                $('#callList').find('.active-call').data('line',lineId);
+                                                $('#callList').find('.active-call').removeClass('d-none')
+                                                                                   .find('.number').text(extn);
+
                                                 console.log("Incoming call accepted");
                                                 // Notice that we can only answer if we got an offer: if this was
                                                 // an offerless call, we'll need to create an offer ourselves
@@ -421,20 +436,39 @@ $(document).ready(function() {
             sipcall.send({message: {request: "dtmf_info", digit: digit}});
         }
 
-        var existing = $(this).closest('.scribe-incall').children('.scribe-item-heading').find('.digits').text();
-        $(this).closest('.scribe-incall').children('.scribe-item-heading').find('.digits').text(existing+digit);
+        var existing = $(this).closest('.active-call').children('.scribe-item-heading').find('.digits').text();
+        $(this).closest('.active-call').children('.scribe-item-heading').find('.digits').text(existing+digit);
 
     });
+
     $('body').on('click', '.btn-hold', function() {
-        holdCall();
-        VoxPhone.hold();
+        // send the hold request
+        var lineId = $(this).closest('.active-call').data('line');
+        var callId = $(this).closest('.active-call').find('.number').text();
+        console.log("Hold: "+lineId);
+        holdCall(Number(lineId));
+        VoxPhone.hold(Number(lineId));
+
+        var inactiveCont = $(this).closest('#callList').find('.inactive-calls');
+        var card = inactiveCont.find('.call-card:first-child').clone();
+        card.removeClass('d-none')
+            .data('line', lineId)
+            .find('.callid').text(callId);
+        inactiveCont.append(card);
+        inactiveCont.removeClass('d-none');
+
+        $(this).closest('.active-call').addClass('d-none')
+                                       .data('line',"")
+                                       .find('.number').text('');
     });
+
     $('body').on('click', '.btn-link.transfer', function() {
         var tranferTo = $(this).closest('.transfer-input').find('.editable').html(); 
         var voxServer = $('.lsmenu .user-panel').data('domain');
         var target = 'sip:'+tranferTo+'@'+voxServer;
+        var lineId = $(this).closest('.active-call').data('line');
         console.log("Transfering the call to :-"+target); 
-        transferCall(target);
+        transferCall(lineId, target);
         VoxPhone.transfer();
     });
 
@@ -471,12 +505,15 @@ $(document).ready(function() {
             // VoxPhone.dial(name, extn, pic, server);
             var callee = 'sip:'+extn+'@'+voxServer;
             doCall(callee, isVideoCall);
+            /*
             if(isVideoCall)
                 $('.tribe-pad').find('.col-messages').addClass('d-none')
                                                      .siblings('.col-videos').removeClass('d-none');
+            */
                                     
-            $('.scribe-incall').removeClass('d-none')
-                               .find('.number').text(extn);
+            $('#callList').find('.active-call').data('line','0')
+                                               .removeClass('d-none')
+                                               .find('.number').text(extn);
         }
 
     });
@@ -485,10 +522,18 @@ $(document).ready(function() {
         var number = $(this).closest('.dialer').find('.display').text();
         var vox_server = $('.lsmenu .user-panel').data('domain');  
         var callee = 'sip:'+number+'@'+vox_server;
+        var lineId = VoxPhone.dial();
+
+        if(active_calls.length > 0) {
+            alert("Active call present")
+            return;
+        }
+            
         doCall(callee, false);
 
-        $('.scribe-incall').find('.number').text(number);
-        $('.scribe-incall').removeClass('d-none'); 
+        $('#callList').find('.active-call').data('line',lineId);
+        $('#callList').find('.active-call').removeClass('d-none')
+                                           .find('.number').text(number);
 
         $('.lsbrowser').find('.display').html('');
         $('.lsbrowser').find('.dialer').toggleClass('d-none');
@@ -497,12 +542,60 @@ $(document).ready(function() {
         $('.lsbrowser').find('.contact-list').empty()
     });
 
-    $('body').on('click', '.btn-hangup', function() {
-        endCall();
-        $('.scribe-incall').addClass('d-none');
+    $('body').on('click', '.call-card .btn-hangup', function() {
+        var obj = $(this).closest('.call-card');
+        var lineId = obj.data('line');
+        endCall(Number(lineId));
+        obj.remove();
+    });
+
+    $('body').on('click', '.active-call .btn-hangup', function() {
+        var activeObj = $(this).closest('.active-call');
+        var lineId = activeObj.data('line');
+        endCall(Number(lineId));
+        activeObj.data('line', "")
+                 .addClass('d-none');
+    });
+
+    $('body').on('click', '.btn-unhold', function() {
+        var lineId = $(this).closest('.call-card').data('line'); 
+        var callId = $(this).closest('.call-card').find('.callid').text();
+        if(active_calls.length > 0) {
+            alert("Active call present")
+            return;
+        }
+        unHoldCall(Number(lineId));
+        VoxPhone.unHold(Number(lineId));
+        $(this).closest('.inactive-calls').parent().find('.active-call').removeClass('d-none')
+                                                                        .data('line', lineId)
+                                                                        .find('.number').text(callId);
+        $(this).closest('.call-card').remove();
+         
+
     });
 
 });
+
+
+function triggerHold() {
+    var lineId = $('#callList').find('.active-call').data('line');
+    var callId = $('#callList').find('.active-call').find('.number').text();
+    console.log("Hold: "+lineId);
+    holdCall(Number(lineId));
+    VoxPhone.hold(Number(lineId));
+
+    var inactiveCont = $('#callList').find('.inactive-calls');
+    var card = inactiveCont.find('.call-card:first-child').clone();
+    card.removeClass('d-none')
+        .data('line', lineId)
+        .find('.callid').text(callId);
+    inactiveCont.append(card);
+    inactiveCont.removeClass('d-none');
+
+    $('#callList').find('.active-call').addClass('d-none')
+                                       .data('line',"")
+                                       .find('.number').text('');
+}
 
 function registerUser() {
     // Let's see if the user provided a server address
@@ -637,11 +730,11 @@ function doHangup() {
     }
 }
 
-function endCall() {
+function endCall(lineId) {
     console.log("Inside endcall");
     // Hangup a call
-    VoxPhone.hangUp();
-    var hangup = { "request": "hangup", "line": 0};
+    VoxPhone.hangUp(lineId);
+    var hangup = { "request": "hangup", "line": lineId};
     sipcall.send({"message": hangup});
     if(calls.length == 0) {
         sipcall.hangup();
@@ -649,23 +742,19 @@ function endCall() {
     }
 }
 
-function holdCall() {
-    // Hangup a call
-    var msg;
-    if(hold) {
-        msg = { "request": "unhold", "line": 0};
-        sipcall.send({"message": msg});
-        hold = false;
-    } else {
-        msg = { "request": "hold", "line": 0};
-        sipcall.send({"message": msg});
-        hold = true;
-    }
+function holdCall(lineId) {
+    var msg = { "request": "hold", "line": lineId};
+    sipcall.send({"message": msg});
 }
 
-function transferCall(target) {
+function unHoldCall(lineId) {
+    var msg = { "request": "unhold", "line": lineId};
+    sipcall.send({"message": msg});
+}
+
+function transferCall(lineId, target) {
     // Hangup a call
-    var msg = { "request": "transfer", "target": target};
+    var msg = { "request": "transfer", "line": lineId, "target": target};
     sipcall.send({"message": msg});
 }
 

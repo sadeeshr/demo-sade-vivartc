@@ -226,112 +226,128 @@
                             {% endcomment %}
 
 
-                            <div class="scribe-item scribe-incall d-none">
-                                <div class="scribe-item-heading" id="headPad">
-                                    <div class="icon"><i class="fa fa-phone"></i></div>
-                                    <div class="callid-container">
-                                        <a class="btn-link number" data-toggle="collapse" data-target="#collapsePad" aria-expanded="true" aria-controls="collapsePad">
-                                        </a>
+                            <div class="scribe-item scribe-incall" id="callList">
+                                <div class="inactive-calls d-none">
+                                    <div class="call-card horizontal d-none">
+                                        <span class="icon"><img src="{{MEDIA_URL}}images/hold_32.png"></img></span>
+                                        <span class="callid px-2"></span>
+                                        <span class="actions text-right mr-4">
+                                             <button class="btn-unhold btn-rounded bg-success mx-3"><i class="fa fa-play text-red"></i></button>
+                                             <button class="btn-hangup btn-rounded bg-danger px-2"><i class="fa fa-phone text-red"></i></button>
+                                        </span> 
                                     </div>
-                                    <div class="transfer-input d-none">
-                                        <div class="editable" contenteditable="true" aria-label="Type your message">
+                                </div>
+                                <!-- active call begin -->
+                                <div class="active-call d-none">
 
+                                    <div class="scribe-item-heading" id="headPad">
+                                        <div class="icon"><i class="fa fa-phone"></i></div>
+                                        <div class="callid-container">
+                                            <a class="btn-link number" data-toggle="collapse" data-target="#collapsePad" aria-expanded="true" aria-controls="collapsePad">
+                                            </a>
                                         </div>
-                                        <div class=""><a class="btn-link transfer"><i class="fa fa-paper-plane-o fa-rotate-30"></i></a></div>
-                                    </div>
-                                    <div class="digits-input d-none">
-                                        <span class="digits"></span>
-                                    </div>
-                                </div>
-                                <div id="collapsePad" class="collapse show" aria-labelledby="headPad" data-parent="#accordion"> 
-                                    <div class="scribe-item-body incall-widget py-3">
-                                        <div class="features-container">
-                                            <div class="row no-margin pt-3">
-                                                <div class="col-sm">
-                                                    <button class="btn btn-mute" title="Mute Call" disabled><i class="fa fa-microphone-slash"></i></button>
-                                                </div>
-                                                <div class="col-sm">
-                                                    <button class="btn btn-hold" title="Hold Call">
-                                                        <img src="{{MEDIA_URL}}images/callhold_64.png"></img>
-                                                    </button>
-                                                </div>
-                                                <div class="col-sm">
-                                                    <button class="btn btn-record" title="Start Recording" disabled>
-                                                        <img src="{{MEDIA_URL}}images/record_blue.png"></img>
-                                                    </button>
-                                                </div>
+                                        <div class="transfer-input d-none">
+                                            <div class="editable" contenteditable="true" aria-label="Type your message">
+
                                             </div>
-                                            <div class="row no-margin pt-3">
-                                                <div class="col-sm">
-                                                    <button class="btn btn-transfer" title="Transfer Call"><img src="{{MEDIA_URL}}images/transfer.png" ></img></button>
-                                                </div>
-                                                <div class="col-sm">
-                                                    <button class="btn btn-record" title="Add Record" disabled><i class="fa fa-plus"></i></button>
-                                                </div>
-                                                <div class="col-sm">
-                                                    <button class="btn btn-notes" title="Add Notes" disabled><i class="fa fa-edit"></i></button>
-                                                </div>
-                                            </div>
+                                            <div class=""><a class="btn-link transfer"><i class="fa fa-paper-plane-o fa-rotate-30"></i></a></div>
                                         </div>
-                                        <div class="digits-container d-none">
-                                            <div class="row no-margin pt-3">
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="1">1</button>
-                                                </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="2">2</button>
-                                                </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="3">3</button>
-                                                </div>
-                                            </div>
-                                            <div class="row no-margin pt-3">
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="4">4</button>
-                                                </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="5">5</button>
-                                                </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="6">6</button>
-                                                </div>
-                                            </div>
-                                            <div class="row no-margin pt-3">
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="7">7</button>
-                                                </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="8">8</button>
-                                                </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="9">9</button>
-                                                </div>
-                                            </div>
-                                            <div class="row no-margin pt-3">
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="*">*</button>
-                                                </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="0">0</button>
-                                                </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-dtmf btn-rounded small" data-value="#">#</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row no-margin pt-3">
-                                            <div class="col-sm">
-                                                <button class="btn btn-rounded btn-small"><i class="fa fa-bars"></i></button> 
-                                            </div>
-                                            <div class="col-sm">
-                                                <button class="btn btn-hangup bg-danger btn-rounded"><i class="fa fa-phone"></i></button>
-                                            </div>
-                                            <div class="col-sm">
-                                                <button class="btn btn-digits btn-rounded btn-small"><i class="fa fa-th"></i></button> 
-                                            </div>
+                                        <div class="digits-input d-none">
+                                            <span class="digits"></span>
                                         </div>
                                     </div>
-                                </div>
+                                    <div id="collapsePad" class="collapse show" aria-labelledby="headPad" data-parent="#accordion"> 
+                                        <div class="scribe-item-body incall-widget py-3">
+                                            <div class="features-container">
+                                                <div class="row no-margin pt-3">
+                                                    <div class="col-sm">
+                                                        <button class="btn btn-mute" title="Mute Call" disabled><i class="fa fa-microphone-slash"></i></button>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <button class="btn btn-hold" title="Hold Call">
+                                                            <img src="{{MEDIA_URL}}images/callhold_64.png"></img>
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <button class="btn btn-record" title="Start Recording" disabled>
+                                                            <img src="{{MEDIA_URL}}images/record_blue.png"></img>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="row no-margin pt-3">
+                                                    <div class="col-sm">
+                                                        <button class="btn btn-transfer" title="Transfer Call"><img src="{{MEDIA_URL}}images/transfer.png" ></img></button>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <button class="btn btn-record" title="Add Record" disabled><i class="fa fa-plus"></i></button>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <button class="btn btn-notes" title="Add Notes" disabled><i class="fa fa-edit"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="digits-container d-none">
+                                                <div class="row no-margin pt-3">
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="1">1</button>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="2">2</button>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="3">3</button>
+                                                    </div>
+                                                </div>
+                                                <div class="row no-margin pt-3">
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="4">4</button>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="5">5</button>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="6">6</button>
+                                                    </div>
+                                                </div>
+                                                <div class="row no-margin pt-3">
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="7">7</button>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="8">8</button>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="9">9</button>
+                                                    </div>
+                                                </div>
+                                                <div class="row no-margin pt-3">
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="*">*</button>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="0">0</button>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <button class="btn btn-dtmf btn-rounded small" data-value="#">#</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row no-margin pt-3">
+                                                <div class="col-sm">
+                                                    <button class="btn btn-rounded btn-small"><i class="fa fa-bars"></i></button> 
+                                                </div>
+                                                <div class="col-sm">
+                                                    <button class="btn btn-hangup bg-danger btn-rounded"><i class="fa fa-phone"></i></button>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <button class="btn btn-digits btn-rounded btn-small"><i class="fa fa-th"></i></button> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                                 <!-- end active call -->
+
                             </div>                           
 
                         </div>        

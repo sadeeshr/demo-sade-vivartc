@@ -592,6 +592,34 @@ li.notiication {
     font-size: 14px;
     font-weight: 700;
 }
+
+.call-card {
+    padding-bottom: .6em;
+    border-bottom: 1px solid #e8e8e8;
+}
+.call-card .icon {
+}
+.call-card .icon img {
+    height: 28px;
+    width: 28px;
+}
+.call-card .callid {
+    font-size: 18px;
+    color: #777;
+}
+.call-card .actions {
+    float: right;
+}
+.call-card .actions button {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    color: #fff;
+    background: rgba(255,255,255, 0.4);
+    border: 1px solid #eee;
+}
+
+
 /* dialer */
 .lsbrowser .dialer {
     padding: 15px;
