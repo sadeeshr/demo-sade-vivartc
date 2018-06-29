@@ -33,19 +33,19 @@ VoxPhone.progress = function(line) {
 
 }
 VoxPhone.incoming = function(callerNumber, line) {
-    // $('<audio id="chatAudio"> <source src="/media/audio/iphone.mp3" type="audio/mpeg"></audio>').appendTo('body');
-    // $('#chatAudio')[0].play();
+    $('<audio id="chatAudio"> <source src="/media/audio/iphone.mp3" type="audio/mpeg"></audio>').appendTo('body');
+    $('#chatAudio')[0].play();
     $('.vox-container').find('.peer-number > span').html(callerNumber);
     $('.vox-modal').removeClass('hide');
 
 }
 VoxPhone.connected = function(line) {
 
-/*    if($('#chatAudio').length > 0) {
+    if($('#chatAudio').length > 0) {
         $('#chatAudio')[0].pause();
         $('#chatAudio').remove();
     }
- */
+
     // $('.vox-container').find('.sp-actions .btn-action.transfer').removeClass('disabled');
     console.log("Recieved Connect Notification");
     $('.tribe-pad').find('.action-item.audio').addClass('connected');
@@ -74,6 +74,10 @@ VoxPhone.hangUp = function(line) {
         return value != line;
     });
     
+    if($('#chatAudio').length > 0) {
+        $('#chatAudio')[0].pause();
+        $('#chatAudio').remove();
+    }
 
     console.log(calls);
     if(calls.length > 0)
@@ -82,12 +86,6 @@ VoxPhone.hangUp = function(line) {
     $('#callList').find('.active-call').addClass('d-none');
     $('#callList').find('.inactive-calls').addClass('d-none');
 
-/*
-    if($('#chatAudio').length > 0) {
-        $('#chatAudio')[0].pause();
-        $('#chatAudio').remove();
-    }
-*/
 
 }
 
@@ -202,7 +200,7 @@ $(document).ready(function() {
                                 if(jsep !== null && jsep !== undefined) {
                                     // What has been negotiated?
                                     doAudio = (jsep.sdp.indexOf("m=audio ") > -1);
-                                    doVideo = (jsep.sdp.indexOf("m=video ") > -1);
+                                    // doVideo = (jsep.sdp.indexOf("m=video ") > -1);
                                     Janus.debug("Audio " + (doAudio ? "has" : "has NOT") + " been negotiated");
                                     Janus.debug("Video " + (doVideo ? "has" : "has NOT") + " been negotiated");
                                 } else {
@@ -244,8 +242,9 @@ $(document).ready(function() {
                                                 var lineId = result['line'];
                                                 $('#callList').find('.active-call').data('line',lineId);
                                                 $('#callList').find('.active-call').removeClass('d-none')
-                                                                                   .find('.number').text(extn);
+                                                                                   .find('.number').text(result["username"]);
 
+                                                console.log(jsep); 
                                                 console.log("Incoming call accepted");
                                                 // Notice that we can only answer if we got an offer: if this was
                                                 // an offerless call, we'll need to create an offer ourselves

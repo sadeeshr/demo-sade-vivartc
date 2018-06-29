@@ -106,6 +106,7 @@ $(function() {
     /* @ mentions */
     $('.msg-input').atwho({
         at: "@",
+        limit: 20,
         data: '/iris/at/mentions',
         displayTpl: "<li><img class='mr-1 rounded img-xs' src='${photo}'></img>${display_name}</li>",
         insertTpl: "<span class='at-mention'>${atwho-at}${display_name}</span>",
