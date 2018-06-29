@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import *
+from hub.models import Channel
 
 # Create your models here.
 class Presence(models.Model):
@@ -44,3 +45,26 @@ class MessageAttachment(models.Model):
 
     def __str__(self):
         return '{}'.format(self.name)
+
+
+class Meeting(models.Model):
+    TYPE_CHOICES = (
+        ('0', 'Tele'),
+        ('1', 'Direct'),
+    )    
+
+    subject = models.CharField(max_length=200)
+    start   = models.DateTimeField()
+    end     = models.DateTimeField()
+    description = models.TextField(null=True, blank=True)
+
+    type = models.CharField(choices=TYPE_CHOICES, default='1', max_length=2)    
+    conf_profile = models.ForeignKey(ConfProfile, null=True, blank=True, related_name="conferences")
+
+    # Source
+    channel = models.ForeignKey(Channel, null=True, blank=True, related_name="meetings")
+    source_id =  models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return '{}'.format(self.subject)
+

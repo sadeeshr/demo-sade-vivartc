@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import Enterprise 
+from hub.models import Channel
 
 # Create your models here.
 
@@ -46,8 +47,12 @@ class ConfProfile(models.Model):
     def __str__(self):
         return '%s' % self.bridge_id
  
+
+"""
+Contact - Synchronized for multiple sources
+"""
 class Contact(models.Model):
-    first_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100, null=True, blank=True)
     last_name = models.CharField(max_length=100, null=True, blank=True)
     mobile = models.CharField(max_length=20, null=True, blank=True)
     work = models.CharField(max_length=20, null=True, blank=True)
@@ -56,7 +61,11 @@ class Contact(models.Model):
     email = models.CharField(max_length=100, null=True, blank=True)
     photo = models.ImageField(upload_to='photo', null=True, blank=True)
 
-    # add source later
+    # external source
+    channel = models.ForeignKey(Channel, null=True, blank=True, related_name="contacts")
+    source_id =  models.CharField(max_length=200, null=True, blank=True)
+    source_module = models.CharField(max_length=100, null=True, blank=True)
+    
     
     def __str__(self):
         return '%s' % self.first_name

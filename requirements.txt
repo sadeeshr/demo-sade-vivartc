@@ -1,9 +1,12 @@
 aioredis==1.0.0
+amqp==2.3.2
 asgiref==2.3.0
 async-timeout==2.0.1
 attrs==18.1.0
 autobahn==18.5.1
 Automat==0.6.0
+billiard==3.5.0.3
+celery==4.2.0
 certifi==2018.4.16
 channels==2.1.1
 channels-redis==2.1.1
@@ -17,6 +20,7 @@ hyperlink==18.0.0
 idna==2.6
 incremental==17.5.0
 jsonfield==2.0.2
+kombu==4.2.1
 msgpack==0.5.6
 Pillow==5.1.0
 psycopg2==2.7.4
@@ -27,4 +31,5 @@ six==1.11.0
 Twisted==18.4.0
 txaio==2.10.0
 urllib3==1.22
+vine==1.1.4
 zope.interface==4.5.0
