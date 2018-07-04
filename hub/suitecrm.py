@@ -23,13 +23,12 @@ class suitecrm(object):
         }
         self._channel = None
 
-    def connect(self, name):
+    def connect(self, channel):
         try:
-            crm = Channel.objects.get(name__iexact=name)
-            if crm.suitecrm is None:
+            if channel.suitecrm is None:
                 return 
-            self._channel = crm 
-            sc = crm.suitecrm
+            self._channel = channel
+            sc = channel.suitecrm
 
             params = {
                 'grant_type': 'client_credentials',
@@ -37,7 +36,7 @@ class suitecrm(object):
                 'client_secret': sc.client_secret,
                 'scope' : 'standard:create standard:read standard:update standard:delete standard:delete standard:relationship:create standard:relationship:read standard:relationship:update standard:relationship:delete'
             }
-            url = "{0}{1}".format(crm.address, self.ACCESS_TOKEN_URL)
+            url = "{0}{1}".format(channel.address, self.ACCESS_TOKEN_URL)
             response = requests.post(url, json=params, headers=self._headers)
             if response.status_code == 200:       
                 result = response.json()

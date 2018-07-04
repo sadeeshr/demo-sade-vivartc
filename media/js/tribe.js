@@ -50,7 +50,7 @@ $(function() {
             
             var msgListHt = $('.col-messages').height() - $('.col-messages .footer').outerHeight();
             $('.col-messages .message-list').slimScroll({
-                scrollTo: msgListHt
+                scrollTo: msgListHt+"px"
             });
         } else {
             if (message.code == 80) {

@@ -258,6 +258,10 @@ function syncTeamMessages(teamId) {
                 });
                 */
                 $('.message-list').html(result);
+                var msgListHt = $('.col-messages').height() - $('.col-messages .footer').outerHeight();
+                $('.col-messages .message-list').slimScroll({
+                    scrollTo: msgListHt+"px"
+                });
             },
             error: function(xhr, error) {
                 console.log(error);

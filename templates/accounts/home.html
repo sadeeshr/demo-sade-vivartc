@@ -54,11 +54,11 @@
                 </div>
         
                 <div class="actions float-right">
-                    <div class="action-item audio" data-action="audio">
-                        <a href="#" class="btn-link new-call" ><i class="fa fa-phone"></i></a>
+                    <div class="action-item audio" data-action="audio" style="color: #aaa;" title="Not Supported">
+                        <i class="fa fa-phone"></i>
                     </div>
-                    <div class="action-item video" data-action="video">
-                        <a href="#" class="btn-link new-call"><i class="fa fa-video-camera"></i></a>
+                    <div class="action-item video" data-action="video" style="color: #aaa;" title="Not Supported">
+                        <i class="fa fa-video-camera"></i>
                     </div>
         
                     <div class="search-content sm-hide">
@@ -440,13 +440,13 @@ $(document).ready(function() {
     var msgListHt = $('.col-messages').height() - $('.col-messages .footer').outerHeight();
     $('.col-messages .message-list').css('height', msgListHt);   
     $('.col-messages .message-list').css('max-height', msgListHt);   
+    console.log(msgListHt);
     $('.col-messages .message-list').slimScroll({
         height: msgListHt,
-        scrollTo: msgListHt
+        start: 'bottom'
     });
     
     var teamsHt = $('.phbook .teams > .body').outerHeight();
-    console.log(teamsHt);
     if(teamsHt > 200) {
         $('.phbook .teams > .body').css('max-height','200px');
         $('.phbook .teams > .body').css('height','200px');

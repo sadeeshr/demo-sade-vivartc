@@ -20,7 +20,7 @@ def sync_all():
         channels = Channel.objects.filter(type='1')
         for channel in channels:
             sc = suitecrm()
-            sc.connect(channel.name)
+            sc.connect(channel)
             sc.sync_contacts()
             sc.sync_leads()
             sc.sync_meetings()
