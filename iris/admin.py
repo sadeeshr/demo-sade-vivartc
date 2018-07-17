@@ -5,3 +5,4 @@ from iris.models import *
 admin.site.register(Message)
 admin.site.register(DirectMessage)
 admin.site.register(Meeting)
+admin.site.register(Call)

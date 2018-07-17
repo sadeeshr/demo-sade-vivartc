@@ -26,7 +26,8 @@ var active_calls = [];
 
 var in_call = false;
 
-VoxPhone.dial = function() {
+VoxPhone.dial = function(peer) {
+    voxBoard.sendEvent(peer, 2, calls.length);
     return calls.length; 
 }
 VoxPhone.progress = function(line) {
@@ -37,6 +38,7 @@ VoxPhone.incoming = function(callerNumber, line) {
     $('#chatAudio')[0].play();
     $('.vox-container').find('.peer-number > span').html(callerNumber);
     $('.vox-modal').removeClass('hide');
+    voxBoard.sendEvent(callerNumber, 1, line); 
 
 }
 VoxPhone.connected = function(line) {
@@ -51,6 +53,7 @@ VoxPhone.connected = function(line) {
     $('.tribe-pad').find('.action-item.audio').addClass('connected');
     calls.push(line);
     active_calls.push(line);
+    voxBoard.sendEvent("", 3, line);
 }
 
 VoxPhone.hold = function(line) {
@@ -78,6 +81,7 @@ VoxPhone.hangUp = function(line) {
         $('#chatAudio')[0].pause();
         $('#chatAudio').remove();
     }
+    voxBoard.sendEvent("", 9, line);
 
     console.log(calls);
     if(calls.length > 0)
@@ -104,7 +108,7 @@ $(document).ready(function() {
         $(this).attr('disabled', true).unbind('click');
         // Make sure the browser supports WebRTC
         if(!Janus.isWebrtcSupported()) {
-            bootbox.alert("No WebRTC support... ");
+            // bootbox.alert("No WebRTC support... ");
             return;
         }
         janus = new Janus({
@@ -123,7 +127,7 @@ $(document).ready(function() {
                     },
                     error: function(error) {
                         Janus.error("  -- Error attaching plugin...", error);
-                        bootbox.alert("  -- Error attaching plugin... " + error);
+                        // bootbox.alert("  -- Error attaching plugin... " + error);
                     },
                     consentDialog: function(on) {
                         Janus.debug("Consent dialog should be " + (on ? "on" : "off") + " now");
@@ -162,7 +166,7 @@ $(document).ready(function() {
                                     localJsep = null;
                                 }
                             }
-                            bootbox.alert(error);
+                            // bootbox.alert(error);
                             return;
                         }
                         var result = msg["result"];
@@ -177,7 +181,7 @@ $(document).ready(function() {
                                 $('#password').removeAttr('disabled');
                                 $('#register').removeAttr('disabled').click(registerUsername);
                                 $('#registerset').removeAttr('disabled');
-                                bootbox.alert(result["code"] + " " + result["reason"]);
+                                // bootbox.alert(result["code"] + " " + result["reason"]);
                                 return;
                             }
                             if(event === 'registered') {
@@ -270,7 +274,7 @@ $(document).ready(function() {
                                                     error: function(error) {
                                                         console.log("Error - hangup the call");
                                                         Janus.error("WebRTC error:", error);
-                                                        bootbox.alert("WebRTC error... " + JSON.stringify(error));
+                                                        // bootbox.alert("WebRTC error... " + JSON.stringify(error));
                                                         // Don't keep the caller waiting any longer, but use a 480 instead of the default 486 to clarify the cause
                                                         var body = { "request": "decline", "code": 480 };
                                                             sipcall.send({"message": body});
@@ -322,7 +326,7 @@ $(document).ready(function() {
                                     incoming = null;
                                 }
                                 Janus.log("Call hung up (" + result["code"] + " " + result["reason"] + ")!");
-                                bootbox.alert(result["code"] + " " + result["reason"]);
+                                // bootbox.alert(result["code"] + " " + result["reason"]);
                                 VoxPhone.hangUp(result['line']);
                                 if(calls.length == 0 ) {
                                     // Reset status
@@ -517,14 +521,28 @@ $(document).ready(function() {
 
     });
 
+    /* Dialing from phone book */
+    $('body').on('click', '#phBook .btn-call', function() {
+         var number = $(this).closest('.media').data('extn');
+         var vox_server = $('.lsmenu .user-panel').data('domain');
+         var callee = 'sip:'+number+'@'+vox_server;
+         var lineId = VoxPhone.dial(number);
+         if(active_calls.length > 0) {
+            return;
+        }
+        doCall(callee, false);
+        $('#callList').find('.active-call').data('line',lineId);
+        $('#callList').find('.active-call').removeClass('d-none')
+                                           .find('.number').text(number);
+    });
+    /* Dialing from dialpad */
     $('body').on('click', '.dialer .btn-dial', function() {
         var number = $(this).closest('.dialer').find('.display').text();
         var vox_server = $('.lsmenu .user-panel').data('domain');  
         var callee = 'sip:'+number+'@'+vox_server;
-        var lineId = VoxPhone.dial();
+        var lineId = VoxPhone.dial(number);
 
         if(active_calls.length > 0) {
-            alert("Active call present")
             return;
         }
             
@@ -560,7 +578,7 @@ $(document).ready(function() {
         var lineId = $(this).closest('.call-card').data('line'); 
         var callId = $(this).closest('.call-card').find('.callid').text();
         if(active_calls.length > 0) {
-            alert("Active call present")
+            bootbox.alert("Active call present")
             return;
         }
         unHoldCall(Number(lineId));
@@ -653,13 +671,11 @@ function doCall(callee, isVideoCall) {
     // Call someone
     var username = callee;
     if(username === "") {
-        bootbox.alert('Please insert a valid SIP address (e.g., sip:pluto@example.com)');
         $('#peer').removeAttr('disabled');
         $('#dovideo').removeAttr('disabled');
         return;
     }
     if(username.indexOf("sip:") != 0 || username.indexOf("@") < 0) {
-        bootbox.alert('Please insert a valid SIP address (e.g., sip:pluto@example.com)');
         $('#peer').removeAttr('disabled').val("");
         $('#dovideo').removeAttr('disabled').val("");
         return;
@@ -712,7 +728,7 @@ function doCall(callee, isVideoCall) {
             },
             error: function(error) {
                 Janus.error("WebRTC error...", error);
-                bootbox.alert("WebRTC error... " + JSON.stringify(error));
+                // bootbox.alert("WebRTC error... " + JSON.stringify(error));
             }
         });
 }
@@ -726,19 +742,23 @@ function doHangup() {
     if(calls.length == 0) {
         sipcall.hangup();
         in_call = false;
+        localJsep = null;
     }
 }
 
 function endCall(lineId) {
     console.log("Inside endcall");
     // Hangup a call
-    VoxPhone.hangUp(lineId);
+    VoxPhone.hangUp(lineId, 9);
     var hangup = { "request": "hangup", "line": lineId};
     sipcall.send({"message": hangup});
-    if(calls.length == 0) {
+/*    if(calls.length == 0) {
+        console.log("Before hangup");
         sipcall.hangup();
         in_call = false;
+        localJsep = null;
     }
+*/
 }
 
 function holdCall(lineId) {

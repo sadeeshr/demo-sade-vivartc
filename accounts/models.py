@@ -59,6 +59,12 @@ class Agent(models.Model):
     def __str__(self):
         return '%s' % self.user
     
+    def is_tel_busy(self):
+        calls = self.calls.filter(status__in=('1','2','5'))  
+        if len(calls) > 0:
+            return True
+        return False
+
 
 class Team(models.Model):
     

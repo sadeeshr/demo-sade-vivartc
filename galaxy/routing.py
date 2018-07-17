@@ -1,11 +1,16 @@
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
-import iris.routing
+from django.conf.urls import url
+
+from iris.consumers import TribeConsumer
+from vox.consumers import VoxConsumer
 
 application = ProtocolTypeRouter({
     'websocket': AuthMiddlewareStack(
-        URLRouter(
-            iris.routing.ws_urlpatterns
-        )
+        URLRouter([
+            url(r'^iris/tribe/$', TribeConsumer),
+            url(r'^vox/board/$', VoxConsumer),
+        ])
     ),
 })
+

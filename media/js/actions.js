@@ -182,7 +182,12 @@
     }); 
 
     $('body').on('click', '.dialer .btn-erase', function() {
-        $(this).closest('.dialer').find('.display').text('');
+        var old = $(this).closest('.dialer').find('.display').text();
+        var updated = "";
+        if(old.length > 1) {
+            var updated = old.slice(0, -1); 
+        }
+        $(this).closest('.dialer').find('.display').text(updated);
     });
 
      

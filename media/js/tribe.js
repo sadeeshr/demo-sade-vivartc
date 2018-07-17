@@ -13,7 +13,7 @@ $(function() {
 
     socket.onmessage = function(e) {
         var message = $.parseJSON(e.data);
-        console.log(message);
+        var msgHt = 0;
 
         if($('.tribe-pad').data("id") == message.board) {
             if (message.code == 100) {
@@ -43,14 +43,14 @@ $(function() {
                             </div>\
                             </li>"
                 msgList.append(item);
+                msgHt = msgList.find("li:last-child").height();
 
             } else if(mesasge.code == 201) {
 
             }
             
-            var msgListHt = $('.col-messages').height() - $('.col-messages .footer').outerHeight();
             $('.col-messages .message-list').slimScroll({
-                scrollTo: msgListHt+"px"
+                scrollBy: msgHt+"px"
             });
         } else {
             if (message.code == 80) {

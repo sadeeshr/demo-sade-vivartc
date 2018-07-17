@@ -223,12 +223,10 @@ input:focus {
     padding: .3em .6em;
 }
 
-.phbook .agents .body {
-    overflow-y: scroll;
-}
 
 .lsbrowser .category {
     padding: .4em 0;
+    border-bottom: 1px solid #ccc;
 }
 .lsbrowser .category {
     padding-left: -0.6em;
@@ -262,7 +260,6 @@ input:focus {
 
 .agents .status-text {
     font-size: 12px;
-    font-style: italic;
 }
 
 .contact-list .contact p {
@@ -289,6 +286,20 @@ input:focus {
 .lsbrowser .item .badge {
     padding-left: 0.9em;
     padding-right: 0.9em;
+}
+
+.item .btn-call {
+    background: rgba(99,193,160, 0.6);
+    border-radius: 50%;
+    padding: 5px;
+    width: 24px;
+    height: 24px;
+}
+.item .btn-call:hover {
+    background: rgba(99,193,160, 0.9);
+}
+.item .btn-call.busy {
+    background: rgba(255,87,34, 0.8);
 }
 
 .text-offline {

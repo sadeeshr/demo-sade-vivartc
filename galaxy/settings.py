@@ -25,7 +25,7 @@ SECRET_KEY = 's%i)xq53p7%eb&227^(y8a&_+v20@yuox^%7bgtp^zw6e!!5b-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['klipie.com','www.klipie.com', 'klipdesk.com','www.klipdesk.com',]
+ALLOWED_HOSTS = ['158.69.215.204','vivartc.vivacommunication.com','www.vivartc.vivacommunication.com',]
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'accounts',
     'vox',
     'iris',
+    'hub',
     'rest_framework',
     'channels',
 ]
@@ -86,8 +87,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'sirius',                      # Or path to database file if using sqlite3.
-        'USER': 'lordzeus',                      # Not used with sqlite3.
-        'PASSWORD': 'kl1pr0cks',
+        'USER': 'thunderbolt',                      # Not used with sqlite3.
+        'PASSWORD': 'n1nt6k0zh1',
         'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '5432',
     }
@@ -131,7 +132,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATICFILES_DIRS = []
+STATIC_ROOT = '/var/www/vivartc.com/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -204,3 +206,14 @@ REST_FRAMEWORK = {
     ]
 }
 
+# Celery related configuration
+from celery.schedules import crontab
+
+CELERY_BROKER_URL = 'pyamqp://guest:guest@localhost:5672//'
+CELERY_TIMEZONE = 'UTC'
+CELERY_BEAT_SCHEDULE = {
+    'periodic_tasks': {
+        'task': 'hub.tasks.sync_all',
+        'schedule': crontab(minute='*/5', hour='*'),
+    }
+}

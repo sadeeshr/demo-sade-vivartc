@@ -1,5 +1,5 @@
 {% load wstags %}
-<div class="lsbrowser d-none d-sm-block" id="directory">
+<div class="lsbrowser d-none d-sm-block" id="directory" style="background: rgba(137, 64, 47, 0.8);">
     <div class="search">
         <span><input type="text" class="search search-box"></span> 
     </div>
@@ -14,55 +14,100 @@
         </div>
     </div>
 
-    <div class="phbook">
-      <div class="category teams viewable" data-mode="1">
-        <div class="heading">
-            <span>Teams</span>
-            <span class="action float-right"></span>
-        </div>
-        <div class="body item-list">
-            <ul class="list-unstyled">
-                {% for team in teams %}
-                <li class="media item team px-3 py-2 {% if team == active_board %}active{% endif %}" data-id="{{team.id}}">
-                    <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/team64x64.png">
-                    <div class="media-body">
-                        <span class="title"><a class="btn-link" href="#">{{ team.name }}</a></span> 
-                    </div>
-                    <div class="media-right">
-                        <span class="badge badge-pill badge-info text-white py-2"></span>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-      </div>
-      <div class="category agents viewable" data-mode="0">
-        <div class="heading">
-            <span>Agents</span>
-            <span class="action float-right"></span>
-        </div>
-        <div class="body item-list" id="dirAgents">
-            <ul class="list list-unstyled">
-                {% for agent in agents %}
-                <li class="media item agent px-3 py-2 {% if agent == request.user.agent %} d-none{% endif %}" data-id="{{ agent.id }}" data-user="{{agent.user.username}}" data-extn="{{agent.tel_profile.extn}}">
-                    {% if agent.photo %}
-                    <img class="align-self-center mr-3 rounded img-xs" src="{{ agent.photo.url }}"> 
-                    {% else %}
-                    <img class="align-self-center mr-3 rounded img-xs" src="{{MEDIA_URL}}images/avatar2.jpg">
-                    {% endif %}
-                    <div class="media-body">
-                        <span class="title"><a class="btn-link fullname" href="#">{{ agent.user.get_full_name }}</a></span> 
-                        <span class="extn d-none">{{agent.tel_profile.extn}}</span>
-                        <div class="status-container">
-                            <span class="status-icon pr-1"><i class="{{ agent.user|statusicon }}"></i></span>
-                            <span class="mb-0 status-text">{{ agent.user|statustext }}</span>
+    <div class="phbook accordion py-2" id="phBook">
+        <div class="category teams viewable" data-mode="1">
+            <div class="heading">
+                <span class="icon pr-2"><i class="fa fa-building-o"></i></span>
+                <span class="title">
+                    <a class="#" data-toggle="collapse" data-target="#teams" aria-expanded="true" aria-controls="teams">
+                        Boards
+                    </a>
+                </span>
+                <span class="action float-right"></span>
+            </div>
+            <div class="body item-list" id="teams" data-parent="#phBook">
+                <ul class="list-unstyled">
+                    {% for team in teams %}
+                    <li class="media item team px-3 py-2 {% if team == active_board %}active{% endif %}" data-id="{{team.id}}">
+                        <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/team64x64.png">
+                        <div class="media-body">
+                            <span class="title"><a class="btn-link" href="#">{{ team.name }}</a></span> 
                         </div>
-                    </div>
-                </li>
-                {% endfor %}
-            </ul>
+                        <div class="media-right">
+                            <span class="badge badge-pill badge-info text-white py-2"></span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-      </div>
+        <div class="category agents viewable" data-mode="0">
+            <div class="heading">
+                <span class="icon pr-2"><i class="fa fa-users"></i></span>
+                <span class="title">
+                    <a class="#" data-toggle="collapse" data-target="#dirAgents" aria-expanded="true" aria-controls="dirAgents">
+                        Agents
+                    </a>
+                </span>
+                <span class="action float-right"></span>
+            </div>
+            <div class="body item-list collapse" id="dirAgents" data-parent="#phBook">
+                <ul class="list list-unstyled">
+                    {% for agent in agents %}
+                    <li class="media item agent px-3 py-2 {% if agent == request.user.agent %} d-none{% endif %}" data-id="{{ agent.id }}" data-user="{{agent.user.username}}" data-extn="{{agent.tel_profile.extn}}">
+                        {% if agent.photo %}
+                        <img class="align-self-center mr-3 rounded img-xs" src="{{ agent.photo.url }}"> 
+                        {% else %}
+                        <img class="align-self-center mr-3 rounded img-xs" src="{{MEDIA_URL}}images/avatar2.jpg">
+                        {% endif %}
+                        <div class="media-body">
+                            <span class="title"><a class="btn-link fullname" href="#">{{ agent.user.get_full_name }}</a></span> 
+                            <span class="extn d-none">{{agent.tel_profile.extn}}</span>
+                            <div class="status-container">
+                                <span class="status-icon pr-1"><i class="{{ agent.user|statusicon }}"></i></span>
+                                <span class="mb-0 status-text">{{ agent.user|statustext }}</span>
+                            </div>
+                        </div>
+                        <div class="media-right">
+                            <span class="actions">
+                                <button class="btn btn-call {% if agent.is_tel_busy %}busy{% endif %}" href="#"><i class="fa fa-phone"></i></button>
+                            </span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="category viewable" data-mode="2">
+            <div class="heading">
+                <span class="icon pr-2"><i class="fa fa-address-book-o"></i></span>
+                <span class="title">
+                    <a class="#" data-toggle="collapse" data-target="#contacts" aria-expanded="true" aria-controls="contacts">
+                        Contacts
+                    </a>
+                </span>
+            </div>
+            <div class="body item-list collapse" id="contacts" data-parent="#phBook">
+                <ul class="list list-unstyled">
+                    {% for contact in contacts %}
+                    <li class="media item px-3 py-2" data-extn="{{contact.mobile}}">
+                        <div class="media-body">
+                            <span class="title">{{contact.full_name}}</span>
+                            <p class="mb-0">{{contact.mobile}}</p>
+                        </div>
+                        <div class="media-right">
+                            <span class="actions">
+                                {% if contact.mobile %}
+                                <button class="btn btn-call" href="#"><i class="fa fa-phone"></i></button>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
 
     {% comment %}
     <div class="category">

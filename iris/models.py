@@ -47,6 +47,46 @@ class MessageAttachment(models.Model):
         return '{}'.format(self.name)
 
 
+class Call(models.Model):
+    DIRECTION_CHOICES = (
+        ('1', 'Incoming'),
+        ('2', 'Outgoing'),
+    )
+
+    STATUS_CHOICES = (
+        (0, 'Idle'),
+        (1, 'Ringing'),
+        (2, 'Dialing'),
+        (3, 'Missed'),
+        (4, 'Failed'),
+        (5, 'In Call'),
+        (9, 'Completed'),    
+    )
+
+    agent =  models.ForeignKey(Agent, related_name="calls")    
+    peer  = models.CharField(max_length=40)
+    start   = models.DateTimeField(auto_now_add=True)
+    end     = models.DateTimeField(null=True, blank=True)
+    line  = models.IntegerField(default=-1)
+    direction = models.CharField(choices=DIRECTION_CHOICES, default='1', max_length=1)
+    status = models.IntegerField(choices=STATUS_CHOICES, default=0)
+
+    class Meta:
+        ordering = ['-start'] 
+
+    def __str__(self):
+        return '{} >> {}'.format(self.agent, self.peer)    
+    
+
+class CallActivity(models.Model):
+    subject = models.TextField()
+    call = models.ForeignKey(Call, related_name="activities") 
+    timestamp = models.DateTimeField(auto_now_add=True) 
+
+    def __str__(self):
+        return '{}'.format(self.subject)    
+
+
 class Meeting(models.Model):
     TYPE_CHOICES = (
         ('0', 'Tele'),

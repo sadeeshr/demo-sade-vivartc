@@ -428,6 +428,7 @@ var user = "{{request.user.username}}";
 var mykey = "{{request.user.id}}";
 </script>
 
+<script src="{{MEDIA_URL}}js/vox.js"></script>
 <script src="{{MEDIA_URL}}plugins/janus/html/janus.js"></script>
 <script src="{{MEDIA_URL}}js/janusintf.js"></script>
 
@@ -445,7 +446,7 @@ $(document).ready(function() {
         height: msgListHt,
         start: 'bottom'
     });
-    
+    {% comment %}  
     var teamsHt = $('.phbook .teams > .body').outerHeight();
     if(teamsHt > 200) {
         $('.phbook .teams > .body').css('max-height','200px');
@@ -460,6 +461,11 @@ $(document).ready(function() {
     $('.phbook .agents > .body').css('max-height','250px');
     $('.phbook .agents > .body').slimScroll({
 
+    });
+    {% endcomment %}
+    var htPhbook = $('.lsbrowser').height() - $('.lsbrowser .search').outerHeight() - $('.dial-launcher').outerHeight() - 40;
+    $('#phBook').slimScroll({
+        height: htPhbook+"px",
     });
 
     var options = {

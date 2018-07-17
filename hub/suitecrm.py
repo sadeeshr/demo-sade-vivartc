@@ -15,6 +15,7 @@ class suitecrm(object):
     CONTACTS_URL = "/api/v8/modules/Contacts"
     MEETINGS_URL = "/api/v8/modules/Meetings"
     ACCOUNTS_URL = "/api/v8/modules/Accounts"
+    CALLS_URL = "/api/v8/modules/Calls"
 
     def __init__(self):
         self._headers = {
@@ -48,6 +49,66 @@ class suitecrm(object):
  
         except Exception as err:
             logging.warning("SuiteCrm connect {}".format(str(err))) 
+
+    def modules(self):
+        url = "{0}{1}".format(self._channel.address, self.MODULES_URL)
+        response = requests.get(url, headers=self._headers)
+        if response.status_code == 200:
+            result = response.json()
+            url = "{0}{1}".format(self._channel.address, self.CALLS_URL) 
+            response = requests.get(url, headers=self._headers)
+            result = response.json()
+            print(result)
+
+    """
+    Log a call in suitecrm
+    @param call handle
+    """
+    def log_call(self, call):
+        try:
+            url = "{0}{1}".format(self._channel.address, self.CALLS_URL)
+            peer = call.peer 
+            try:
+                contact = Contact.objects.filter(mobile=peer).first()
+
+            except Exception as err:
+                return
+
+            delta_secs = (call.end - call.start).seconds
+            if delta_secs < 60:
+                dur_hours = 0
+                dur_mins = 1
+            else:
+                dur_hours = delta_secs//3600    
+                dur_mins  = (delta_secs//60)%60
+
+            start = call.start.strftime("%m/%d/%Y %H:%M")
+            end = call.end.strftime("%m/%d/%Y %H:%M")
+            direction = "inbound"
+            if call.direction == '2':
+                direction = "outbound"
+            
+
+            attributes = {"name": "VivaRTC Call", 
+                          "duration_hours":dur_hours, "duration_minutes": dur_mins, 
+                          "direction": direction, "date_start": start,"date_end": end,
+                          'assigned_user_id': '1','parent_type': contact.source_module, 'parent_id':contact.source_id,
+                          'status': 'Planned','created_by': '1'
+            }
+
+            params = {
+                "data": {
+                    "type":"Calls",
+                    "attributes":attributes
+                }
+            }
+             
+            response = requests.post(url, json=params, headers=self._headers)
+            print(response)
+            print(response.json())
+
+        except Exception as err:
+            logging.warning("SuiteCrm log call error {}".format(str(err)))
 
            
     def sync_contacts(self):
