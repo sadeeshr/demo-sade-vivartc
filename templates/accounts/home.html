@@ -64,7 +64,7 @@
                     <div class="search-content sm-hide">
                         <input type="text">
                     </div>
-                    <div class="action-item sm-hide">
+                    <div class="action-item">
                         <a href="#" class="btn-link info"><i class="fa fa-info-circle"></i></a>
                     </div>
                     <div class="sm-hide">
@@ -149,7 +149,7 @@
                 </div> 
             </div>
 
-            <div class="col-scribe d-none d-md-block">
+            <div class="col-scribe sm-hide">
                 <div class="scribe-container">
                     <div class="scribe-heading">
                         <span class="title">{{ active_board.name }}</span>
@@ -260,28 +260,28 @@
                                         <div class="scribe-item-body incall-widget py-3">
                                             <div class="features-container">
                                                 <div class="row no-margin pt-3">
-                                                    <div class="col-sm">
+                                                    <div class="col">
                                                         <button class="btn btn-mute" title="Mute Call" disabled><i class="fa fa-microphone-slash"></i></button>
                                                     </div>
-                                                    <div class="col-sm">
+                                                    <div class="col">
                                                         <button class="btn btn-hold" title="Hold Call">
                                                             <img src="{{MEDIA_URL}}images/callhold_64.png"></img>
                                                         </button>
                                                     </div>
-                                                    <div class="col-sm">
+                                                    <div class="col">
                                                         <button class="btn btn-record" title="Start Recording" disabled>
                                                             <img src="{{MEDIA_URL}}images/record_blue.png"></img>
                                                         </button>
                                                     </div>
                                                 </div>
                                                 <div class="row no-margin pt-3">
-                                                    <div class="col-sm">
+                                                    <div class="col">
                                                         <button class="btn btn-transfer" title="Transfer Call"><img src="{{MEDIA_URL}}images/transfer.png" ></img></button>
                                                     </div>
-                                                    <div class="col-sm">
+                                                    <div class="col">
                                                         <button class="btn btn-record" title="Add Record" disabled><i class="fa fa-plus"></i></button>
                                                     </div>
-                                                    <div class="col-sm">
+                                                    <div class="col">
                                                         <button class="btn btn-notes" title="Add Notes" disabled><i class="fa fa-edit"></i></button>
                                                     </div>
                                                 </div>
@@ -333,13 +333,13 @@
                                                 </div>
                                             </div>
                                             <div class="row no-margin pt-3">
-                                                <div class="col-sm">
+                                                <div class="col">
                                                     <button class="btn btn-rounded btn-small"><i class="fa fa-bars"></i></button> 
                                                 </div>
-                                                <div class="col-sm">
+                                                <div class="col">
                                                     <button class="btn btn-hangup bg-danger btn-rounded"><i class="fa fa-phone"></i></button>
                                                 </div>
-                                                <div class="col-sm">
+                                                <div class="col">
                                                     <button class="btn btn-digits btn-rounded btn-small"><i class="fa fa-th"></i></button> 
                                                 </div>
                                             </div>
@@ -463,7 +463,7 @@ $(document).ready(function() {
 
     });
     {% endcomment %}
-    var htPhbook = $('.lsbrowser').height() - $('.lsbrowser .search').outerHeight() - $('.dial-launcher').outerHeight() - 40;
+    var htPhbook = $(window).height() - $('.lsbrowser .search').outerHeight() - $('.dial-launcher').outerHeight() - 40;
     $('#phBook').slimScroll({
         height: htPhbook+"px",
     });

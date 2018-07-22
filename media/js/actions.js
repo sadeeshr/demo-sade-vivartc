@@ -1,4 +1,41 @@
-(function() {
+var Dialer = {
+    number: "",
+    selector: "#dialer",
+    init: function(selector) {
+        this.number = "";
+        this.selector = selector;
+        $(this.selector).find('.display').text('');
+    },
+    press: function(digit) {
+        var newNum = this.number+""+digit;
+        this.number = newNum;
+        $(this.selector).find('.display').text('')
+                                     .text(this.number);
+        fetchContacts(this.number);
+    },
+    backspace: function() {
+        var newNum = this.number.slice(0, -1);
+        this.number = newNum;
+        $(this.selector).find('.display').text('')
+                                     .text(this.number);
+        fetchContacts(this.number);
+    }, 
+    clear: function() {
+        this.number = "";
+        $(this.selector).find('.display').text('');
+    },
+    dial: function() {
+        if(this.number == "") {
+            return;
+        }
+        $(this.selector).find('.btn-dial').trigger('click'); 
+    } 
+
+}
+
+
+
+$(function() {
 
     window.onresize = function(){
         document.body.height = window.innerHeight;
@@ -25,9 +62,12 @@
         $(this).closest('.lsbrowser').find('.contacts').toggleClass('d-none');
         if($(this).closest('.lsbrowser').find('.contacts').hasClass('d-none'))
             $(this).closest('.lsbrowser').find('.contact-list').empty()
+        Dialer.init('#dialer'); 
+        $('.lsbrowser .dialer').focus();
     });
     $('body').on('click', '.scribe-heading .link-close', function() {
-        $(this).closest('.col-scribe').removeClass('d-md-block');
+        $(this).closest('.col-scribe').addClass('d-none');
+
     });
     $('body').on('click', '.user-panel .btn-link', function() {
         $(this).closest('.menu').find('.user-panel-submenu').toggleClass('d-none');
@@ -35,7 +75,8 @@
     });
 
     $('body').on('click', '.action-item .btn-link.info', function() {
-        $(this).closest('.tribe-pad').find('.col-scribe').toggleClass('d-md-block');
+        $(this).closest('.tribe-pad').find('.col-scribe').removeClass('d-none')
+                                                         .removeClass('sm-hide');
     });
 
     $('body').on('click', '.btn-transfer', function() {
@@ -111,7 +152,8 @@
     $('body').on('click', '.agents.viewable .btn-link', function() {
         var menuItem = $(this).closest('.item'); 
         var key = $(this).closest('.item').data("id");
-        $('.tribe-pad').data('uname', $(this).closest('.item').data('user'));
+        $('.tribe-pad').data('mode', "1")
+                       .data('uname', $(this).closest('.item').data('user'));
         
         $.ajax({
             type:"GET",
@@ -137,6 +179,7 @@
                 $('.scribe-heading .title').text('').text(result.display_name);
                     
                
+                syncAgentMessages(result.id);
             },
             error: function(xhr, error) {
                 console.log(error);
@@ -151,8 +194,10 @@
         var digit = $(this).attr("data-value");
         var existing = $(this).closest('.dialer').find('.display').text();
         var search = existing+digit;
-        $(this).closest('.dialer').find('.display').text(existing+digit);
+        // $(this).closest('.dialer').find('.display').text(existing+digit);
+        Dialer.press(digit);
 
+        /*
         $.ajax({
             type:"POST",
             cache:false,
@@ -179,15 +224,30 @@
                 console.log(error);
             }
         });
+        */
     }); 
+ 
+    $('body').on('keyup', '.dialer', function(event) {
+        event.preventDefault();
+        var charCode = (event.which) ? event.which : event.keyCode;
+        if ( charCode >= 48 && charCode <= 57 ) {
+            Dialer.press(String.fromCharCode(charCode));
+        } else if(charCode >= 96 && charCode <= 105) {
+            charCode -= 48;
+            Dialer.press(String.fromCharCode(charCode));
+        } else if (charCode == 8) {
+            Dialer.backspace();
+        } else if (charCode == 13) {
+            Dialer.dial();
+        }
+
+    });
+
+
+
 
     $('body').on('click', '.dialer .btn-erase', function() {
-        var old = $(this).closest('.dialer').find('.display').text();
-        var updated = "";
-        if(old.length > 1) {
-            var updated = old.slice(0, -1); 
-        }
-        $(this).closest('.dialer').find('.display').text(updated);
+        Dialer.backspace();
     });
 
      
@@ -235,7 +295,7 @@
     });
 
 
-})();
+});
 
 
 function syncTeamMessages(teamId) {
@@ -274,3 +334,74 @@ function syncTeamMessages(teamId) {
         });
 
 }
+
+
+function fetchContacts(key) {
+
+        $.ajax({
+            type:"POST",
+            cache:false,
+            url: '/vox/search/',
+            data:{
+                'q': key,
+                'csrfmiddlewaretoken': csrf_token
+            },
+            success:function(result) {
+                $('.lsbrowser .contact-list').empty();
+                $.each(result, function(key, item){
+                    var node = "<li class='media contact item px-3 py-2'>\
+                                <div class='align-middle ' style='padding-top: 0.5em;'><img class='mr-3 rounded img-small' src='/media/images/avatar2.jpg'></div>\
+                                <div class='media-body'>\
+                                <span><a class='btn-link' href='#'>"+item.first_name+" "+item.last_name +"</a></span>\
+                                <p class='mb-0'>"+item.company+"</p>\
+                                </div>\
+                                </li>";
+                    $('.lsbrowser .contact-list').append(node);
+                });
+
+            },
+            error: function(xhr, error) {
+                console.log(error);
+            }
+        });
+
+
+}
+
+function syncAgentMessages(agentId) {
+    console.log("requesting for messages");
+
+        $.ajax({
+            type:"GET",
+            cache:false,
+            url: '/iris/agent/messages',
+            data:{
+                'key': agentId,
+            },
+            success:function(result) {
+                console.log(result);
+                /*$.each(result, function(key, message) {
+                    var li = "<li class='media message visible'>\
+                              <img class='mr-3 rounded img-sm' src='"+message.author_photo+"'>\
+                              <div class='media-body'>\
+                              <span><h5 class='title'>"+message.author+"</h5></span>\
+                              <span class='time'>"+message.time+"</span>\
+                              <p class='text'>"+message.content+"</p>\
+                              </div>\
+                              </li>"
+                    $('.message-list').append(li);
+                });
+                */
+                $('.message-list').html(result);
+                var msgListHt = $('.col-messages').height() - $('.col-messages .footer').outerHeight();
+                $('.col-messages .message-list').slimScroll({
+                    scrollTo: msgListHt+"px"
+                });
+            },
+            error: function(xhr, error) {
+                console.log(error);
+            }
+        });
+
+}
+

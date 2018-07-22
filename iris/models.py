@@ -15,6 +15,7 @@ class Presence(models.Model):
     user = models.OneToOneField(User)    
     status = models.CharField(choices=STATUS_CHOICES, default='0', max_length=2)
     text = models.CharField(max_length=200, null=True, blank=True)
+    channel_name = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return '{}'.format(self.get_status_display())

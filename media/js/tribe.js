@@ -15,20 +15,13 @@ $(function() {
         var message = $.parseJSON(e.data);
         var msgHt = 0;
 
-        if($('.tribe-pad').data("id") == message.board) {
-            if (message.code == 100) {
-                /*if (message.uid != mykey) {
-                    var item = "<li class='notification text-center'> <span class='user pr-2'>"+message.dn+"\
-                               </span><span class='text'>"+message.message+"</span></li>";
-                    $('.message-list').append(item);
-                } */
-            } else if (message.code == 102) {
-               /* if (message.uid != mykey) {
-                    var item = "<li class='notification text-center'> <span class='user pr-2'>"+message.dn+"\
-                               </span><span class='text'>"+message.message+"</span></li>";
-                    $('.message-list').append(item);
-                } */
-            } else if(message.code == 101) {
+        if(message.username == user) {
+            return;
+        }
+
+        console.log(message);
+        if(message.code == 101) {
+            if($('.tribe-pad').data("id") == message.board && $('.tribe-pad').data("mode") == 0) {
                 var msgList = $('.message-list');
                 var agent = $('.lsbrowser .agents').find(`[data-user='${message.username}']`);
                 var fullName = agent.find('.fullname').text();
@@ -45,14 +38,43 @@ $(function() {
                 msgList.append(item);
                 msgHt = msgList.find("li:last-child").height();
 
-            } else if(mesasge.code == 201) {
+                $('.col-messages .message-list').slimScroll({
+                    scrollBy: msgHt+"px"
+                });
+
+            } else {
+                var team = $('.lsbrowser .teams').find(`[data-id='${message.board}']`);
+                var count = parseInt(team.find('.badge').text(), 10) || 0;
+                count++;
+                team.find('.badge').text(count);
+            } 
+        } else if(message.code == 201) {
+            if($('.tribe-pad').data("uname") == message.username && $('.tribe-pad').data("mode") == 1) {
+                var msgList = $('.message-list');
+                var agent = $('.lsbrowser .agents').find(`[data-user='${message.username}']`);
+                var fullName = agent.find('.fullname').text();
+                var img = agent.find('img').attr('src');
+
+                var item = "<li class='media message'>\
+                            <img class='mr-3 rounded img-sm' src='"+img+"'>\
+                            <div class='media-body'>\
+                            <span><h5 class='title'>"+fullName+"</h5></span>\
+                            <span class='time'></span>\
+                            <p class='text'>"+message.message+"</p>\
+                            </div>\
+                            </li>"
+                msgList.append(item);
+                msgHt = msgList.find("li:last-child").height();
+
+                $('.col-messages .message-list').slimScroll({
+                    scrollBy: msgHt+"px"
+                });
+
+            } else {
 
             }
-            
-            $('.col-messages .message-list').slimScroll({
-                scrollBy: msgHt+"px"
-            });
-        } else {
+        }
+
             if (message.code == 80) {
                 $('.lsbrowser .agents').find(`[data-user='${message.user}']`).find('.status-container').find('.status-icon').html('')
                               .html(getStatusIconHtml(message.status));
@@ -62,27 +84,10 @@ $(function() {
                 $('.lsbrowser .agents').find(`[data-user='${message.user}']`).find('.status-container').find('.status-text').text('').text(message.status_text);
                 
 
-            } else if (message.code == 100) { 
-                
+            } 
 
-            } else if (message.code == 101) {
-                var team = $('.lsbrowser .teams').find(`[data-id='${message.board}']`); 
-                var count = parseInt(team.find('.badge').text(), 10) || 0;
-                count++;
-                team.find('.badge').text(count);
-
-            } else if (message.code == 102) {
-
-            }
-
-        }
-           
-       
-       
 
     }
-
-
 
     $('.msg-input').keypress(function(event) { 
         if(event.which == 13) {
@@ -96,8 +101,26 @@ $(function() {
             socket.send(JSON.stringify(msg));
 
             $(this).html('');
-        }
+                var msgList = $('.message-list');
+                var agent = $('.lsbrowser .agents').find(`[data-user='${user}']`);
+                var fullName = agent.find('.fullname').text();
+                var img = agent.find('img').attr('src');
 
+                var item = "<li class='media message'>\
+                            <img class='mr-3 rounded img-sm' src='"+img+"'>\
+                            <div class='media-body'>\
+                            <span><h5 class='title'>"+fullName+"</h5></span>\
+                            <span class='time'></span>\
+                            <p class='text'>"+text+"</p>\
+                            </div>\
+                            </li>"
+                msgList.append(item);
+                msgHt = msgList.find("li:last-child").height();
+
+                $('.col-messages .message-list').slimScroll({
+                    scrollBy: msgHt+"px"
+                });
+        }
 
     });
 

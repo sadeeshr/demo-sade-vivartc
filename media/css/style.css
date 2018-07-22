@@ -45,7 +45,7 @@ input:focus {
     outline: none;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 769px) {
     .sm-hide {
         display: none !important;
     }
@@ -204,7 +204,7 @@ input:focus {
 
 /* Left browser */
 .lsbrowser {
-    background: rgba(232,232,232, 0.4);
+    background: rgba(137, 64, 47, 0.8);
     height: 100%;
     margin-left: 56px;
     padding: .9em 0;
@@ -223,6 +223,10 @@ input:focus {
     padding: .3em .6em;
 }
 
+
+.lsbrowser .phbook {
+
+}
 
 .lsbrowser .category {
     padding: .4em 0;
@@ -453,24 +457,27 @@ li.notiication {
 .input-container .msg-input {
     padding: 5px 15px;
     border: 2px solid #756666;
-    border-radius: 3px;
+    border-radius: 5px;
     min-height: 32px;
     max-height: 300px;
     height: 100%;
     -moz-appearance: textfield-multiline;
     -webkit-appearance: textarea;
-    margin-left: 33px
-
+    /* margin-left: 33px; */
+    padding-left: 33px;
+    background: #fff; 
 }
 
 .input-container .btn-attach {
     position: absolute;
     bottom: 15;
     left: 15;
-    min-height: 38px;
+    min-height: 32px;
+    /*
     border-top: 2px solid #756666;
     border-bottom: 2px solid #756666;
     border-left: 2px solid #756666;
+    */
     background: inherit;
 }
 
@@ -488,11 +495,13 @@ li.notiication {
     border-left: 1px solid #e8e8e8;
     background: rgba(255,255,255,0.7)
 }
-@media (max-width: 768px) {
+/*
+@media (max-width: 767px) {
     .col-scribe {
         display: none !important;
     }
 }
+*/
 
 .scribe-container {
     display: flex;
@@ -639,6 +648,7 @@ li.notiication {
     left: 56;
     padding-bottom: 45px;
     width: 100% ;
+    outline: none;
     background: rgb(242,242,242, 0.2);
 }
 @media (max-width: 576px) { 
@@ -1080,6 +1090,15 @@ li.notiication {
 }
 
 @media screen and (max-width: 767px) {
+    .menu-float {
+        position: fixed;
+        top: 0;
+        height: 100% !important;
+        width: 300px;
+        right: 0;
+        z-index: 1032;
+        background: rgba(137, 64, 47, 0.95);
+    }
     .sidebar-collapse .navbar-collapse {
         position: fixed;
         display: block;

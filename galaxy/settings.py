@@ -25,12 +25,41 @@ SECRET_KEY = 's%i)xq53p7%eb&227^(y8a&_+v20@yuox^%7bgtp^zw6e!!5b-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['158.69.215.204','vivartc.vivacommunication.com','www.vivartc.vivacommunication.com',]
+ALLOWED_HOSTS = ['158.69.215.204','.vivacommunication.com', ]
 
 
 # Application definition
+SHARED_APPS = [
+    'tenant_schemas',
+    'controller',
+    'django.contrib.admin',
+    'django.contrib.messages',
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'django.contrib.sessions',
+    'django.contrib.staticfiles',
+    'django.contrib.postgres',
+]
+
+
+TENANT_APPS = [
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.admin',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'accounts',
+    'vox',
+    'iris',
+    'hub',
+    'rest_framework',
+    'channels',
+]
+
 
 INSTALLED_APPS = [
+    'tenant_schemas',
+    'controller',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +76,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'tenant_schemas.middleware.TenantMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -85,7 +115,7 @@ WSGI_APPLICATION = 'galaxy.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'tenant_schemas.postgresql_backend', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'sirius',                      # Or path to database file if using sqlite3.
         'USER': 'thunderbolt',                      # Not used with sqlite3.
         'PASSWORD': 'n1nt6k0zh1',
@@ -93,8 +123,11 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
-
+# Multi tenant support
+DATABASE_ROUTERS = (
+    'tenant_schemas.routers.TenantSyncRouter',
+)
+TENANT_MODEL = "controller.Client"
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 

@@ -6,7 +6,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.response import Response
 from rest_framework import status
-
+from django.db.models import Q
 from .serializers import *
 
 # Create your views here.
@@ -36,3 +36,20 @@ class MessageViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
         
 
+    def direct_messages(self, request):
+        try:
+            pk = request.GET.get('key','')            
+            agent = Agent.objects.get(id=pk)
+            messages = []
+            direct_messages =  DirectMessage.objects.filter(Q(to=request.user) | Q(message__author=request.user), 
+                                                            Q(message__author=agent.user)| Q(to=agent.user))
+            for dm in direct_messages:
+                messages.append(dm.message)
+            #serialized = DirectMesssageSerializer(direct_messages, many=True)
+            #print(serialized.data)
+            #return Response("Succesful")
+            return Response({'messages':messages})
+
+        except Exception as err:
+            logging.error("Direct Messages {}".format(str(err)))
+            return Response(status=status.HTTP_404_NOT_FOUND)

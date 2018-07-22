@@ -343,6 +343,8 @@ $(document).on('click', '.navbar-toggler', function() {
     $toggle = $(this);
 
     if (nowuiKit.misc.navbar_menu_visible == 1) {
+        $('.lsbrowser').removeClass('menu-float')
+                       .addClass('d-none');
         $('html').removeClass('nav-open');
         nowuiKit.misc.navbar_menu_visible = 0;
         $toggle.closest('.navbar').find('.lsbrowser').remove();
@@ -355,9 +357,15 @@ $(document).on('click', '.navbar-toggler', function() {
             $toggle.addClass('toggled');
         }, 580);
 
-        $(this).closest('.navbar').find('.navbar-collapse').html($('.lsbrowser').clone().removeClass('d-none').css('margin-left',0));
-        $(this).closest('.navbar').find('.navbar-collapse').find('.lsbrowser .dialer').css('left',0);
-
+        $('.lsbrowser').removeClass('d-none')
+                       .addClass('menu-float');
+        //$(this).closest('.navbar').find('.navbar-collapse').html($('.lsbrowser').clone().removeClass('d-none').css('margin-left',0));
+        // $(this).closest('.navbar').find('.navbar-collapse').find('.lsbrowser .dialer').css('left',0);
+        var htPhbook = $(window).height() - $('.lsbrowser .search').outerHeight() - $('.dial-launcher').outerHeight() - 40;
+        $('#phBook').slimScroll({
+            height: htPhbook+"px",
+        });
+/*
         div = '<div id="bodyClick"></div>';
         $(div).appendTo('body').click(function() {
             $('html').removeClass('nav-open');
@@ -367,8 +375,8 @@ $(document).on('click', '.navbar-toggler', function() {
                 $('#bodyClick').remove();
             }, 550);
         });
-
         $('html').addClass('nav-open');
+*/
         nowuiKit.misc.navbar_menu_visible = 1;
     }
 });
@@ -476,7 +484,7 @@ function debounce(func, wait, immediate) {
     };
 };
 
-
+/*
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-46172202-1']);
 _gaq.push(['_trackPageview']);
@@ -489,3 +497,4 @@ _gaq.push(['_trackPageview']);
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(ga, s);
 })();
+*/

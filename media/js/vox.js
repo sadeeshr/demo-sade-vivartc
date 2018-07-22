@@ -14,7 +14,9 @@ var voxBoard = {
                         'line': line, 
                         'peer': peer
                       };
-        this.socket.send(JSON.stringify(payload));
+        if(this.socket != null) {
+            this.socket.send(JSON.stringify(payload));
+        }
         
     },
     sendActivity: function() {

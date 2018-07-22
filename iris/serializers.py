@@ -33,3 +33,9 @@ class MessageSerializer(serializers.ModelSerializer):
         else:
             return '' 
         
+class DirectMessageSerializer(serializers.ModelSerializer):
+    #message = MessageSerializer()
+
+    class Meta:
+        model = DirectMessage
+        fields = ('message', )

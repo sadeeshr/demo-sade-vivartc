@@ -1,56 +1,76 @@
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from .exceptions import ClientError
 from accounts.models import Agent, Team
-from iris.models import Message, Presence
+from iris.models import Message, DirectMessage, Presence
 from django.contrib.auth.models import User
+from tenant_schemas.utils import schema_context
 
 from channels.db import database_sync_to_async
 import json
 import logging
 
+from controller.sessions import fetch_schema, fetch_user
 
 @database_sync_to_async
-def get_boards(user):
-    agent = user.agent
-    teams = agent.teams.all()
-    boards = []
-    for team in teams:
-        boards.append(team.id)
-    
-    # add to the Organization Board
-    boards.append("account-{}".format(agent.account.id))
-    
-    return boards
+def register(schema, user, channel_name):
+    with schema_context(schema):
+        agent = user.agent
+        teams = agent.teams.all()
+        boards = []
+
+        presence, created = Presence.objects.get_or_create(user=user)
+        presence.channel_name = channel_name
+        presence.save()
+        for team in teams:
+            board_name = "{}-board-{}".format(schema, team.id)
+            boards.append(board_name)
+        # add to the Organization Board
+        boards.append("{}-{}".format(schema, agent.account.id))
+        
+        return boards
 
 @database_sync_to_async
-def store_message(user, data):
-    code   = data["code"]
+def deregister(schema, user, channel_name):
+    with schema_context(schema):
+        presence = resence.objects.get(user=user)
+        presence.channel_name = None
+        presence.save()
 
-    team = None
-    if code == 101:
-        text   = data["message"] 
-        board_id = data["id"]
-        team = Team.objects.get(id=board_id)
-        Message.objects.create(author=user, team=team, content=text)
-        return board_id
-    elif code == 80:
-        status = data["status"]
-        pres, created = Presence.objects.get_or_create(user=user) 
-        pres.status = status
-        pres.save()
-        key = "account-{}".format(user.agent.account.id)
-        return key
-    elif code == 81:
-        text = data["status_text"]
-        status = data["status"]
-        pres, created = Presence.objects.get_or_create(user=user) 
-        pres.text = text
-        pres.save()
-        key = "account-{}".format(user.agent.account.id)
-        return key
+@database_sync_to_async
+def store_message(schema, user, data):
+    with schema_context(schema):
+        code   = data["code"]
+        team = None
+        if code == 101:
+            text   = data["message"] 
+            board_id = data["id"]
+            team = Team.objects.get(id=board_id)
+            Message.objects.create(author=user, team=team, content=text)
+            return board_id
+        elif code == 201:
+            text   = data["message"]
+            agent_id = data["id"]
+            agent = Agent.objects.get(id=agent_id)
+            message = Message.objects.create(author=user, content=text)
+            DirectMessage.objects.create(to=agent.user, message=message) 
+            return agent.user.presence.channel_name
+        elif code == 80:
+            status = data["status"]
+            pres, created = Presence.objects.get_or_create(user=user) 
+            pres.status = status
+            pres.save()
+            key = "{}-{}".format(schema, user.agent.account.id)
+            return key
+        elif code == 81:
+            text = data["status_text"]
+            status = data["status"]
+            pres, created = Presence.objects.get_or_create(user=user) 
+            pres.text = text
+            pres.save()
+            key = "{}-{}".format(schema, user.agent.account.id)
+            return key
         
     
-
 class TribeConsumer(AsyncJsonWebsocketConsumer):
     
     """
@@ -59,37 +79,46 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
 
     """
     async def connect(self):
-        # accept only authenticated clients
-        if self.scope["user"].is_anonymous:
-            # user is not looged in 
+        headers = self.scope.get("headers", [])
+        schema = await fetch_schema(headers)
+        user   = await fetch_user(schema, headers)
+        if user is None:
             await self.close()
-        else:
-            await self.accept()
-
+            return
+        
+        await self.accept()
         self._boards = set()
-        boards = await get_boards(self.scope["user"])
-        await self.join_boards(boards)
+        boards = await register(schema, user, self.channel_name)
+        await self.join_boards(user, boards)
 
     async def disconnect(self, key):
-        print("Entering Disconnect")
+        headers = self.scope.get("headers", [])
+        schema = await fetch_schema(headers)
+        user   = await fetch_user(schema, headers)
+
         for board_id in list(self._boards):
             try:
-                print("Leave board %s", board_id)
-                await self.leave_board(board_id)
+                await self.leave_board(user, board_id)
             except ClientError:
                 pass         
 
 
     async def receive_json(self, content):
         logging.info("Message recieved {}".format(content))
-
         try:
+            headers = self.scope.get("headers", [])
+            schema = await fetch_schema(headers)
+            user   = await fetch_user(schema, headers)
             if content["code"] == 101:
-                await self.board_send(content, content["id"]) 
-                await store_message(self.scope["user"], content)
+                key = "{}-board-{}".format(schema, content["id"])
+                await self.board_send(user, content, key) 
+                await store_message(schema, user, content)
+            elif content["code"] == 201:
+                key = await store_message(schema, user, content)
+                await self.board_send(user, content, key) 
             elif content["code"] == 80 or content["code"] == 81:  
-                key = await store_message(self.scope["user"], content)
-                await self.board_send(content, key) 
+                key = await store_message(schema, user, content)
+                await self.board_send(user, content, key) 
             
 
         except ClientError as e:
@@ -99,48 +128,45 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
     Methods for joining, leaving & communicating in the room 
 
     """ 
-    async def join_boards(self, boards):
+    async def join_boards(self, user, boards):
         for key in boards:
-            board_name = "board-{}".format(key)
-
-            await self.channel_layer.group_send(
-                board_name, 
-                {
-                    "type": "chat.join",
-                    "board": key,
-                    "uid": self.scope["user"].id,
-                    "dn": self.scope["user"].get_full_name(),
-                    "message": "joined the session",
-                }
-            )
+            print(key)
+            #await self.channel_layer.group_send(
+            #    key, 
+            #    {
+            #        "type": "chat.join",
+            #        "board": key,
+            #        "uid": user.id,
+            #        "dn": user.get_full_name(),
+            #        "message": "joined the session",
+            #    }
+            #)
             # add to the room list
             self._boards.add(key)
 
             await self.channel_layer.group_add(
-                board_name,
+                key,
                 self.channel_name,
             )
             
 
-    async def leave_board(self, board_id):
+    async def leave_board(self, user, board_id):
        
-        board_name = "board-{}".format(board_id) 
-
-        await self.channel_layer.group_send(
-            board_name,
-            {
-                "type": "chat.leave",
-                "board": board_id,
-                "uid": self.scope["user"].id,
-                "dn": self.scope["user"].get_full_name(),
-                "message": "left the session",
-            }
-        )
+        #await self.channel_layer.group_send(
+        #    board_name,
+        #    {
+        #        "type": "chat.leave",
+        #        "board": board_id,
+        #        "uid": user.id,
+        #        "dn": user.get_full_name(),
+        #        "message": "left the session",
+        #    }
+        #)
 
         self._boards.discard(board_id)
 
         await self.channel_layer.group_discard(
-            board_name,
+            board_id,
             self.channel_name,
         )
          
@@ -149,8 +175,8 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
     """
     Send message to the board
     """
-    async def board_send(self, content, key):
-        board_name = "board-{}".format(key)
+    async def board_send(self, user, content, key):
+        board_name = key
         message = ""
 
         if content["code"] == 80 or content["code"] == 81:
@@ -162,12 +188,20 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
                 {
                     "type": "chat.presence",
                     "code": content["code"],
-                    "room_id": key,
-                    "user": self.scope["user"].username,
+                    "room_id": content["id"],
+                    "user": user.username,
                     "status": status,
                     "status_text": status_text,
                 }
             )
+        elif content["code"] == 201:
+            await self.channel_layer.send(key, {
+                "type": "chat.message",
+                "code": content["code"],
+                "room_id": content["id"],
+                "username": user.username,
+                "message": content["message"],
+            })
  
         else:
             message = content["message"]
@@ -176,8 +210,8 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
                 {
                     "type": "chat.message",
                     "code": content["code"],
-                    "room_id": key,
-                    "username": self.scope["user"].username,
+                    "room_id": content["id"],
+                    "username": user.username,
                     "message": message,
                 }
             )
