@@ -12,63 +12,60 @@ import logging
 from controller.sessions import fetch_schema, fetch_user
 
 @database_sync_to_async
-def register(schema, user, channel_name):
-    with schema_context(schema):
-        agent = user.agent
-        teams = agent.teams.all()
-        boards = []
+def register(user, channel_name):
+    agent = user.agent
+    teams = agent.teams.all()
+    boards = []
 
-        presence, created = Presence.objects.get_or_create(user=user)
-        presence.channel_name = channel_name
-        presence.save()
-        for team in teams:
-            board_name = "{}-board-{}".format(schema, team.id)
-            boards.append(board_name)
-        # add to the Organization Board
-        boards.append("{}-board".format(schema))
-        
-        return boards
-
-@database_sync_to_async
-def deregister(schema, user, channel_name):
-    with schema_context(schema):
-        presence = resence.objects.get(user=user)
-        presence.channel_name = None
-        presence.save()
+    presence, created = Presence.objects.get_or_create(user=user)
+    presence.channel_name = channel_name
+    presence.save()
+    for team in teams:
+        board_name = "{}-board-{}".format(schema, team.id)
+        boards.append(board_name)
+    # add to the Organization Board
+    boards.append("{}-board".format(schema))
+    
+    return boards
 
 @database_sync_to_async
-def store_message(schema, user, data):
-    with schema_context(schema):
-        code   = data["code"]
-        team = None
-        if code == 101:
-            text   = data["message"] 
-            board_id = data["id"]
-            team = Team.objects.get(id=board_id)
-            Message.objects.create(author=user, team=team, content=text)
-            return board_id
-        elif code == 201:
-            text   = data["message"]
-            agent_id = data["id"]
-            agent = Agent.objects.get(id=agent_id)
-            message = Message.objects.create(author=user, content=text)
-            DirectMessage.objects.create(to=agent.user, message=message) 
-            return agent.user.presence.channel_name
-        elif code == 80:
-            status = data["status"]
-            pres, created = Presence.objects.get_or_create(user=user) 
-            pres.status = status
-            pres.save()
-            key = "{}-board".format(schema)
-            return key
-        elif code == 81:
-            text = data["status_text"]
-            status = data["status"]
-            pres, created = Presence.objects.get_or_create(user=user) 
-            pres.text = text
-            pres.save()
-            key = "{}-board".format(schema)
-            return key
+def deregister(user, channel_name):
+    presence = resence.objects.get(user=user)
+    presence.channel_name = None
+    presence.save()
+
+@database_sync_to_async
+def store_message(user, data):
+    code   = data["code"]
+    team = None
+    if code == 101:
+        text   = data["message"] 
+        board_id = data["id"]
+        team = Team.objects.get(id=board_id)
+        Message.objects.create(author=user, team=team, content=text)
+        return board_id
+    elif code == 201:
+        text   = data["message"]
+        agent_id = data["id"]
+        agent = Agent.objects.get(id=agent_id)
+        message = Message.objects.create(author=user, content=text)
+        DirectMessage.objects.create(to=agent.user, message=message) 
+        return agent.user.presence.channel_name
+    elif code == 80:
+        status = data["status"]
+        pres, created = Presence.objects.get_or_create(user=user) 
+        pres.status = status
+        pres.save()
+        key = "{}-board".format(schema)
+        return key
+    elif code == 81:
+        text = data["status_text"]
+        status = data["status"]
+        pres, created = Presence.objects.get_or_create(user=user) 
+        pres.text = text
+        pres.save()
+        key = "{}-board".format(schema)
+        return key
         
     
 class TribeConsumer(AsyncJsonWebsocketConsumer):
@@ -80,27 +77,18 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
     """
     async def connect(self):
         headers = self.scope.get("headers", [])
-        schema = await fetch_schema(headers)
-        user   = await fetch_user(schema, headers)
-        if user is None:
-            await self.close()
-            return
-        
         await self.accept()
         self._boards = set()
-        boards = await register(schema, user, self.channel_name)
+        boards = await register(user, self.channel_name)
         await self.join_boards(user, boards)
         await self.send_status(schema, user, 1)
         
 
     async def disconnect(self, key):
         headers = self.scope.get("headers", [])
-        schema = await fetch_schema(headers)
-        user   = await fetch_user(schema, headers)
-
         for board_id in list(self._boards):
             try:
-                await self.leave_board(user, board_id)
+                await self.leave_board(board_id)
             except ClientError:
                 pass         
 
@@ -109,17 +97,14 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
         logging.info("Message recieved {}".format(content))
         try:
             headers = self.scope.get("headers", [])
-            schema = await fetch_schema(headers)
-            user   = await fetch_user(schema, headers)
             if content["code"] == 101:
-                key = "{}-board-{}".format(schema, content["id"])
                 await self.board_send(user, content, key) 
-                await store_message(schema, user, content)
+                await store_message(user, content)
             elif content["code"] == 201:
-                key = await store_message(schema, user, content)
+                key = await store_message(user, content)
                 await self.board_send(user, content, key) 
             elif content["code"] == 80 or content["code"] == 81:  
-                key = await store_message(schema, user, content)
+                key = await store_message(user, content)
                 await self.board_send(user, content, key) 
             
 
