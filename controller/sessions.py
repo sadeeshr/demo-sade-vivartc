@@ -45,7 +45,7 @@ def fetch_user(schema, headers):
         with schema_context(schema):
             session = Session.objects.get(session_key=cookies['sessionid']) 
             uid = session.get_decoded().get('_auth_user_id')
-            user = User.objects.get(pk=uid)
+            user = User.objects.select_related('presence', 'agent').get(pk=uid)
             print("{} {}".format(user.username, user.email))
             return user
 

@@ -158,9 +158,26 @@ $(function() {
     });
 
 
-    $('body').on('click', '.btn-logout', function() {
+    $('body').on('click', '.btn-logout', function(e) {
+        e.preventDefault();
         var msg  = {'code': 80, 'status': 0, 'status_text': ""};
         socket.send(JSON.stringify(msg));
+
+        $.ajax({
+            type:"POST",
+            cache:false,
+            url: '/accounts/logout/',
+            data:{
+                'csrfmiddlewaretoken': csrf_token,
+            },
+            success:function(result) {
+                window.location = "/";     
+            },
+            error: function(xhr, error) {
+                console.log(error);
+            }
+        });
+
 
     });
 

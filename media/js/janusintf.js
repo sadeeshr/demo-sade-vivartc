@@ -70,6 +70,7 @@ VoxPhone.transfer = function(line) {
 }
 
 VoxPhone.hangUp = function(line) {
+    console.log(calls);
     calls = jQuery.grep(calls, function(value) {
         return value != line;
     });
@@ -713,7 +714,7 @@ function doCall(callee, isVideoCall) {
                 //          }
                 //      };
                 var body = { request: "call", uri: username};
-                // jsep["dtls-reset"] = true;
+                jsep["dtls-reset"] = true;
                 // Note: you can also ask the plugin to negotiate SDES-SRTP, instead of the
                 // default plain RTP, by adding a "srtp" attribute to the request. Valid
                 // values are "sdes_optional" and "sdes_mandatory", e.g.:
@@ -723,8 +724,20 @@ function doCall(callee, isVideoCall) {
                 // Just beware that some endpoints will NOT accept an INVITE
                 // with a crypto line in it if the protocol is not RTP/SAVP,
                 // so if you want SDES use "sdes_optional" with care.
-                sipcall.send({"message": body, "jsep": jsep});
-                localJsep = jsep;
+                sipcall.send({
+                    "message": body, 
+                    "jsep": jsep,
+                    "success": function() {
+                        localJsep = jsep;
+                    
+                    },
+                    error: function(error) {
+                        Janus.error("SEND Error...", error);
+                        sipcall.hangup();
+                        in_call = false;
+                        localJsep = null;
+                    }
+                 });
             },
             error: function(error) {
                 Janus.error("WebRTC error...", error);

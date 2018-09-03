@@ -37,26 +37,32 @@ def store_event(schema, user, content):
                 call.save()
             # Terminated (9)
             elif status == 9:
-                call = Call.objects.filter(agent=agent, line=line).first()
-                call.end = timezone.now()
-                call.line = -1
-                if call.status == 1:
-                    call.status = 3
-                    call.save()
-                elif call.status == 2:
-                    call.status = 4
-                    call.save()
-                elif call.status == 5:
-                    call.status = 9
-                    call.save()
-                    # store it in suite crm     
-                    channel = Channel.objects.get(type='1')
-                    sc = suitecrm()
-                    sc.connect(channel)
-                    sc.log_call(call)
-            
+                calls = Call.objects.filter(agent=agent, line=line)
+                if len(calls) > 0:                
+                    call = calls[0]
+                    call.end = timezone.now()
+                    call.line = -1
+                    if call.status == 1:
+                        call.status = 3
+                        call.save()
+                    elif call.status == 2:
+                        call.status = 4
+                        call.save()
+                    elif call.status == 5:
+                        call.status = 9
+                        call.save()
+                        # store it in suite crm     
+                        channel = Channel.objects.get(type='1')
+                        sc = suitecrm()
+                        sc.connect(channel)
+                        sc.log_call(call)
+
+            call_status = agent.is_tel_busy()
+            return 1 if call_status is True else 0
+
     except Exception as err:
         logging.warning("Store Vox event {}".format(str(err)))
+        return 0
 
 
 class VoxConsumer(AsyncJsonWebsocketConsumer):
@@ -71,12 +77,29 @@ class VoxConsumer(AsyncJsonWebsocketConsumer):
             return
 
         await self.accept()
+        await self.join_board("{}-vox".format(schema))
+
 
     
     async def disconnect(self, key):
-        pass
-
+        headers = self.scope.get("headers", [])
+        schema = await fetch_schema(headers)
+        await self.leave_board("{}-vox".format(schema))
     
+    async def join_board(self, name):
+        await self.channel_layer.group_add(
+            name,
+            self.channel_name,
+        )
+
+    async def leave_board(self, name): 
+        await self.channel_layer.group_discard(
+            name,
+            self.channel_name,
+        )
+     
+    
+
     """
     Recieve JSON Message
     Messages:-
@@ -86,7 +109,28 @@ class VoxConsumer(AsyncJsonWebsocketConsumer):
             headers = self.scope.get("headers", [])
             schema = await fetch_schema(headers)
             user   = await fetch_user(schema, headers)
-            await store_event(schema, user, content)
+            call_status = await store_event(schema, user, content)
+            board_name = "{}-vox".format(schema)
+            
+            await self.channel_layer.group_send(
+                board_name,
+                {
+                    "type": "vox.event",
+                    "code": 10,
+                    "user": user.id,
+                    "status": call_status,
+                }
+            )
 
         except ClientError as e:
             await self.send_json({"error": e.code})
+
+
+    async def vox_event(self, event):
+        await self.send_json(
+            {
+                "code": event["code"],
+                "user": event["user"],
+                "status": event["status"],
+            },
+        )

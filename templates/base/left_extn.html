@@ -28,13 +28,16 @@
             <div class="body item-list" id="teams" data-parent="#phBook">
                 <ul class="list-unstyled">
                     {% for team in teams %}
-                    <li class="media item team px-3 py-2 {% if team == active_board %}active{% endif %}" data-id="{{team.id}}">
+                    <li class="media item team px-3 py-2 {% if team == active_board %}active{% endif %}" data-id="{{team.id}}" data-extn="{{team.conf_profile.bridge_id}}">
                         <img class="mr-3 rounded img-small" src="{{MEDIA_URL}}images/team64x64.png">
                         <div class="media-body">
-                            <span class="title"><a class="btn-link" href="#">{{ team.name }}</a></span> 
+                            <span class="title pr-3"><a class="btn-link" href="#">{{ team.name }}</a></span> 
+                            <span class="badge badge-info text-white"></span>
                         </div>
                         <div class="media-right">
-                            <span class="badge badge-pill badge-info text-white py-2"></span>
+                            {% if team.conf_profile %}
+                            <button class="btn btn-call" href="#"><i class="fa fa-phone"></i></button>
+                            {% endif %}
                         </div>
                     </li>
                     {% endfor %}
@@ -54,7 +57,7 @@
             <div class="body item-list collapse" id="dirAgents" data-parent="#phBook">
                 <ul class="list list-unstyled">
                     {% for agent in agents %}
-                    <li class="media item agent px-3 py-2 {% if agent == request.user.agent %} d-none{% endif %}" data-id="{{ agent.id }}" data-user="{{agent.user.username}}" data-extn="{{agent.tel_profile.extn}}">
+                    <li class="media item agent px-3 py-1 {% if agent == request.user.agent %} d-none{% endif %}" data-id="{{ agent.id }}" data-user="{{agent.user.username}}" data-extn="{{agent.tel_profile.extn}}">
                         {% if agent.photo %}
                         <img class="align-self-center mr-3 rounded img-xs" src="{{ agent.photo.url }}"> 
                         {% else %}
@@ -65,7 +68,8 @@
                             <span class="extn d-none">{{agent.tel_profile.extn}}</span>
                             <div class="status-container">
                                 <span class="status-icon pr-1"><i class="{{ agent.user|statusicon }}"></i></span>
-                                <span class="mb-0 status-text">{{ agent.user|statustext }}</span>
+                                <span class="mb-0 status-text pr-3">{{ agent.user|statustext }}</span>
+                                <span class="badge badge-info text-white"></span>
                             </div>
                         </div>
                         <div class="media-right">

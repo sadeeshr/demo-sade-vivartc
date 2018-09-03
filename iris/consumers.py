@@ -25,7 +25,7 @@ def register(schema, user, channel_name):
             board_name = "{}-board-{}".format(schema, team.id)
             boards.append(board_name)
         # add to the Organization Board
-        boards.append("{}-{}".format(schema, agent.account.id))
+        boards.append("{}-board".format(schema))
         
         return boards
 
@@ -59,7 +59,7 @@ def store_message(schema, user, data):
             pres, created = Presence.objects.get_or_create(user=user) 
             pres.status = status
             pres.save()
-            key = "{}-{}".format(schema, user.agent.account.id)
+            key = "{}-board".format(schema)
             return key
         elif code == 81:
             text = data["status_text"]
@@ -67,7 +67,7 @@ def store_message(schema, user, data):
             pres, created = Presence.objects.get_or_create(user=user) 
             pres.text = text
             pres.save()
-            key = "{}-{}".format(schema, user.agent.account.id)
+            key = "{}-board".format(schema)
             return key
         
     
@@ -90,6 +90,8 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
         self._boards = set()
         boards = await register(schema, user, self.channel_name)
         await self.join_boards(user, boards)
+        await self.send_status(schema, user, 1)
+        
 
     async def disconnect(self, key):
         headers = self.scope.get("headers", [])
@@ -170,7 +172,21 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
             self.channel_name,
         )
          
-            
+    async def send_status(self, schema, user, status):
+        board_name = "{}-board".format(schema)         
+ 
+        await self.channel_layer.group_send(
+            board_name,
+            {
+                "type": "chat.presence",
+                "code": 80,
+                "room_id": 0,
+                "user": user.username,
+                "status": status,
+                "status_text": "",
+            }
+        )
+        
         
     """
     Send message to the board
@@ -188,7 +204,7 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
                 {
                     "type": "chat.presence",
                     "code": content["code"],
-                    "room_id": content["id"],
+                    "room_id": 0,
                     "user": user.username,
                     "status": status,
                     "status_text": status_text,
@@ -280,3 +296,17 @@ class TribeConsumer(AsyncJsonWebsocketConsumer):
                 "message": event["message"],
             },
         )
+
+from channels.layers import get_channel_layer
+
+def push_presence(request, presence):
+    channel_layer = get_channel_layer()
+    user = request.user
+    schema_name = request.tenant.schema_name
+    board_name = "{}-board".format(schema_name)
+    status = presence.status
+    
+    channel_layer.group_send(
+        board_name,
+        {"type": "chat.presence", "code": 80, "room_id": 0, "user":user.username, "status":status, "status_text": ""},
+    )

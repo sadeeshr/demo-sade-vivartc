@@ -200,10 +200,15 @@
             },
             success:function(resp) {
                 console.log(resp);
-                obj.closest('.inline-editable').addClass('d-none')
-                                               .siblings('.editable-info').find('.editable-link').removeClass('d-none')
-                                                                                                 .text('')
-                                                                                                 .text(value);
+                if(field != 'pswd')
+                    obj.closest('.inline-editable').addClass('d-none')
+                                                   .siblings('.editable-info').find('.editable-link').removeClass('d-none')
+                                                                                                     .text('')
+                                                                                                     .text(value);
+                else
+                    obj.closest('.inline-editable').addClass('d-none')
+                                                   .siblings('.editable-info').find('.editable-link').removeClass('d-none');
+                 
             },
             error:function(resp) {
 

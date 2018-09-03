@@ -42,6 +42,14 @@ $(function() {
     // implement message handler
     voxSocket.onmessage = function(e) {
         var message = $.parseJSON(e.data);
+        console.log(message);
+        if (message.code == 10) {
+            if (message.status == 1) {
+                $('.lsbrowser .agents').find(`[data-id='${message.user}']`).find('.actions').find('.btn-call').addClass('busy');
+            } else {
+                $('.lsbrowser .agents').find(`[data-id='${message.user}']`).find('.actions').find('.btn-call').removeClass('busy');
+            }
+        }
 
     }
 

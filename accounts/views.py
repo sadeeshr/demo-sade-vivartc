@@ -59,6 +59,8 @@ def home(request):
         return HttpResponse('dashboard Error')
 
 
+from iris.consumers import push_presence
+
 @csrf_exempt
 def login(request):
     if not request.POST:
@@ -80,6 +82,8 @@ def login(request):
 
             presence.status = '1'
             presence.save()
+            push_presence(request, presence)
+
             url = request.POST.get('next')
             if url is None:
                 url = '/accounts/home/'
@@ -97,13 +101,20 @@ def logout(request):
             presence = request.user.presence
             presence.status = '0'
             presence.save()
+            agent = request.user.agent
+            calls = agent.calls.filter(status__in=('1','2','5')) 
+            print(calls)
+            for call in calls:
+                call.status = '4'
+                call.save()
+
             auth.logout(request)
 
         except Presence.DoesNotExist:
             auth.logout(request)
 
-
-    return HttpResponseRedirect(reverse('index'))
+    resp = {'redirect':'/'}
+    return HttpResponse(json.dumps(resp), content_type='application/json')
 
 
 def index(request):
@@ -198,7 +209,7 @@ class AgentViewSet(viewsets.ViewSet):
                 user.first_name = value 
             elif 'lname' in field:
                 user.last_name  = value
-            elif 'password' in field:
+            elif 'pswd' in field:
                 user.set_password(value)
             elif 'title' in field:
                 agent.title = value 
